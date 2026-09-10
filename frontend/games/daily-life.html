@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Story Recall &amp; Sequencing - Cognitive Progression</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Game Progress Module -->
+<script src="game-progress.js"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#dde2f3",
+            "on-primary-fixed-variant": "#005236",
+            "on-secondary-fixed": "#002113",
+            "inverse-primary": "#7cd9ac",
+            "secondary-fixed-dim": "#74daa9",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#161c27",
+            "on-background": "#161c27",
+            "surface": "#f9f9ff",
+            "on-secondary": "#ffffff",
+            "surface-tint": "#006c49",
+            "secondary-fixed": "#90f7c4",
+            "surface-container-high": "#e3e8f9",
+            "on-primary-fixed": "#002113",
+            "on-secondary-container": "#00734e",
+            "tertiary-fixed": "#ffdcc3",
+            "tertiary-fixed-dim": "#ffb77d",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#6e3900",
+            "on-surface-variant": "#3e4942",
+            "inverse-on-surface": "#ecf0ff",
+            "on-error": "#ffffff",
+            "on-primary-container": "#b9ffd9",
+            "surface-container-low": "#f1f3ff",
+            "inverse-surface": "#2a303d",
+            "surface-container-lowest": "#ffffff",
+            "secondary-container": "#90f7c4",
+            "on-tertiary-fixed": "#2f1500",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#7cd9ac",
+            "surface-container": "#e8eeff",
+            "surface-dim": "#d4daea",
+            "on-primary": "#ffffff",
+            "tertiary": "#824500",
+            "outline-variant": "#bec9c0",
+            "on-tertiary-container": "#ffede1",
+            "primary-container": "#127c56",
+            "error": "#ba1a1a",
+            "surface-container-highest": "#dde2f3",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#005236",
+            "secondary": "#006c49",
+            "primary": "#006141",
+            "primary-fixed": "#98f5c7",
+            "background": "#f9f9ff",
+            "tertiary-container": "#a65900",
+            "outline": "#6e7a72"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "gutter-grid": "1.5rem",
+            "container-pad-desktop": "3rem",
+            "touch-min": "3.5rem",
+            "space-xs": "0.5rem",
+            "space-3xl": "4.5rem",
+            "space-lg": "1.5rem",
+            "space-2xl": "3rem",
+            "space-xxs": "0.25rem",
+            "touch-lg": "4.25rem",
+            "space-xl": "2rem",
+            "space-sm": "0.75rem",
+            "container-pad-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "display-hero": ["Manrope", "sans-serif"],
+            "clinical-metric": ["Manrope", "sans-serif"],
+            "label-caption": ["Inter", "sans-serif"],
+            "headline-md": ["Manrope", "sans-serif"],
+            "headline-sm": ["Manrope", "sans-serif"],
+            "clinical-label": ["Inter", "sans-serif"],
+            "display-hero-mobile": ["Manrope", "sans-serif"],
+            "quote-accent": ["Playfair Display", "serif"],
+            "patient-body-md": ["Inter", "sans-serif"],
+            "patient-body-lg": ["Inter", "sans-serif"],
+            "clinical-body": ["Inter", "sans-serif"],
+            "headline-lg": ["Manrope", "sans-serif"],
+            "headline-lg-mobile": ["Manrope", "sans-serif"],
+            "patient-action-lg": ["Manrope", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    @keyframes pulse-gentle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.04); }
+    }
+    .animate-pulse-gentle {
+      animation: pulse-gentle 2.2s infinite ease-in-out;
+    }
+    @keyframes soundwave {
+      0%, 100% { height: 6px; }
+      50% { height: 22px; }
+    }
+    .soundbar-1 { animation: soundwave 1.1s ease-in-out infinite 0.1s; }
+    .soundbar-2 { animation: soundwave 1.1s ease-in-out infinite 0.3s; }
+    .soundbar-3 { animation: soundwave 1.1s ease-in-out infinite 0.2s; }
+    .soundbar-4 { animation: soundwave 1.1s ease-in-out infinite 0.4s; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-['Inter'] antialiased min-h-screen flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TOP CLINICAL & PATIENT HEADER (Brand Preserved) -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest/95 backdrop-blur-md border-b border-surface-container-high px-4 sm:px-8 py-3.5 transition-all">
+<div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+<svg class="w-5 h-5" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" fill="currentColor"></path>
+</svg>
+</div>
+<div>
+<span class="text-xs font-semibold text-secondary uppercase tracking-wider font-['Inter']">Cognitive Therapy Routine</span>
+<h1 class="text-on-surface text-lg sm:text-xl font-bold font-['Manrope'] leading-tight">Story Recall &amp; Sequencing</h1>
+</div>
+</div>
+<div class="flex items-center gap-2 sm:gap-3">
+<!-- Audio Guidance Active Toggle -->
+<button aria-label="Toggle Audio Companion" class="h-10 px-3 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container-high flex items-center gap-2 text-sm font-semibold transition border border-outline-variant/30 focus:ring-2 focus:ring-primary focus:outline-none" id="audio-toggle-btn">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<span class="hidden md:inline font-['Manrope']">Audio Companion</span>
+</button>
+<!-- Large Type A/A+ Switcher -->
+<button aria-label="Adjust Font Size" class="h-10 px-3.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container-high flex items-center gap-1 text-sm font-bold transition border border-outline-variant/30 focus:ring-2 focus:ring-primary focus:outline-none" id="font-scale-btn">
+<span class="text-xs">A</span>
+<span class="text-base font-extrabold">A+</span>
+</button>
+<!-- Exit Routine Safety Button -->
+<button class="h-10 px-4 rounded-lg bg-surface-container-high text-on-surface-variant hover:bg-error-container hover:text-error transition font-bold text-sm font-['Manrope'] flex items-center gap-1.5 focus:ring-2 focus:ring-error focus:outline-none">
+<span class="material-symbols-outlined text-base">logout</span>
+<span class="truncate">Exit Routine</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN ADAPTIVE COGNITIVE WORKSPACE -->
+<main class="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 space-y-8" id="main-content">
+<!-- COGNITIVE PROGRESSION STEPPER -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 border border-surface-container-high shadow-sm space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-surface-container-low pb-3">
+<div>
+<h2 class="text-base font-bold font-['Manrope'] text-on-surface flex items-center gap-2">
+<span class="size-2.5 rounded-full bg-primary animate-pulse"></span>
+            Cognitive Progression Pathway
+          </h2>
+<p class="text-xs text-on-surface-variant mt-0.5">Step-by-step recall: first reconstruct the timeline, then reflect on nuanced story details.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed text-xs font-bold rounded-full" id="overall-status-badge">
+            Sequencing Phase
+          </span>
+<span class="text-xs font-medium text-on-surface-variant">Step 1 of 2 Complete</span>
+</div>
+</div>
+<!-- Progressive Visual Steps Stepper -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<!-- Step 1 Tile -->
+<div class="flex items-center gap-3.5 p-3 rounded-xl bg-secondary-fixed/30 border-2 border-primary transition-all" id="step-1-indicator">
+<div class="size-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm shadow-sm">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">done</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-primary">Step 1 • Completed &amp; Verified</p>
+<p class="text-sm font-bold text-on-surface font-['Manrope']">Arrange Alex's Morning Routine</p>
+</div>
+</div>
+<!-- Step 2 Tile -->
+<div class="flex items-center gap-3.5 p-3 rounded-xl bg-surface-container-low border border-outline-variant/40 transition-all" id="step-2-indicator">
+<div class="size-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-sm" id="step-2-badge-icon">
+            2
+          </div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant" id="step-2-subtitle">Step 2 • Active Focus</p>
+<p class="text-sm font-bold text-on-surface font-['Manrope']" id="step-2-title">Story Questions (Question 1 Active)</p>
+</div>
+</div>
+</div>
+<!-- Linear progress bar indicator -->
+<div class="w-full bg-surface-container-high rounded-full h-2 overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-700 ease-out" id="progress-bar-fill" style="width: 50%;"></div>
+</div>
+</div>
+<!-- SECTION 1: ROUTINE CARDS SEQUENCING WORKSPACE -->
+<section aria-labelledby="sequence-heading" class="bg-surface-container-lowest rounded-2xl p-6 border border-surface-container-high shadow-sm space-y-6">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<span class="text-xs font-bold text-secondary tracking-wider uppercase font-['Inter']">Task 1: Spatial &amp; Chronological Arrangement</span>
+<h2 class="text-2xl font-bold font-['Manrope'] text-on-surface" id="sequence-heading">Alex's Morning Timeline</h2>
+<p class="text-sm text-on-surface-variant mt-1">Review or adjust the order using the arrow controls until it feels natural.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low text-xs font-semibold text-on-surface">
+<span class="material-symbols-outlined text-sm text-primary">touch_app</span>
+            4 Key Milestones
+          </span>
+</div>
+</div>
+<!-- 4 Morning Routine Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="routine-container">
+<!-- Routine Card 1 -->
+<article class="routine-card flex flex-col bg-surface-bright rounded-xl border-2 border-primary/40 hover:border-primary shadow-sm hover:shadow-md transition-all overflow-hidden p-3 group" data-order="1">
+<div class="relative aspect-video w-full rounded-lg overflow-hidden bg-surface-container mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Alex sitting upright in a sunlit cozy bedroom, arms stretched outward in a gentle morning stretch with soft golden light streaming across white linen bedding and leafy green house plants in a warm, welcoming painterly style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5GEC4Utf0XCTa10zmBJBiNSKeeNTWWQVo0kNZ5P0vOFR41GS-n1_Fwtiht39Ll0jQ1telS_KdXQpjcodzeK_zy5nJhmsDZuG4oyZCBrmEzRF-WvftacoHPdP8O2q-_B7yGoGywxYzvTitkDAnJ4Yo9Kc1ilJ_HzM6fs5soqoFiyGZKy0f-MLBZ9ooFAl4lQczIZYAbJlRC9mO9QppJLK11gn5u7WIxpo387H1WP1PhX3q9SsvIKo"/>
+<span class="absolute top-2 left-2 px-2.5 py-0.5 rounded-md bg-primary text-on-primary font-bold text-xs font-['Manrope'] shadow">
+              Order 1
+            </span>
+</div>
+<div class="flex-grow space-y-1">
+<h3 class="font-bold text-on-surface font-['Manrope'] text-base">Waking Up &amp; Stretching</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Alex greets the dawn with deep breaths and gentle arm stretches beside the sunlit window.</p>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container flex items-center justify-between gap-1">
+<button class="shift-left-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed" disabled="" title="Move Left">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+<span class="text-xs">Left</span>
+</button>
+<span class="text-[11px] font-bold text-secondary font-['Manrope']">First Step</span>
+<button class="shift-right-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary" title="Move Right">
+<span class="text-xs">Right</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Routine Card 2 -->
+<article class="routine-card flex flex-col bg-surface-bright rounded-xl border-2 border-primary/40 hover:border-primary shadow-sm hover:shadow-md transition-all overflow-hidden p-3 group" data-order="2">
+<div class="relative aspect-video w-full rounded-lg overflow-hidden bg-surface-container mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A ceramic teapot steeping aromatic chamomile tea on a tidy rustic kitchen table with fragrant steam wafting upwards near a clay mug and dried mint sprigs in warm comforting sunlight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDewM2UVyMOp92aNNPiz8qWaVmz2sGnvw1sgm-dfIuoH5xFb45rZ3w-CIEWmLf4axmOE_VgU9SCc84Ln9ABIxwX5d5leACW_IMPwMEBLIeiiaFqR1S261hgiKbX8x8Dzbp7vWzlA1E27JjxVnUSiPzRRQpx-OAipILIhJ15CedQ3uTBvGND3qSGF-yQlyKAUIOYuTsnejfJQlp12p0oaIer9ygyarVkV8Paj1DQoP_BA0tf3zyyjc"/>
+<span class="absolute top-2 left-2 px-2.5 py-0.5 rounded-md bg-primary text-on-primary font-bold text-xs font-['Manrope'] shadow">
+              Order 2
+            </span>
+</div>
+<div class="flex-grow space-y-1">
+<h3 class="font-bold text-on-surface font-['Manrope'] text-base">Steeping Warm Tea</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Infusing dried peppermint and chamomile in hot water to warm up before morning tasks.</p>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container flex items-center justify-between gap-1">
+<button class="shift-left-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary" title="Move Left">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+<span class="text-xs">Left</span>
+</button>
+<span class="text-[11px] font-bold text-secondary font-['Manrope']">Kitchen</span>
+<button class="shift-right-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary" title="Move Right">
+<span class="text-xs">Right</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Routine Card 3 -->
+<article class="routine-card flex flex-col bg-surface-bright rounded-xl border-2 border-primary/40 hover:border-primary shadow-sm hover:shadow-md transition-all overflow-hidden p-3 group" data-order="3">
+<div class="relative aspect-video w-full rounded-lg overflow-hidden bg-surface-container mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Alex using a classic vintage brass watering can to nourish vibrant rosemary and basil planter boxes in a thriving sunlit kitchen garden patio with gentle drops of water reflecting the morning light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXhEfC06Crt4Ws73RGs5TU8Vbq2bmM-fs92PnwR-azxF22vJE51Nc1AvVwlFjQXdg6YOXnbnWqgtQ6k7EaiBFl-9JzIkSEUs51MLuxK2M-XrHDUIHqcexESqHZcLtWNmeIDDhr65l7kUYYclA2mxAFweG_gSZlFFPKa1oeBFYydDTKJAVyFHyxgBrSqwo0qgt1l2cvvx3_2Hpqt36IY-L1dbKKBPJSvlGnP5igRx4Ffj6ET52cNo"/>
+<span class="absolute top-2 left-2 px-2.5 py-0.5 rounded-md bg-primary text-on-primary font-bold text-xs font-['Manrope'] shadow">
+              Order 3
+            </span>
+</div>
+<div class="flex-grow space-y-1">
+<h3 class="font-bold text-on-surface font-['Manrope'] text-base">Watering Garden Herbs</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Carrying the brass watering pitcher outside to nurture sweet basil and lavender pots.</p>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container flex items-center justify-between gap-1">
+<button class="shift-left-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary" title="Move Left">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+<span class="text-xs">Left</span>
+</button>
+<span class="text-[11px] font-bold text-secondary font-['Manrope']">Garden</span>
+<button class="shift-right-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary" title="Move Right">
+<span class="text-xs">Right</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Routine Card 4 -->
+<article class="routine-card flex flex-col bg-surface-bright rounded-xl border-2 border-primary/40 hover:border-primary shadow-sm hover:shadow-md transition-all overflow-hidden p-3 group" data-order="4">
+<div class="relative aspect-video w-full rounded-lg overflow-hidden bg-surface-container mb-3">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A tranquil wooden porch with a comfortable rocking chair, steaming cup of herbal infusion, and peaceful view over green rolling hills in soft morning mist with golden illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1vHrLIltAWB2LCBzwqGFiEfnKtKYgEhZiCAvPLXEy60R7pIYsujLsxMO_RwRLpNQw8doSaD4_96x57s23NImY5c6GLLgGelBLeB6tChYpb58AdGtxdaxpqBvKg1YhLlS5VxXBf4B-E_p_y2J8jNHvbHLuv2YddcJN8pAl4ZQFIjY6s6GlfWmEMeB5N6Ls6Pvpql9YM6oPcW84zvvYHW-LBXBWDI-K-c7tPpCSCuL0X04X6YkOFGw"/>
+<span class="absolute top-2 left-2 px-2.5 py-0.5 rounded-md bg-primary text-on-primary font-bold text-xs font-['Manrope'] shadow">
+              Order 4
+            </span>
+</div>
+<div class="flex-grow space-y-1">
+<h3 class="font-bold text-on-surface font-['Manrope'] text-base">Relaxing on Porch</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">Resting on the wooden bench while listening to birds chirp and sipping herbal tea.</p>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container flex items-center justify-between gap-1">
+<button class="shift-left-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary" title="Move Left">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+<span class="text-xs">Left</span>
+</button>
+<span class="text-[11px] font-bold text-secondary font-['Manrope']">Final</span>
+<button class="shift-right-btn min-h-[44px] px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-semibold flex items-center gap-1 transition focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed" disabled="" title="Move Right">
+<span class="text-xs">Right</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</article>
+</div>
+<!-- SEQUENCE CONFIRMATION & HARMONY BANNER -->
+<div class="bg-primary/10 border-2 border-primary rounded-xl p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 transition-all" id="confirmation-banner">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-xl bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h3 class="text-base font-bold font-['Manrope'] text-on-surface">Routine Set Successfully!</h3>
+<p class="text-sm text-secondary font-medium">The 4 morning moments are in natural harmony: <span class="font-semibold text-on-surface">Waking → Steeping Tea → Watering Garden → Porch Reflection</span>.</p>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto">
+<button class="w-full md:w-auto min-h-[48px] px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-['Manrope'] font-bold text-sm shadow-sm hover:shadow flex items-center justify-center gap-2 transition transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" id="lock-routine-btn">
+<span>Lock Routine &amp; Begin Question 1</span>
+<span class="material-symbols-outlined text-lg">arrow_downward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- SECTION 2: FOCUSED QUESTION 1 COGNITIVE EXPLORATION -->
+<!-- Presented prominently now that routine has been sequenced -->
+<section aria-labelledby="question-heading" class="bg-surface-container-lowest rounded-2xl p-6 sm:p-8 border-2 border-primary shadow-lg space-y-6 transition-all" id="question-1-card">
+<!-- Top Question Meta & Audio Prompter -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-surface-container pb-5">
+<div class="space-y-1.5">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-bold font-['Manrope']">
+<span class="size-2 rounded-full bg-primary"></span>
+            Story Question 1 of 2 • Orientation &amp; Immediate Recall
+          </div>
+<p class="text-xs text-on-surface-variant font-medium">Reflect on Alex's morning sequence to recall details with clarity.</p>
+</div>
+<!-- Prominent Audio Reader with animated wave -->
+<button class="min-h-[50px] px-5 py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 flex items-center gap-3 text-on-surface font-semibold text-sm transition group shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" id="play-question-audio">
+<span class="size-8 rounded-lg bg-primary text-on-primary flex items-center justify-center group-hover:scale-105 transition">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</span>
+<span class="font-['Manrope']">Listen to Question</span>
+<div class="hidden flex items-end gap-1 h-5 px-1" id="soundwave-container">
+<div class="w-1 bg-primary rounded-full soundbar-1"></div>
+<div class="w-1 bg-secondary rounded-full soundbar-2"></div>
+<div class="w-1 bg-primary rounded-full soundbar-3"></div>
+<div class="w-1 bg-secondary rounded-full soundbar-4"></div>
+</div>
+</button>
+</div>
+<!-- High-Legibility Primary Question Prompt -->
+<div class="bg-surface-bright p-5 rounded-xl border border-surface-container-high">
+<h2 class="text-xl sm:text-2xl font-extrabold font-['Manrope'] text-on-surface leading-snug" id="question-heading">
+          Question 1: What did Alex do right after waking up, before heading out to the garden?
+        </h2>
+<p class="text-sm text-secondary font-medium mt-2 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">lightbulb</span>
+          Hint: Think of warm steam, ceramic mugs, and soothing natural herbs in the kitchen.
+        </p>
+</div>
+<!-- Expression Workspace: Voice vs Written Expression -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Panel: Voice Expression (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col justify-between bg-surface-container-low rounded-xl p-5 border border-surface-container-high space-y-4">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-secondary">Voice Expression</span>
+<span class="text-[11px] font-semibold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Accessible Mic</span>
+</div>
+<p class="text-sm text-on-surface">Speak your thought aloud naturally. We will transcribe it automatically.</p>
+</div>
+<!-- Large Accessible Mic Button (56px+ Touch Target) -->
+<div class="py-4 flex flex-col items-center justify-center space-y-3">
+<button class="size-20 rounded-full bg-primary hover:bg-primary-container text-on-primary flex items-center justify-center shadow-md hover:shadow-lg transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary-fixed cursor-pointer" id="mic-toggle-btn">
+<span class="material-symbols-outlined text-3xl" id="mic-icon" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+<div class="text-center">
+<span class="text-sm font-bold font-['Manrope'] text-on-surface block" id="mic-status-text">
+                Tap to Speak Your Answer
+              </span>
+<span class="text-xs text-on-surface-variant" id="mic-subtext">Press once to start • No hurry</span>
+</div>
+</div>
+<div class="bg-surface-bright p-3 rounded-lg border border-outline-variant/30 text-xs text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-secondary">verified_user</span>
+<span>Gentle speech pacing: pause anytime without penalty.</span>
+</div>
+</div>
+<!-- Right Panel: Written Response Notebook (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col bg-surface-bright rounded-xl p-5 border border-surface-container-high space-y-4">
+<div class="flex items-center justify-between">
+<div class="space-y-0.5">
+<label class="text-xs font-bold uppercase tracking-wider text-secondary" for="answer-notebook">Written Response Notebook</label>
+<p class="text-xs text-on-surface-variant">Type your reflection or touch word chips below to build your sentence.</p>
+</div>
+<button class="text-xs text-on-surface-variant hover:text-error font-medium underline focus:outline-none" id="clear-text-btn">
+              Clear
+            </button>
+</div>
+<!-- High-Contrast Textarea -->
+<textarea class="w-full rounded-xl border border-outline-variant p-3.5 text-base sm:text-lg text-on-surface focus:border-primary focus:ring-2 focus:ring-primary-fixed transition font-['Inter'] leading-relaxed placeholder:text-on-surface-variant/50" id="answer-notebook" placeholder="Type here or tap word helper chips below..." rows="4"></textarea>
+<!-- Word Helper Chips for 1-tap insertion -->
+<div class="space-y-2">
+<p class="text-xs font-semibold text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">auto_awesome</span>
+              Tap to add words:
+            </p>
+<div class="flex flex-wrap gap-2">
+<button class="word-chip min-h-[38px] px-3 py-1 rounded-lg bg-surface-container-low hover:bg-secondary-fixed text-on-surface hover:text-on-secondary-fixed text-xs sm:text-sm font-semibold border border-outline-variant/40 transition">
+                + steeped herbal tea
+              </button>
+<button class="word-chip min-h-[38px] px-3 py-1 rounded-lg bg-surface-container-low hover:bg-secondary-fixed text-on-surface hover:text-on-secondary-fixed text-xs sm:text-sm font-semibold border border-outline-variant/40 transition">
+                + put on warm slippers
+              </button>
+<button class="word-chip min-h-[38px] px-3 py-1 rounded-lg bg-surface-container-low hover:bg-secondary-fixed text-on-surface hover:text-on-secondary-fixed text-xs sm:text-sm font-semibold border border-outline-variant/40 transition">
+                + boiled water in kitchen
+              </button>
+<button class="word-chip min-h-[38px] px-3 py-1 rounded-lg bg-surface-container-low hover:bg-secondary-fixed text-on-surface hover:text-on-secondary-fixed text-xs sm:text-sm font-semibold border border-outline-variant/40 transition">
+                + relaxed in the quiet room
+              </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Encouraging Non-Punitive Positive Reinforcement Banner -->
+<div class="bg-secondary-fixed/40 border border-primary/30 rounded-xl p-4 flex items-center gap-3" id="validation-note">
+<div class="size-8 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-base">sentiment_very_satisfied</span>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-bold text-on-surface font-['Manrope']">Splendid reflection!</p>
+<p class="text-xs text-on-surface-variant">Alex steeped comforting herbal tea right after stretching, filling the kitchen with soothing aroma before gardening.</p>
+</div>
+<span class="text-xs font-bold text-primary px-2.5 py-1 bg-surface-container-lowest rounded-md">Score: 100%</span>
+</div>
+<!-- Action Navigation Buttons -->
+<div class="pt-3 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-3">
+<button class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-outline-variant/60 text-on-surface hover:bg-surface-container text-sm font-semibold flex items-center justify-center gap-1.5 transition" id="re-review-routine-btn">
+<span class="material-symbols-outlined text-base">visibility</span>
+<span>Review 4 Routine Cards</span>
+</button>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold text-sm font-['Manrope'] transition" id="save-complete-btn">
+            Save &amp; Complete Later
+          </button>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-bold text-sm font-['Manrope'] flex items-center justify-center gap-2 shadow-sm transition" id="next-question-btn">
+<span>Next Question (Question 2)</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- BOTTOM CLINICAL TELEMETRY BAR (Brand Preserved) -->
+<footer class="mt-8 bg-surface-container-lowest border-t border-surface-container-high py-3 px-4 sm:px-8">
+<div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-4">
+<span class="font-bold text-on-surface font-['Manrope'] flex items-center gap-1.5">
+<span class="size-2 rounded-full bg-secondary"></span>
+          Telemetry Session ID: #COG-8492
+        </span>
+<span class="hidden sm:inline text-outline-variant">•</span>
+<span class="hidden sm:inline">Participant: Alex M. (Evaluation Mode)</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1">
+<span class="text-on-surface-variant">Sequencing Accuracy:</span>
+<span class="font-bold text-primary font-['Manrope']">100%</span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-1">
+<span class="text-on-surface-variant">Word Retrieval Latency:</span>
+<span class="font-bold text-on-surface font-['Manrope']">Normal (1.8s)</span>
+</div>
+<span class="text-outline-variant">•</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-[11px] font-semibold text-secondary">
+          No Time Constraints
+        </span>
+</div>
+</div>
+</footer>
+<!-- LIGHTWEIGHT VANILLA JAVASCRIPT FOR DYNAMIC INTERACTION -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Routine Cards Shift Logic
+      const container = document.getElementById('routine-container');
+      
+      function updateCardControls() {
+        const cards = Array.from(container.children);
+        cards.forEach((card, index) => {
+          const leftBtn = card.querySelector('.shift-left-btn');
+          const rightBtn = card.querySelector('.shift-right-btn');
+          const badge = card.querySelector('span.rounded-md');
+
+          if (badge) {
+            badge.textContent = `Order ${index + 1}`;
+          }
+
+          if (leftBtn) leftBtn.disabled = (index === 0);
+          if (rightBtn) rightBtn.disabled = (index === cards.length - 1);
+        });
+      }
+
+      container.addEventListener('click', (e) => {
+        const leftBtn = e.target.closest('.shift-left-btn');
+        const rightBtn = e.target.closest('.shift-right-btn');
+        const card = e.target.closest('.routine-card');
+
+        if (!card) return;
+
+        if (leftBtn && card.previousElementSibling) {
+          container.insertBefore(card, card.previousElementSibling);
+          updateCardControls();
+        } else if (rightBtn && card.nextElementSibling) {
+          container.insertBefore(card.nextElementSibling, card);
+          updateCardControls();
+        }
+      });
+
+      updateCardControls();
+
+      // 2. Lock Routine and Smooth Scroll to Question 1
+      const lockRoutineBtn = document.getElementById('lock-routine-btn');
+      const questionCard = document.getElementById('question-1-card');
+      const overallStatusBadge = document.getElementById('overall-status-badge');
+      const progressBar = document.getElementById('progress-bar-fill');
+
+      lockRoutineBtn.addEventListener('click', () => {
+        // Visual confirmation update
+        overallStatusBadge.textContent = 'Question 1 In Progress';
+        progressBar.style.width = '75%';
+        
+        // Scroll smoothly to question 1
+        questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        questionCard.classList.add('ring-4', 'ring-primary/20');
+        setTimeout(() => {
+          questionCard.classList.remove('ring-4', 'ring-primary/20');
+        }, 1200);
+      });
+
+      // Review routine button returns view to cards
+      const reReviewBtn = document.getElementById('re-review-routine-btn');
+      if (reReviewBtn) {
+        reReviewBtn.addEventListener('click', () => {
+          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+
+      // 3. Audio Prompter Simulation
+      const audioBtn = document.getElementById('play-question-audio');
+      const soundwave = document.getElementById('soundwave-container');
+      let isAudioPlaying = false;
+
+      audioBtn.addEventListener('click', () => {
+        isAudioPlaying = !isAudioPlaying;
+        if (isAudioPlaying) {
+          soundwave.classList.remove('hidden');
+          audioBtn.classList.add('bg-primary-fixed');
+          setTimeout(() => {
+            soundwave.classList.add('hidden');
+            audioBtn.classList.remove('bg-primary-fixed');
+            isAudioPlaying = false;
+          }, 3500);
+        } else {
+          soundwave.classList.add('hidden');
+          audioBtn.classList.remove('bg-primary-fixed');
+        }
+      });
+
+      // 4. Voice Expression Microphone Interaction
+      const micBtn = document.getElementById('mic-toggle-btn');
+      const micStatus = document.getElementById('mic-status-text');
+      const micSubtext = document.getElementById('mic-subtext');
+      const notebook = document.getElementById('answer-notebook');
+      let isRecording = false;
+
+      micBtn.addEventListener('click', () => {
+        isRecording = !isRecording;
+        if (isRecording) {
+          micBtn.classList.add('bg-error', 'animate-pulse-gentle');
+          micBtn.classList.remove('bg-primary');
+          micStatus.textContent = 'Listening to your voice...';
+          micStatus.classList.add('text-error');
+          micSubtext.textContent = 'Speak comfortably. Tap again when finished.';
+
+          setTimeout(() => {
+            if (isRecording) {
+              const currentVal = notebook.value.trim();
+              const addition = "After waking up and stretching, Alex went into the kitchen to steep warm herbal chamomile tea.";
+              notebook.value = currentVal ? currentVal + " " + addition : addition;
+              stopRecording();
+            }
+          }, 2400);
+        } else {
+          stopRecording();
+        }
+      });
+
+      function stopRecording() {
+        isRecording = false;
+        micBtn.classList.remove('bg-error', 'animate-pulse-gentle');
+        micBtn.classList.add('bg-primary');
+        micStatus.textContent = 'Voice Answer Captured!';
+        micStatus.classList.remove('text-error');
+        micSubtext.textContent = 'Transcribed directly to your notebook.';
+      }
+
+      // 5. Word Helper Chips for Instant 1-Tap Text Insertion
+      const chips = document.querySelectorAll('.word-chip');
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const phrase = chip.textContent.replace('+', '').trim();
+          const currentText = notebook.value.trim();
+          if (currentText.length > 0) {
+            notebook.value = `${currentText} ${phrase}`;
+          } else {
+            notebook.value = `Alex ${phrase}`;
+          }
+          notebook.focus();
+        });
+      });
+
+      // Clear button
+      const clearBtn = document.getElementById('clear-text-btn');
+      clearBtn.addEventListener('click', () => {
+        notebook.value = '';
+        notebook.focus();
+      });
+
+      // 6. Font Scaler Simulation (A/A+)
+      const fontScaleBtn = document.getElementById('font-scale-btn');
+      let isLarge = false;
+      fontScaleBtn.addEventListener('click', () => {
+        isLarge = !isLarge;
+        if (isLarge) {
+          document.body.classList.add('text-lg');
+          fontScaleBtn.classList.add('bg-secondary-fixed');
+        } else {
+          document.body.classList.remove('text-lg');
+          fontScaleBtn.classList.remove('bg-secondary-fixed');
+        }
+      });
+
+      // 7. Next Question Toast
+      const nextBtn = document.getElementById('next-question-btn');
+      nextBtn.addEventListener('click', () => {
+        MINDNER_GAME_PROGRESS.markCompleted(MINDNER_GAME_PROGRESS.currentLevel());
+        alert('Wonderful job completing Question 1! Transitioning gently to Question 2 (Garden Recollections).');
+        // Redirect to home with success message after delay
+        setTimeout(() => {
+          const level = MINDNER_GAME_PROGRESS.currentLevel();
+          MINDNER_GAME_PROGRESS.goHome(level);
+        }, 1000);
+      });
+    });
+  </script>
+</body></html>

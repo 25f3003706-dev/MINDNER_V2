@@ -1,0 +1,45 @@
+import sqlite3
+from pathlib import Path
+
+import pandas as pd
+
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / "database" / "caregiver.db"
+SCHEMA_PATH = BASE_DIR / "database" / "schema.sql"
+
+
+def load_tables():
+    """Create the database schema and return every table as a DataFrame."""
+    tables_query = """
+    SELECT name
+    FROM sqlite_master
+    WHERE type = 'table'
+      AND name NOT LIKE 'sqlite_%'
+    ORDER BY name;
+    """
+
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("PRAGMA foreign_keys = ON;")
+
+        # CREATE IF NOT EXISTS preserves any existing data.
+        with SCHEMA_PATH.open("r", encoding="utf-8") as schema_file:
+            conn.executescript(schema_file.read())
+
+        tables = pd.read_sql_query(tables_query, conn)["name"].tolist()
+        data = {}
+
+        print("Tables found:\n" + ("=" * 60))
+        for table in tables:
+            print(f"  {table}")
+            data[table] = pd.read_sql_query(
+                f'SELECT * FROM "{table}"', conn
+            )
+            df = data[table]
+            print(f"Loaded: {table:<25} -> {df.shape[0]} rows x {df.shape[1]} columns")
+
+    print("\nTotal tables loaded:", len(data))
+    return data
+
+
+if __name__ == "__main__":
+    data = load_tables()

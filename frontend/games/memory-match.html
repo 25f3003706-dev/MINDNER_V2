@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MINDNER | Memory Match Routine</title>
+<!-- Google Fonts: Manrope, Inter, Playfair Display -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-container": "#127c56",
+            "outline": "#6e7a72",
+            "inverse-surface": "#2a303d",
+            "secondary-fixed": "#90f7c4",
+            "surface-container-high": "#e3e8f9",
+            "surface-container-low": "#f1f3ff",
+            "on-secondary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed-dim": "#74daa9",
+            "tertiary": "#824500",
+            "inverse-on-surface": "#ecf0ff",
+            "surface-bright": "#f9f9ff",
+            "on-tertiary-fixed": "#2f1500",
+            "on-secondary-fixed-variant": "#005236",
+            "inverse-primary": "#7cd9ac",
+            "on-primary": "#ffffff",
+            "surface-dim": "#d4daea",
+            "on-background": "#161c27",
+            "primary": "#006141",
+            "tertiary-container": "#a65900",
+            "on-secondary-fixed": "#002113",
+            "on-surface-variant": "#3e4942",
+            "on-tertiary-container": "#ffede1",
+            "primary-fixed-dim": "#7cd9ac",
+            "on-tertiary-fixed-variant": "#6e3900",
+            "background": "#f9f9ff",
+            "secondary-container": "#90f7c4",
+            "surface-variant": "#dde2f3",
+            "tertiary-fixed-dim": "#ffb77d",
+            "tertiary-fixed": "#ffdcc3",
+            "surface-tint": "#006c49",
+            "on-secondary-container": "#00734e",
+            "error-container": "#ffdad6",
+            "on-surface": "#161c27",
+            "primary-fixed": "#98f5c7",
+            "on-error": "#ffffff",
+            "on-primary-container": "#b9ffd9",
+            "surface-container": "#e8eeff",
+            "surface-container-lowest": "#ffffff",
+            "surface": "#f9f9ff",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#dde2f3",
+            "on-primary-fixed": "#002113",
+            "on-primary-fixed-variant": "#005236",
+            "secondary": "#006c49",
+            "outline-variant": "#bec9c0",
+            "error": "#ba1a1a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "gutter-grid": "1.5rem",
+            "touch-lg": "4.25rem",
+            "space-xl": "2rem",
+            "space-3xl": "4.5rem",
+            "space-xxs": "0.25rem",
+            "space-2xl": "3rem",
+            "space-md": "1rem",
+            "space-xs": "0.5rem",
+            "space-sm": "0.75rem",
+            "container-pad-desktop": "3rem",
+            "touch-min": "3.5rem",
+            "container-pad-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Manrope"],
+            "quote-accent": ["Playfair Display"],
+            "patient-action-lg": ["Manrope"],
+            "display-hero-mobile": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "patient-body-lg": ["Inter"],
+            "clinical-label": ["Inter"],
+            "display-hero": ["Manrope"],
+            "clinical-metric": ["Manrope"],
+            "label-caption": ["Inter"],
+            "headline-lg": ["Manrope"],
+            "clinical-body": ["Inter"],
+            "patient-body-md": ["Inter"],
+            "headline-lg-mobile": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-md": ["26px", {"lineHeight": "36px", "fontWeight": "600"}],
+            "quote-accent": ["24px", {"lineHeight": "36px", "letterSpacing": "0", "fontWeight": "500"}],
+            "patient-action-lg": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+            "display-hero-mobile": ["34px", {"lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "headline-sm": ["22px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "patient-body-lg": ["20px", {"lineHeight": "32px", "fontWeight": "400"}],
+            "clinical-label": ["13px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+            "display-hero": ["48px", {"lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "clinical-metric": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+            "label-caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+            "headline-lg": ["36px", {"lineHeight": "46px", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+            "clinical-body": ["15px", {"lineHeight": "22px", "fontWeight": "400"}],
+            "patient-body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg-mobile": ["28px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .subtle-pattern {
+      background-image: radial-gradient(rgba(0, 97, 65, 0.12) 1.5px, transparent 1.5px);
+      background-size: 16px 16px;
+    }
+  </style>
+<script src="game-progress.js"></script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col justify-between selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar from Shared Components Hierarchy -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none docked full-width top-0 sticky z-40">
+<div class="flex justify-between items-center w-full px-container-pad-mobile md:px-container-pad-desktop h-touch-min max-w-7xl mx-auto">
+<!-- Brand & Routine Context -->
+<div class="flex items-center gap-space-lg">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-primary dark:text-inverse-primary">
+          MINDNER
+        </span>
+<div class="hidden sm:flex items-center gap-space-xs px-space-sm py-1 bg-surface-container rounded-full">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-clinical-label font-clinical-label text-on-surface-variant">Routine Active: Memory Match</span>
+</div>
+</div>
+<!-- Navigation Links (Contextual Destination: Activities) -->
+<nav class="hidden md:flex items-center gap-space-xl">
+<a class="text-on-surface-variant dark:text-surface-variant font-patient-body-md hover:text-primary dark:hover:text-inverse-primary pb-1 transition-colors duration-200" href="#routine">Today's Routine</a>
+<a class="text-primary dark:text-inverse-primary border-b-2 border-primary dark:border-inverse-primary pb-1 font-patient-action-lg text-patient-body-md transition-colors duration-200" href="#activities">Activities</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-patient-body-md hover:text-primary dark:hover:text-inverse-primary pb-1 transition-colors duration-200" href="#progress">My Progress</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-patient-body-md hover:text-primary dark:hover:text-inverse-primary pb-1 transition-colors duration-200" href="#careteam">Care Team</a>
+</nav>
+<!-- Trailing Controls: Audio Guidance & Calm Exit -->
+<div class="flex items-center gap-space-md">
+<!-- Audio Guidance Button -->
+<button aria-label="Audio Guidance" class="flex items-center gap-space-xs px-space-md h-11 rounded-full bg-surface-container-low hover:bg-surface-container transition-colors duration-200 text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary" id="audioToggleBtn" onclick="toggleAudioGuidance()">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="volume_up">volume_up</span>
+<span class="text-clinical-label font-clinical-label text-on-surface">Audio Guidance</span>
+<span class="w-2 h-2 rounded-full bg-primary ml-1" id="audioBadge"></span>
+</button>
+<!-- Exit to Home / Return Button -->
+<a class="flex items-center gap-space-xs px-space-md h-11 rounded-full bg-surface-container-lowest border border-outline-variant hover:bg-surface-container-low transition-all duration-150 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" href="#exit" onclick="confirmExit(event)">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="arrow_back">arrow_back</span>
+<span class="text-clinical-label font-clinical-label font-semibold">Exit to Home</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Patient Content Area (Single Stream Focused Flow max-w 720px) -->
+<main class="flex-1 max-w-[760px] w-full mx-auto px-container-pad-mobile md:px-container-pad-desktop py-space-xl flex flex-col justify-start">
+<!-- Cognitive Orientation & Status Banner -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-space-lg shadow-sm mb-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md mb-space-sm">
+<!-- Pairs Counter -->
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed text-2xl" data-icon="extension">extension</span>
+</div>
+<div>
+<span class="text-clinical-label font-clinical-label text-on-surface-variant uppercase tracking-wider block">Progress</span>
+<span class="text-headline-sm font-headline-sm text-on-surface font-bold" id="pairsCounterText">Pairs Found: 0 of 6</span>
+</div>
+</div>
+<!-- Non-Stressful Gentle Timer & Comfort Status -->
+<div class="flex items-center gap-space-md self-start sm:self-auto bg-surface-container-low px-space-md py-space-xs rounded-xl">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg" data-icon="timer">timer</span>
+<span class="font-clinical-body text-clinical-body font-semibold tracking-wider" id="sessionTimer">00:00</span>
+</div>
+<span class="h-4 w-px bg-outline-variant"></span>
+<span class="text-clinical-label font-clinical-label text-primary font-medium">Gentle Pace</span>
+</div>
+</div>
+<!-- Calming Progress Bar -->
+<div aria-valuemax="6" aria-valuemin="0" aria-valuenow="0" class="w-full bg-surface-container-high rounded-full h-3 overflow-hidden" role="progressbar">
+<div class="bg-primary h-3 rounded-full transition-all duration-500 ease-out" id="progressBar" style="width: 0%;"></div>
+</div>
+</section>
+<!-- Large Humanist Instruction Banner -->
+<div class="mb-space-lg text-center">
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-2">
+        Find the matching pairs.
+      </h1>
+<p class="text-patient-body-lg font-patient-body-lg text-on-surface-variant" id="instructionSub">
+        Tap a card to turn it over, then find its partner.
+      </p>
+</div>
+<!-- Interactive Game Grid: 3 Rows x 4 Columns -->
+<div class="grid grid-cols-3 sm:grid-cols-4 gap-space-md mb-space-2xl perspective-1000 select-none" id="gameGrid">
+<!-- Generated Dynamically by JS for full game mechanics -->
+</div>
+<!-- Bottom Reassuring Touch Controls (Touch Min 56px) -->
+<div class="flex flex-wrap items-center justify-between gap-space-md pt-space-xs border-t border-outline-variant">
+<!-- Pause Routine -->
+<button class="h-touch-min min-w-[140px] px-space-lg rounded-2xl border-2 border-outline-variant bg-surface-container-lowest text-on-surface font-patient-action-lg text-patient-body-md hover:bg-surface-container-low active:scale-[0.98] transition-all flex items-center justify-center gap-space-xs focus:ring-2 focus:ring-primary focus:outline-none" id="pauseBtn" onclick="togglePauseRoutine()">
+<span class="material-symbols-outlined text-2xl text-on-surface" data-icon="pause_circle">pause_circle</span>
+<span id="pauseBtnText">Pause Routine</span>
+</button>
+<!-- Spoken Hint -->
+<button class="h-touch-min px-space-xl rounded-2xl bg-secondary-container hover:bg-secondary-fixed active:scale-[0.98] text-on-secondary-fixed font-patient-action-lg text-patient-body-md transition-all flex items-center justify-center gap-space-xs shadow-sm focus:ring-2 focus:ring-secondary focus:outline-none" onclick="provideGentleHint()">
+<span class="material-symbols-outlined text-2xl" data-icon="lightbulb">lightbulb</span>
+<span>Spoken Hint</span>
+</button>
+<!-- Refresh / Reset gently -->
+<button class="h-touch-min min-w-[140px] px-space-lg rounded-2xl border border-outline-variant bg-surface-container-lowest text-on-surface-variant font-patient-action-lg text-patient-body-md hover:bg-surface-container-low active:scale-[0.98] transition-all flex items-center justify-center gap-space-xs focus:ring-2 focus:ring-primary focus:outline-none" onclick="resetRoutine()">
+<span class="material-symbols-outlined text-2xl text-outline" data-icon="restart_alt">restart_alt</span>
+<span>Start Over</span>
+</button>
+</div>
+</main>
+<!-- Reassuring Hint Announcement Pill (Screen Reader & Micro-prompt) -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-space-lg py-space-sm rounded-full shadow-lg flex items-center gap-space-sm opacity-0 pointer-events-none transition-opacity duration-300" id="hintToast">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="hearing">hearing</span>
+<span class="text-patient-body-md font-patient-body-md" id="hintMessage">Take your time. Notice the cards in the top corners.</span>
+</div>
+<!-- Quiet Dignity Completion Modal (Level 3 Elevation) -->
+<div aria-labelledby="modalTitle" aria-modal="true" class="fixed inset-0 z-50 bg-on-background/40 backdrop-blur-sm hidden flex items-center justify-center p-space-md" id="completionModal" role="dialog">
+<div class="bg-surface-container-lowest border-2 border-primary-fixed rounded-[28px] max-w-lg w-full p-space-2xl shadow-2xl transform transition-all text-center">
+<!-- Gentle Reinforcement Icon Badge -->
+<div class="w-20 h-20 rounded-full bg-secondary-container mx-auto mb-space-md flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-4xl" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="inline-block px-space-md py-1 rounded-full bg-surface-container text-primary text-clinical-label font-clinical-label font-bold mb-2">
+        Daily Routine Complete
+      </span>
+<h2 class="text-headline-lg font-headline-lg text-on-surface mb-2" id="modalTitle">
+        Wonderful work!
+      </h2>
+<p class="text-patient-body-lg font-patient-body-lg text-on-surface-variant mb-space-xl">
+        You successfully found all matching cards with calm, steady attention.
+      </p>
+<!-- Clinical Metrics Summary Cards -->
+<div class="grid grid-cols-3 gap-space-sm bg-surface-container-low rounded-2xl p-space-md mb-space-xl border border-outline-variant">
+<div class="text-center">
+<span class="text-label-caption font-label-caption text-on-surface-variant block uppercase">Matched</span>
+<span class="text-clinical-metric font-clinical-metric text-primary">6 / 6</span>
+</div>
+<div class="text-center border-x border-outline-variant px-1">
+<span class="text-label-caption font-label-caption text-on-surface-variant block uppercase">Session Time</span>
+<span class="text-clinical-metric font-clinical-metric text-on-surface" id="statTime">02:14</span>
+</div>
+<div class="text-center">
+<span class="text-label-caption font-label-caption text-on-surface-variant block uppercase">Precision</span>
+<span class="text-clinical-metric font-clinical-metric text-primary" id="statAccuracy">94%</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-space-md">
+<button class="flex-1 h-touch-min rounded-2xl border-2 border-primary-container bg-surface-container-lowest text-primary font-patient-action-lg text-patient-body-md hover:bg-surface-container-low transition-colors flex items-center justify-center gap-space-xs" onclick="resetRoutine(); closeModal();">
+<span class="material-symbols-outlined text-2xl" data-icon="refresh">refresh</span>
+<span>Play Again</span>
+</button>
+<button class="flex-1 h-touch-min rounded-2xl bg-primary-container hover:bg-primary text-on-primary font-patient-action-lg text-patient-body-md transition-colors flex items-center justify-center gap-space-xs shadow-md" onclick="closeModal()">
+<span>Complete Routine</span>
+<span class="material-symbols-outlined text-2xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Soft Clinical Audio & Interaction Logic -->
+<script>
+    // Distinct Everyday Familiar Items
+    const cardDataItems = [
+      { id: 'apple', label: 'Apple', icon: 'nutrition', color: 'text-tertiary', bgColor: 'bg-tertiary-fixed' },
+      { id: 'house', label: 'House', icon: 'home', color: 'text-primary', bgColor: 'bg-secondary-container' },
+      { id: 'flower', label: 'Flower', icon: 'local_florist', color: 'text-secondary', bgColor: 'bg-secondary-fixed' },
+      { id: 'book', label: 'Book', icon: 'menu_book', color: 'text-primary-container', bgColor: 'bg-surface-container-high' },
+      { id: 'cup', label: 'Cup', icon: 'local_cafe', color: 'text-tertiary-container', bgColor: 'bg-tertiary-fixed-dim' },
+      { id: 'tree', label: 'Tree', icon: 'park', color: 'text-primary', bgColor: 'bg-primary-fixed' }
+    ];
+
+    let cards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let totalAttempts = 0;
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let isPaused = false;
+    let isProcessing = false;
+    let audioGuidanceActive = true;
+
+    // Synthesized gentle speech helper (no jarring sounds)
+    function speakCalmly(message) {
+      if (!audioGuidanceActive || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.rate = 0.85; // Slow, calm cadence
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function initGame() {
+      // Build paired array of 12 cards
+      const deck = [...cardDataItems, ...cardDataItems].map((item, index) => ({
+        ...item,
+        uniqueId: `${item.id}-${index}-${Math.random()}`,
+        matched: false,
+        flipped: false
+      }));
+
+      // Gentle Fisher-Yates Shuffle
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+
+      cards = deck;
+      flippedCards = [];
+      matchedPairs = 0;
+      totalAttempts = 0;
+      isProcessing = false;
+
+      renderGrid();
+      updateUI();
+      startTimer();
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('gameGrid');
+      grid.innerHTML = '';
+
+      cards.forEach((card, index) => {
+        const cardContainer = document.createElement('div');
+        cardContainer.className = 'w-full h-32 sm:h-40 rounded-[20px] cursor-pointer focus:outline-none focus:ring-4 focus:ring-primary-container';
+        cardContainer.setAttribute('tabindex', '0');
+        cardContainer.setAttribute('role', 'button');
+        cardContainer.setAttribute('aria-label', card.flipped ? `${card.label}` : `Card ${index + 1}, face down`);
+
+        // Card Inner 3D Container
+        const cardInner = document.createElement('div');
+        cardInner.className = `w-full h-full relative transition-transform duration-500 transform-style-3d ${card.flipped ? 'rotate-y-180' : ''}`;
+        cardInner.id = `card-inner-${index}`;
+
+        // Face Down (Front representation before flip)
+        const faceDown = document.createElement('div');
+        faceDown.className = 'absolute inset-0 w-full h-full rounded-[20px] border-2 border-outline-variant bg-surface-container-low subtle-pattern backface-hidden shadow-sm flex flex-col items-center justify-center p-space-sm transition-all hover:border-primary';
+        faceDown.innerHTML = `
+          <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary-container border border-outline-variant">
+            <span class="material-symbols-outlined text-2xl" data-icon="psychology">psychology</span>
+          </div>
+          <span class="text-label-caption font-label-caption text-on-surface-variant font-medium mt-2">Card ${index + 1}</span>
+        `;
+
+        // Face Up (Back representation shown when rotated)
+        const faceUp = document.createElement('div');
+        const matchStateStyles = card.matched 
+          ? 'border-2 border-primary bg-primary-fixed/20 shadow-md ring-2 ring-primary/40' 
+          : 'border-2 border-outline-variant bg-surface-container-lowest shadow-sm';
+
+        faceUp.className = `absolute inset-0 w-full h-full rounded-[20px] ${matchStateStyles} rotate-y-180 backface-hidden flex flex-col items-center justify-center p-space-sm relative`;
+        
+        let badgeHtml = '';
+        if (card.matched) {
+          badgeHtml = `
+            <div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm">
+              <span class="material-symbols-outlined text-sm font-bold" data-icon="check">check</span>
+            </div>
+          `;
+        }
+
+        faceUp.innerHTML = `
+          ${badgeHtml}
+          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full ${card.bgColor} ${card.color} flex items-center justify-center mb-1">
+            <span class="material-symbols-outlined text-3xl" data-icon="${card.icon}">${card.icon}</span>
+          </div>
+          <span class="text-patient-body-md font-patient-action-lg text-on-surface">${card.label}</span>
+        `;
+
+        cardInner.appendChild(faceDown);
+        cardInner.appendChild(faceUp);
+        cardContainer.appendChild(cardInner);
+
+        // Click and Keyboard Support
+        cardContainer.onclick = () => handleCardClick(index);
+        cardContainer.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCardClick(index);
+          }
+        };
+
+        grid.appendChild(cardContainer);
+      });
+    }
+
+    function handleCardClick(index) {
+      if (isPaused || isProcessing) return;
+      const card = cards[index];
+
+      // Ignore already flipped or matched cards
+      if (card.flipped || card.matched) return;
+
+      // Flip the card
+      card.flipped = true;
+      flippedCards.push({ ...card, index });
+      updateCardVisual(index);
+
+      // Auditory reassurance
+      if (audioGuidanceActive && flippedCards.length === 1) {
+        speakCalmly(card.label);
+      }
+
+      if (flippedCards.length === 2) {
+        totalAttempts++;
+        isProcessing = true;
+        checkMatch();
+      }
+    }
+
+    function updateCardVisual(index) {
+      const card = cards[index];
+      const cardInner = document.getElementById(`card-inner-${index}`);
+      if (!cardInner) return;
+
+      if (card.flipped) {
+        cardInner.classList.add('rotate-y-180');
+      } else {
+        cardInner.classList.remove('rotate-y-180');
+      }
+    }
+
+    function checkMatch() {
+      const [first, second] = flippedCards;
+
+      if (first.id === second.id) {
+        // Matched!
+        setTimeout(() => {
+          cards[first.index].matched = true;
+          cards[second.index].matched = true;
+          matchedPairs++;
+
+          // Speak match reassurance
+          speakCalmly(`Found the matching ${first.label}! Good job.`);
+          
+          flippedCards = [];
+          isProcessing = false;
+          renderGrid();
+          updateUI();
+
+          if (matchedPairs === 6) {
+            triggerCompletion();
+          }
+        }, 500);
+
+      } else {
+        MINDNER_GAME_PROGRESS.markFailed(MINDNER_GAME_PROGRESS.currentLevel());
+        // Not a match - Turn back gently with sufficient dwell time
+        setTimeout(() => {
+          cards[first.index].flipped = false;
+          cards[second.index].flipped = false;
+          updateCardVisual(first.index);
+          updateCardVisual(second.index);
+          flippedCards = [];
+          isProcessing = false;
+        }, 1200);
+      }
+    }
+
+    function updateUI() {
+      // Update Pairs Text
+      document.getElementById('pairsCounterText').innerText = `Pairs Found: ${matchedPairs} of 6`;
+      
+      // Update Progress Bar
+      const percentage = (matchedPairs / 6) * 100;
+      document.getElementById('progressBar').style.width = `${percentage}%`;
+      document.querySelector('[role="progressbar"]').setAttribute('aria-valuenow', matchedPairs);
+
+      // Contextual Instruction Subtext
+      const instructionSub = document.getElementById('instructionSub');
+      if (matchedPairs === 0) {
+        instructionSub.innerText = 'Tap any card to turn it over, then find its partner.';
+      } else if (matchedPairs === 5) {
+        instructionSub.innerText = 'Just one more pair to discover. You are doing wonderfully.';
+      } else {
+        instructionSub.innerText = `Great observation! You have found ${matchedPairs} matching pairs.`;
+      }
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          timerSeconds++;
+          const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+          const secs = String(timerSeconds % 60).padStart(2, '0');
+          document.getElementById('sessionTimer').innerText = `${mins}:${secs}`;
+        }
+      }, 1000);
+    }
+
+    function togglePauseRoutine() {
+      isPaused = !isPaused;
+      const pauseBtnText = document.getElementById('pauseBtnText');
+      const pauseIcon = document.querySelector('#pauseBtn .material-symbols-outlined');
+
+      if (isPaused) {
+        pauseBtnText.innerText = 'Resume';
+        pauseIcon.innerText = 'play_circle';
+        showToast('Routine paused. Take a breath and resume whenever you are ready.');
+        speakCalmly('Routine paused.');
+      } else {
+        pauseBtnText.innerText = 'Pause Routine';
+        pauseIcon.innerText = 'pause_circle';
+        showToast('Routine resumed.');
+        speakCalmly('Routine resumed.');
+      }
+    }
+
+    function provideGentleHint() {
+      // Find an unmatched card pair
+      const unmatched = cards.filter(c => !c.matched);
+      if (unmatched.length === 0) return;
+
+      const targetId = unmatched[0].id;
+      const matchingIndices = [];
+      cards.forEach((c, idx) => {
+        if (c.id === targetId) matchingIndices.push(idx + 1);
+      });
+
+      const message = `Here is a gentle hint: A matching pair is located near Card ${matchingIndices[0]} and Card ${matchingIndices[1]}.`;
+      showToast(message);
+      speakCalmly(message);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('hintToast');
+      const msgElem = document.getElementById('hintMessage');
+      msgElem.innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 4000);
+    }
+
+    function toggleAudioGuidance() {
+      audioGuidanceActive = !audioGuidanceActive;
+      const badge = document.getElementById('audioBadge');
+      if (audioGuidanceActive) {
+        badge.classList.remove('bg-outline-variant');
+        badge.classList.add('bg-primary');
+        showToast('Audio guidance is now on.');
+        speakCalmly('Audio guidance enabled.');
+      } else {
+        badge.classList.remove('bg-primary');
+        badge.classList.add('bg-outline-variant');
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        showToast('Audio guidance is muted.');
+      }
+    }
+
+    function confirmExit(e) {
+      e.preventDefault();
+      const exitConfirmed = confirm('Would you like to exit to Today’s Routine? Your progress will be gently saved.');
+      if (exitConfirmed) {
+        window.location.hash = 'routine';
+      }
+    }
+
+    function triggerCompletion() {
+      clearInterval(timerInterval);
+      MINDNER_GAME_PROGRESS.markCompleted(MINDNER_GAME_PROGRESS.currentLevel());
+      
+      const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const secs = String(timerSeconds % 60).padStart(2, '0');
+      document.getElementById('statTime').innerText = `${mins}:${secs}`;
+
+      // Calculate accuracy
+      const calculatedAccuracy = Math.max(70, Math.round((6 / Math.max(totalAttempts, 6)) * 100));
+      document.getElementById('statAccuracy').innerText = `${calculatedAccuracy}%`;
+
+      speakCalmly('Wonderful work! You have completed the memory match routine today.');
+
+      setTimeout(() => {
+        document.getElementById('completionModal').classList.remove('hidden');
+      }, 400);
+    }
+
+    function closeModal() {
+      document.getElementById('completionModal').classList.add('hidden');
+      
+      // Redirect to home with success message after short delay
+      setTimeout(() => {
+        const level = MINDNER_GAME_PROGRESS.currentLevel();
+        MINDNER_GAME_PROGRESS.goHome(level);
+      }, 500);
+    }
+
+    function resetRoutine() {
+      clearInterval(timerInterval);
+      timerSeconds = 0;
+      document.getElementById('sessionTimer').innerText = '00:00';
+      if (isPaused) {
+        togglePauseRoutine();
+      }
+      initGame();
+      showToast('Game has been refreshed. Enjoy!');
+    }
+
+    // Initialize on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      initGame();
+    });
+  </script>
+</body></html>

@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MINDNER - Cognitive Daily Pathway</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#7cd9ac",
+            "on-secondary-fixed-variant": "#005236",
+            "on-primary-fixed": "#002113",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#e3e8f9",
+            "on-surface": "#161c27",
+            "inverse-on-surface": "#ecf0ff",
+            "background": "#f9f9ff",
+            "surface": "#f9f9ff",
+            "on-tertiary-fixed-variant": "#6e3900",
+            "on-secondary-fixed": "#002113",
+            "tertiary-container": "#a65900",
+            "on-tertiary-fixed": "#2f1500",
+            "secondary-fixed-dim": "#74daa9",
+            "tertiary-fixed-dim": "#ffb77d",
+            "primary-fixed": "#98f5c7",
+            "on-surface-variant": "#3e4942",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#b9ffd9",
+            "surface-tint": "#006c49",
+            "outline": "#6e7a72",
+            "outline-variant": "#bec9c0",
+            "on-tertiary": "#ffffff",
+            "inverse-surface": "#2a303d",
+            "surface-container": "#e8eeff",
+            "secondary": "#006c49",
+            "on-tertiary-container": "#ffede1",
+            "surface-container-low": "#f1f3ff",
+            "primary": "#006141",
+            "surface-dim": "#d4daea",
+            "on-secondary-container": "#00734e",
+            "inverse-primary": "#7cd9ac",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "primary-container": "#127c56",
+            "secondary-fixed": "#90f7c4",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#ffdcc3",
+            "surface-container-highest": "#dde2f3",
+            "surface-variant": "#dde2f3",
+            "on-background": "#161c27",
+            "surface-bright": "#f9f9ff",
+            "on-error-container": "#93000a",
+            "on-primary-fixed-variant": "#005236",
+            "on-primary": "#ffffff",
+            "secondary-container": "#90f7c4",
+            "tertiary": "#824500"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "touch-min": "3.5rem",
+            "gutter-grid": "1.5rem",
+            "space-2xl": "3rem",
+            "touch-lg": "4.25rem",
+            "container-pad-desktop": "3rem",
+            "space-md": "1rem",
+            "container-pad-mobile": "1.25rem",
+            "space-sm": "0.75rem",
+            "space-xxs": "0.25rem",
+            "space-xs": "0.5rem",
+            "space-3xl": "4.5rem"
+          },
+          "fontFamily": {
+            "clinical-body": ["Inter"],
+            "quote-accent": ["Playfair Display"],
+            "headline-sm": ["Manrope"],
+            "patient-body-lg": ["Inter"],
+            "patient-body-md": ["Inter"],
+            "clinical-label": ["Inter"],
+            "clinical-metric": ["Manrope"],
+            "headline-lg-mobile": ["Manrope"],
+            "label-caption": ["Inter"],
+            "display-hero": ["Manrope"],
+            "display-hero-mobile": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "headline-md": ["Manrope"],
+            "patient-action-lg": ["Manrope"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24 !important;
+    }
+    @keyframes gentlePulse {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.02); }
+    }
+    .animate-gentle-bob {
+      animation: gentlePulse 2.8s ease-in-out infinite;
+    }
+    @keyframes tooltipBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-tooltip {
+      animation: tooltipBounce 1.8s ease-in-out infinite;
+    }
+    .duo-node-3d {
+      box-shadow: 0 8px 0px rgba(0, 0, 0, 0.16);
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .duo-node-3d:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0px rgba(0, 0, 0, 0.16);
+    }
+    .duo-node-gold {
+      background: linear-gradient(180deg, #ffc83b 0%, #e59b00 100%);
+      box-shadow: 0 8px 0px #b77600, 0 12px 20px rgba(229, 155, 0, 0.28);
+    }
+    .duo-node-gold:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0px #b77600;
+    }
+    .duo-node-active {
+      background: linear-gradient(180deg, #127c56 0%, #0a5238 100%);
+      box-shadow: 0 8px 0px #043825, 0 12px 24px rgba(18, 124, 86, 0.35);
+    }
+    .duo-node-active:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0px #043825;
+    }
+    .duo-node-locked {
+      background: #e2e8f0;
+      box-shadow: 0 7px 0px #cbd5e1;
+    }
+    /* Confetti Particle */
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 14px;
+      opacity: 0.9;
+      pointer-events: none;
+      animation: confettiFall 2.8s ease-out forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(-40px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-surface font-patient-body-md text-on-surface antialiased min-h-screen flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TOP APP BAR -->
+<header class="bg-surface border-b border-outline-variant shadow-sm docked full-width top-0 sticky z-40">
+<div class="flex justify-between items-center w-full px-container-pad-mobile md:px-container-pad-desktop h-touch-min max-w-7xl mx-auto">
+<!-- Brand Anchor -->
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined material-symbols-fill text-2xl" data-icon="psychology">psychology</span>
+</div>
+<div>
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-primary">MINDNER</span>
+<span class="hidden sm:inline-block ml-2 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-clinical-label font-clinical-label">Cognitive Flow</span>
+</div>
+</div>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center space-x-6">
+</nav>
+<!-- Trailing Action Badges / Controls -->
+<div class="flex items-center gap-space-xs sm:gap-space-sm">
+<button class="p-2.5 rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors duration-200 text-primary flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-primary" id="audioGuidanceBtn" title="Audio Guidance">
+<span class="material-symbols-outlined text-xl" data-icon="volume_up">volume_up</span>
+<span class="hidden xl:inline font-clinical-label text-clinical-label">Audio Guidance</span>
+</button>
+<a class="hidden sm:flex items-center gap-1 px-3 py-2 rounded-xl bg-surface-container text-primary font-clinical-label hover:bg-surface-container-high transition-colors" href="#clinician">
+<span class="material-symbols-outlined text-lg" data-icon="accessibility_new">accessibility_new</span>
+<span>Clinician Portal</span>
+</a>
+<div class="relative ml-1">
+<div class="w-10 h-10 rounded-full border-2 border-primary-fixed bg-surface-container-high flex items-center justify-center text-primary font-headline-sm font-bold">
+<span class="material-symbols-outlined material-symbols-fill text-2xl" data-icon="account_circle">account_circle</span>
+</div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary-fixed ring-2 ring-white" title="Active &amp; Calm Status"></span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-4 py-6 sm:py-8 flex flex-col items-center relative">
+<!-- TOP STATUS COUNTER BAR -->
+<section class="w-full max-w-xl bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm px-4 py-3 mb-6 flex items-center justify-between gap-2 transition-all">
+<!-- Module Focus Badge -->
+<div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high cursor-pointer transition-colors" title="Switch Module">
+<span class="w-6 h-6 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-sm material-symbols-fill" data-icon="spa">spa</span>
+</span>
+<span class="font-clinical-label text-clinical-label text-on-surface font-semibold hidden xs:inline">Cognitive Focus</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Streak Pill -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 border border-orange-200/60" title="12 Days Streak">
+<span class="material-symbols-outlined material-symbols-fill text-amber-500 text-xl" data-icon="local_fire_department">local_fire_department</span>
+<div class="flex flex-col leading-tight">
+<span class="font-headline-sm font-bold text-amber-900 text-sm" id="streakCount">12</span>
+<span class="text-[10px] text-amber-700/80 -mt-1 hidden sm:inline">Streak</span>
+</div>
+</div>
+<!-- Gems / Tokens Pill -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 border border-sky-200/60" title="Mind Gems Earned">
+<span class="material-symbols-outlined material-symbols-fill text-sky-500 text-xl" data-icon="diamond">diamond</span>
+<div class="flex flex-col leading-tight">
+<span class="font-headline-sm font-bold text-sky-950 text-sm" id="gemCount">600</span>
+<span class="text-[10px] text-sky-700/80 -mt-1 hidden sm:inline">Gems</span>
+</div>
+</div>
+<!-- Energy / Serenity Hearts -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200/60" title="Serenity Reserve">
+<span class="material-symbols-outlined material-symbols-fill text-emerald-600 text-xl" data-icon="favorite">favorite</span>
+<div class="flex flex-col leading-tight">
+<span class="font-headline-sm font-bold text-emerald-950 text-sm">5/5</span>
+<span class="text-[10px] text-emerald-700/80 -mt-1 hidden sm:inline">Serenity</span>
+</div>
+</div>
+</section>
+<!-- UNIT SECTION HEADER BANNER (Strictly Starts with 0 of 5 Completed) -->
+<section class="w-full max-w-xl bg-gradient-to-r from-primary via-primary-container to-[#0c6142] rounded-3xl p-5 sm:p-6 text-white shadow-md relative overflow-hidden mb-12">
+<div class="absolute -right-12 -bottom-12 w-44 h-44 rounded-full bg-white/10 pointer-events-none"></div>
+<div class="absolute right-16 top-3 w-16 h-16 rounded-full bg-secondary-fixed/20 pointer-events-none"></div>
+<div class="relative z-10 flex items-start justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-block px-2.5 py-0.5 rounded-md bg-secondary-fixed text-on-secondary-fixed text-xs font-bold tracking-wide">
+            UNIT 1
+          </span>
+<span class="text-xs font-clinical-label text-primary-fixed flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span> 5-8 min daily
+          </span>
+</div>
+<h1 class="text-headline-md font-headline-md font-bold text-white tracking-tight">Morning Calm &amp; Daily Sequencing</h1>
+<p class="text-patient-body-md text-on-primary-container mt-1 max-w-md opacity-95">
+          Step by step daily routine recovery. Start at Level 1 to build gentle cognitive confidence.
+        </p>
+</div>
+<button class="flex-shrink-0 w-12 h-12 rounded-2xl bg-white/15 hover:bg-white/25 border border-white/30 text-white flex items-center justify-center transition-all shadow-sm active:scale-95" onclick="openGuidebookModal()" title="Open Routine Guidebook">
+<span class="material-symbols-outlined text-2xl" data-icon="menu_book">menu_book</span>
+</button>
+</div>
+<!-- Progress Bar (Starts strictly at 0%) -->
+<div class="mt-4 pt-3 border-t border-white/15 flex items-center justify-between text-xs text-primary-fixed">
+<span id="unitProgressLabel">Milestones Completed: 0 of 5</span>
+<div class="w-32 bg-white/20 rounded-full h-2 overflow-hidden">
+<div class="bg-secondary-fixed h-full rounded-full transition-all duration-700" id="unitProgressBar" style="width: 0%;"></div>
+</div>
+</div>
+</section>
+<!-- FLOATING INTERACTIVE TOAST NOTIFICATION -->
+<div class="fixed top-20 z-50 transition-all duration-500 transform -translate-y-20 opacity-0 pointer-events-none max-w-sm bg-primary text-white px-5 py-3 rounded-2xl shadow-xl border border-secondary-fixed/40 flex items-center gap-3" id="progressionToast">
+<div class="w-9 h-9 rounded-xl bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-2xl" data-icon="stars">stars</span>
+</div>
+<div>
+<h4 class="font-bold text-sm" id="toastTitle">Level 1 Complete!</h4>
+<p class="text-xs text-on-primary-container" id="toastSubtitle">+25 Gems Earned • Next Level Revealed</p>
+</div>
+</div>
+<!-- WINDING PATHWAY MAP CONTAINER -->
+<section class="w-full max-w-xl relative flex flex-col items-center justify-center pb-20" id="pathwaySection">
+<!-- SVG Pathway Connecting Nodes (Responsive Vector that precisely links node centers:
+     Node 1: (200, 48)  [Center]
+     Node 2: (112, 204) [Offset Left]
+     Node 3: (200, 360) [Center]
+     Node 4: (288, 516) [Offset Right]
+     Node 5: (112, 672) [Offset Left]
+     Node 6 (Trophy): (200, 832) [Center]
+-->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" fill="none" preserveaspectratio="none" viewbox="0 0 400 900">
+<!-- Muted Background Track Groove -->
+<path d="M 200 48
+         C 200 110, 112 142, 112 204
+         C 112 266, 200 298, 200 360
+         C 200 422, 288 454, 288 516
+         C 288 578, 112 610, 112 672
+         C 112 736, 200 768, 200 832" stroke="#e2e8f0" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+<!-- Segment 1: Node 1 -> Node 2 -->
+<path class="transition-all duration-700" d="M 200 48 C 200 110, 112 142, 112 204" id="pathSegment1" stroke="#cbd5e1" stroke-dasharray="6 6" stroke-linecap="round" stroke-width="12"></path>
+<!-- Segment 2: Node 2 -> Node 3 -->
+<path class="transition-all duration-700" d="M 112 204 C 112 266, 200 298, 200 360" id="pathSegment2" stroke="#cbd5e1" stroke-dasharray="6 6" stroke-linecap="round" stroke-width="12"></path>
+<!-- Segment 3: Node 3 -> Node 4 -->
+<path class="transition-all duration-700" d="M 200 360 C 200 422, 288 454, 288 516" id="pathSegment3" stroke="#cbd5e1" stroke-dasharray="6 6" stroke-linecap="round" stroke-width="12"></path>
+<!-- Segment 4: Node 4 -> Node 5 -->
+<path class="transition-all duration-700" d="M 288 516 C 288 578, 112 610, 112 672" id="pathSegment4" stroke="#cbd5e1" stroke-dasharray="6 6" stroke-linecap="round" stroke-width="12"></path>
+<!-- Segment 5: Node 5 -> Trophy -->
+<path class="transition-all duration-700" d="M 112 672 C 112 736, 200 768, 200 832" id="pathSegment5" stroke="#cbd5e1" stroke-dasharray="6 6" stroke-linecap="round" stroke-width="12"></path>
+</svg>
+<!-- MASCOT: Mindy the Gentle Owl Companion -->
+<div class="absolute z-20 flex flex-col items-center animate-gentle-bob select-none pointer-events-auto transition-all duration-700" id="mascotWrapper" style="top: 0px; right: 28px;">
+<!-- Speech Cheer Bubble -->
+<div class="bg-surface-container-lowest border-2 border-primary-container px-3 py-1.5 rounded-2xl shadow-sm text-xs font-clinical-label font-bold text-primary mb-1 relative" id="mascotBubble">
+<span id="mascotSpeech">Welcome! Tap Level 1 to start 🌿</span>
+<div class="w-2.5 h-2.5 bg-surface-container-lowest border-r-2 border-b-2 border-primary-container transform rotate-45 absolute -bottom-1.5 left-6"></div>
+</div>
+<!-- SVG Mindy Owl -->
+<div class="w-20 h-20 sm:w-24 sm:h-24 relative filter drop-shadow-md cursor-pointer" onclick="pokeMascot()" title="Click Mindy for encouragement">
+<svg class="w-full h-full" viewbox="0 0 120 120">
+<ellipse cx="60" cy="65" fill="#127c56" rx="38" ry="42"></ellipse>
+<ellipse cx="60" cy="72" fill="#90f7c4" rx="24" ry="26"></ellipse>
+<path d="M 22 55 C 10 65, 12 85, 26 88 C 24 75, 25 65, 22 55 Z" fill="#095339"></path>
+<path class="animate-pulse" d="M 96 55 C 112 40, 114 65, 96 76 C 96 68, 97 60, 96 55 Z" fill="#095339"></path>
+<circle cx="48" cy="50" fill="#ffffff" r="14"></circle>
+<circle cx="72" cy="50" fill="#ffffff" r="14"></circle>
+<circle cx="50" cy="50" fill="#161c27" r="7"></circle>
+<circle cx="70" cy="50" fill="#161c27" r="7"></circle>
+<circle cx="52" cy="48" fill="#ffffff" r="2.5"></circle>
+<circle cx="72" cy="48" fill="#ffffff" r="2.5"></circle>
+<polygon fill="#ffb77d" points="60,54 54,64 66,64"></polygon>
+<polygon fill="#095339" points="45,26 48,36 40,34"></polygon>
+<polygon fill="#095339" points="75,26 72,36 80,34"></polygon>
+<ellipse cx="48" cy="106" fill="#ffb77d" rx="8" ry="4"></ellipse>
+<ellipse cx="72" cy="106" fill="#ffb77d" rx="8" ry="4"></ellipse>
+</svg>
+</div>
+<span class="text-[11px] font-bold text-on-surface-variant">Mindy</span>
+</div>
+<!-- NODE 1: ACTIVE LEVEL 1 (Center: 50% = 200px) -->
+<div class="relative z-10 w-full flex justify-center items-center mb-16" id="nodeContainer1">
+<div class="flex flex-col items-center relative">
+<!-- Floating START Tooltip (Starts at Level 1) -->
+<div class="absolute -top-12 z-30 animate-tooltip" id="startTooltip">
+<button class="bg-surface-container-lowest border-2 border-primary text-primary font-patient-action-lg text-sm px-4 py-1.5 rounded-2xl shadow-md flex items-center gap-1.5 hover:bg-primary-fixed/30 transition-all cursor-pointer" onclick="openExerciseForCurrentLevel()">
+<span class="tracking-wider font-bold">START</span>
+<span class="material-symbols-outlined text-base material-symbols-fill" data-icon="play_arrow">play_arrow</span>
+</button>
+<div class="w-3 h-3 bg-surface-container-lowest border-r-2 border-b-2 border-primary transform rotate-45 mx-auto -mt-1.5"></div>
+</div>
+<!-- Pulsing Ring Wrapper -->
+<div class="relative w-24 h-24 rounded-full flex items-center justify-center p-1.5" id="ringWrapper1">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="transparent" r="44" stroke="#e2e8f0" stroke-width="5"></circle>
+<circle class="animate-pulse" cx="50" cy="50" fill="transparent" r="44" stroke="#127c56" stroke-dasharray="276" stroke-dashoffset="90" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<button class="duo-node-3d duo-node-active w-20 h-20 rounded-full flex items-center justify-center text-white border-4 border-secondary-fixed focus:outline-none focus:ring-4 focus:ring-primary-fixed cursor-pointer transition-all" id="nodeBtn1" onclick="handleNodeClick(1)">
+<span class="material-symbols-outlined material-symbols-fill text-4xl" data-icon="wb_sunny" id="nodeIcon1">wb_sunny</span>
+</button>
+</div>
+<span class="mt-2 text-xs font-clinical-label font-bold text-primary bg-primary-fixed/40 border border-primary/30 px-3 py-1 rounded-full shadow-xs text-center whitespace-nowrap" id="nodeLabel1">
+        1. Gentle Awakening
+      </span>
+</div>
+</div>
+<!-- NODE 2: LOCKED (Offset Left: Center at 28% = 112px) -->
+<div class="relative z-10 w-full mb-16" id="nodeContainer2">
+<div class="flex flex-col items-center relative w-24 ml-[calc(28%-3rem)]">
+<div class="relative w-24 h-24 rounded-full flex items-center justify-center p-1.5" id="ringWrapper2">
+<button class="duo-node-3d duo-node-locked w-20 h-20 rounded-full flex items-center justify-center text-outline border-4 border-slate-200 cursor-not-allowed transition-all" id="nodeBtn2" onclick="handleNodeClick(2)">
+<span class="material-symbols-outlined material-symbols-fill text-3xl" data-icon="lock" id="nodeIcon2">lock</span>
+</button>
+</div>
+<span class="mt-2 text-xs font-clinical-label font-medium text-outline bg-surface-container border border-outline-variant px-2.5 py-0.5 rounded-full text-center whitespace-nowrap" id="nodeLabel2">
+          2. Word Harmony
+        </span>
+</div>
+</div>
+<!-- NODE 3: LOCKED (Center: 50% = 200px) -->
+<div class="relative z-10 w-full flex justify-center items-center mb-16" id="nodeContainer3">
+<div class="flex flex-col items-center relative">
+<div class="relative w-24 h-24 rounded-full flex items-center justify-center p-1.5" id="ringWrapper3">
+<button class="duo-node-3d duo-node-locked w-20 h-20 rounded-full flex items-center justify-center text-outline border-4 border-slate-200 cursor-not-allowed transition-all" id="nodeBtn3" onclick="handleNodeClick(3)">
+<span class="material-symbols-outlined material-symbols-fill text-3xl" data-icon="lock" id="nodeIcon3">lock</span>
+</button>
+</div>
+<span class="mt-2 text-xs font-clinical-label font-medium text-outline bg-surface-container border border-outline-variant px-2.5 py-0.5 rounded-full text-center whitespace-nowrap" id="nodeLabel3">
+          3. Morning Sequence
+        </span>
+</div>
+</div>
+<!-- NODE 4: LOCKED (Offset Right: Center at 72% = 288px) -->
+<div class="relative z-10 w-full mb-16" id="nodeContainer4">
+<div class="flex flex-col items-center relative w-24 ml-[calc(72%-3rem)]">
+<div class="relative w-24 h-24 rounded-full flex items-center justify-center p-1.5" id="ringWrapper4">
+<button class="duo-node-3d duo-node-locked w-20 h-20 rounded-full flex items-center justify-center text-outline border-4 border-slate-200 cursor-not-allowed transition-all" id="nodeBtn4" onclick="handleNodeClick(4)">
+<span class="material-symbols-outlined material-symbols-fill text-3xl" data-icon="lock" id="nodeIcon4">lock</span>
+</button>
+</div>
+<span class="mt-2 text-xs font-clinical-label font-medium text-outline bg-surface-container border border-outline-variant px-2.5 py-0.5 rounded-full text-center whitespace-nowrap" id="nodeLabel4">
+          4. Picture Pairing
+        </span>
+</div>
+</div>
+<!-- NODE 5: LOCKED (Offset Left: Center at 28% = 112px) -->
+<div class="relative z-10 w-full mb-16" id="nodeContainer5">
+<div class="flex flex-col items-center relative w-24 ml-[calc(28%-3rem)]">
+<div class="relative w-24 h-24 rounded-full flex items-center justify-center p-1.5" id="ringWrapper5">
+<button class="duo-node-3d duo-node-locked w-20 h-20 rounded-full flex items-center justify-center text-outline border-4 border-slate-200 cursor-not-allowed transition-all" id="nodeBtn5" onclick="handleNodeClick(5)">
+<span class="material-symbols-outlined text-3xl" data-icon="lock" id="nodeIcon5">lock</span>
+</button>
+</div>
+<span class="mt-2 text-xs font-clinical-label font-medium text-outline bg-surface-container border border-outline-variant px-2.5 py-0.5 rounded-full text-center whitespace-nowrap" id="nodeLabel5">
+          5. Calm Mosaic
+        </span>
+</div>
+</div>
+<!-- NODE 6: UNIT 1 MASTERY TROPHY (Locked until Level 5 complete: Center: 50% = 200px) -->
+<div class="relative z-10 flex flex-col items-center" id="nodeContainer6">
+<div class="w-24 h-24 flex items-center justify-center">
+<button class="duo-node-3d duo-node-locked w-24 h-24 rounded-3xl flex items-center justify-center text-outline cursor-not-allowed border-4 border-slate-200 transition-all" id="trophyBtn" onclick="handleNodeClick(6)" title="Unit 1 Completion Certificate &amp; Trophy">
+<span class="material-symbols-outlined material-symbols-fill text-4xl text-outline" data-icon="military_tech" id="trophyIcon">military_tech</span>
+</button>
+</div>
+<span class="mt-2 text-xs font-clinical-label font-bold text-on-surface-variant bg-surface-container border border-outline-variant px-3 py-1 rounded-full text-center whitespace-nowrap" id="trophyLabel">
+        Unit 1 Mastery Trophy
+      </span>
+</div>
+</section>
+<!-- QUICK DEMO CONTROLS BAR (Review & Testing) -->
+<section class="w-full max-w-xl bg-surface-container rounded-2xl p-3 border border-outline-variant/80 mb-4 flex items-center justify-between gap-2 shadow-xs">
+<div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-base text-primary" data-icon="tune">tune</span>
+<span class="font-clinical-label font-semibold">Demo Progression:</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-xl hover:bg-primary-container transition-all flex items-center gap-1" onclick="advanceLevelDemo()">
+<span>Advance Next</span>
+<span class="material-symbols-outlined text-sm" data-icon="fast_forward">fast_forward</span>
+</button>
+<button class="px-3 py-1.5 bg-surface-container-lowest border border-outline-variant text-xs text-on-surface hover:bg-surface transition-all rounded-xl flex items-center gap-1" onclick="resetPathwayToLevel1()">
+<span class="material-symbols-outlined text-sm" data-icon="restart_alt">restart_alt</span>
+<span>Reset Level 1</span>
+</button>
+</div>
+</section>
+<!-- CAREGIVER & CLINICAL OBSERVATION DOCK -->
+<section class="w-full max-w-xl bg-surface-container-low border border-outline-variant rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 mt-2 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl" data-icon="query_stats">query_stats</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-sm font-bold text-on-surface">Cognitive Baseline Observation</h2>
+<p class="text-xs text-on-surface-variant font-clinical-body">Level 1 Morning awakening calibration: Ready for initial response</p>
+</div>
+</div>
+<button class="flex-shrink-0 px-3 py-2 rounded-xl border border-primary text-primary hover:bg-primary hover:text-white font-clinical-label text-xs transition-colors duration-200" onclick="openCareTeamModal()">
+      Clinical Notes
+    </button>
+</section>
+</main>
+<!-- BOTTOM NAVIGATION BAR -->
+<footer class="sticky bottom-0 z-40 bg-surface-container-lowest border-t border-outline-variant/60 py-2 px-4 shadow-lg w-full">
+<div class="max-w-xl mx-auto flex items-center justify-around">
+<a class="flex flex-col items-center justify-center py-1 px-3 rounded-2xl bg-secondary-container/40 text-primary transition-all" href="#pathway">
+<span class="material-symbols-outlined material-symbols-fill text-2xl" data-icon="route">route</span>
+<span class="text-[11px] font-bold font-clinical-label mt-0.5">Pathway</span>
+</a>
+<a class="flex flex-col items-center justify-center py-1 px-3 text-on-surface-variant hover:text-primary transition-colors" href="#listen">
+<span class="material-symbols-outlined text-2xl" data-icon="headphones">headphones</span>
+<span class="text-[11px] font-medium font-clinical-label mt-0.5">Audio</span>
+</a>
+<a class="flex flex-col items-center justify-center py-1 px-3 text-on-surface-variant hover:text-primary transition-colors" href="#practice">
+<span class="material-symbols-outlined text-2xl" data-icon="fitness_center">fitness_center</span>
+<span class="text-[11px] font-medium font-clinical-label mt-0.5">Practice</span>
+</a>
+<a class="flex flex-col items-center justify-center py-1 px-3 text-on-surface-variant hover:text-primary transition-colors" href="#trophies">
+<span class="material-symbols-outlined text-2xl" data-icon="emoji_events">emoji_events</span>
+<span class="text-[11px] font-medium font-clinical-label mt-0.5">Awards</span>
+</a>
+<a class="flex flex-col items-center justify-center py-1 px-3 text-on-surface-variant hover:text-primary transition-colors" href="#profile">
+<span class="material-symbols-outlined text-2xl" data-icon="more_horiz">more_horiz</span>
+<span class="text-[11px] font-medium font-clinical-label mt-0.5">More</span>
+</a>
+</div>
+</footer>
+<script src="./games/game-progress.js"></script>
+<!-- ========================================================== -->
+<!-- DYNAMIC EXERCISE MODAL (Adapts to Active Level 1 through 5) -->
+<!-- ========================================================== -->
+<div class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/40 backdrop-blur-xs p-4" id="exerciseModal">
+<div class="bg-surface-container-lowest border border-outline-variant w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative transform transition-all">
+<!-- Header -->
+<div class="flex items-center justify-between mb-5">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary animate-ping"></span>
+<span class="font-clinical-label text-xs uppercase tracking-wider text-primary font-bold" id="modalExerciseStep">Level 1 Activity</span>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant" onclick="closeExerciseModal()" title="Close">
+<span class="material-symbols-outlined text-2xl" data-icon="close">close</span>
+</button>
+</div>
+<!-- Interactive Game Content Container -->
+<div id="quizStage1">
+<div class="mb-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-bold mb-3" id="modalBadge">
+<span class="material-symbols-outlined text-sm" data-icon="wb_sunny">wb_sunny</span> Gentle Awakening
+        </div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface mb-2" id="modalQuestion">
+          Which calming anchor helps your mind greet the morning peacefully?
+        </h3>
+<p class="text-patient-body-md text-on-surface-variant" id="modalDescription">
+          Take a slow breath. Select the mindful step that eases you into clarity.
+        </p>
+</div>
+<!-- Decision Cards -->
+<div class="space-y-3 my-6" id="modalOptionsContainer">
+<!-- Injected via JavaScript based on current level -->
+</div>
+<!-- Feedback Area -->
+<div class="hidden rounded-2xl p-3.5 mb-4 text-sm font-semibold flex items-center gap-2" id="quizFeedback"></div>
+<!-- Modal Actions -->
+<div class="flex items-center gap-3 pt-2">
+<button class="h-touch-min px-4 rounded-2xl border border-outline-variant hover:bg-surface-container flex items-center justify-center gap-2 text-primary cursor-pointer" id="audioPromptBtn" onclick="speakCurrentPrompt()" title="Listen to question">
+<span class="material-symbols-outlined text-2xl" data-icon="volume_up">volume_up</span>
+<span class="text-xs font-bold font-clinical-label hidden sm:inline">Listen</span>
+</button>
+<button class="flex-1 h-touch-min rounded-2xl bg-slate-200 text-slate-400 font-patient-action-lg transition-all cursor-not-allowed flex items-center justify-center gap-2 shadow-sm" disabled="" id="submitAnswerBtn" onclick="verifyAnswer()">
+<span>Check My Answer</span>
+<span class="material-symbols-outlined text-xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Celebration Screen -->
+<div class="hidden text-center py-4" id="quizCelebration">
+<div class="w-20 h-20 rounded-full bg-secondary-fixed text-on-secondary-fixed mx-auto flex items-center justify-center mb-4 animate-bounce">
+<span class="material-symbols-outlined material-symbols-fill text-5xl" data-icon="celebration">celebration</span>
+</div>
+<h3 class="text-headline-md font-headline-md font-bold text-primary mb-1" id="celebrationTitle">Level 1 Complete!</h3>
+<p class="text-patient-body-md text-on-surface-variant max-w-sm mx-auto mb-6" id="celebrationSubtitle">
+        Calm focus achieved. You've unlocked the next milestone on your routine pathway!
+      </p>
+<div class="bg-surface-container-low border border-outline-variant rounded-2xl p-4 flex items-center justify-around mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined material-symbols-fill text-sky-500 text-2xl" data-icon="diamond">diamond</span>
+<span class="font-headline-sm font-bold text-on-surface">+25 Mind Gems</span>
+</div>
+<div class="w-px h-8 bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined material-symbols-fill text-amber-500 text-2xl" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-headline-sm font-bold text-on-surface">Milestone Star</span>
+</div>
+</div>
+<button class="w-full h-touch-min rounded-2xl bg-primary text-white hover:bg-primary-container font-patient-action-lg shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer" onclick="completeAndUnlockNextLevel()">
+<span>Reveal Next Milestone</span>
+<span class="material-symbols-outlined text-xl" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ========================================================== -->
+<!-- MODAL 2: ROUTINE GUIDEBOOK MODAL                           -->
+<!-- ========================================================== -->
+<div class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/40 backdrop-blur-xs p-4" id="guidebookModal">
+<div class="bg-surface-container-lowest border border-outline-variant w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+<div class="flex items-center justify-between mb-4 border-b border-outline-variant pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="menu_book">menu_book</span>
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Unit 1 Routine Guidebook</h3>
+</div>
+<button class="w-9 h-9 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant" onclick="closeGuidebookModal()">
+<span class="material-symbols-outlined text-xl" data-icon="close">close</span>
+</button>
+</div>
+<div class="space-y-4 text-patient-body-md text-on-surface-variant">
+<div class="p-4 rounded-2xl bg-surface-container-low border border-outline-variant">
+<h4 class="font-bold text-on-surface text-sm flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="psychology">psychology</span>
+          Gradual Pathway Principle
+        </h4>
+<p class="text-sm">Each milestone represents a gentle clinical anchor: Gentle Awakening, Word Harmony, Morning Sequence, Picture Pairing, and Calm Mosaic. Progression unlocks step by step to reduce cognitive fatigue.</p>
+</div>
+<div class="p-4 rounded-2xl bg-surface-container-low border border-outline-variant">
+<h4 class="font-bold text-on-surface text-sm flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="record_voice_over">record_voice_over</span>
+          Voice Guidance
+        </h4>
+<p class="text-sm">Tap the Listen button on any prompt to hear speech spoken at an accessible 0.85x speed with warm cadence.</p>
+</div>
+</div>
+<button class="mt-6 w-full h-12 rounded-xl bg-primary text-white font-clinical-label font-bold cursor-pointer" onclick="closeGuidebookModal()">
+      Return to Pathway
+    </button>
+</div>
+</div>
+<!-- ========================================================== -->
+<!-- MODAL 3: CLINICIAN OBSERVATIONS DRAWER                     -->
+<!-- ========================================================== -->
+<div class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/40 backdrop-blur-xs p-4" id="careTeamModal">
+<div class="bg-surface-container-lowest border border-outline-variant w-full max-w-lg rounded-3xl p-6 shadow-2xl relative">
+<div class="flex items-center justify-between mb-4 border-b border-outline-variant pb-3">
+<div>
+<span class="text-xs font-clinical-label text-primary font-bold">CLINICAL OBSERVATION TELEMETRY</span>
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Dr. Elena Vance, MD</h3>
+</div>
+<button class="w-9 h-9 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant" onclick="closeCareTeamModal()">
+<span class="material-symbols-outlined text-xl" data-icon="close">close</span>
+</button>
+</div>
+<div class="space-y-3">
+<div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 leading-relaxed">
+<strong>Protocol Directive:</strong> Strict sequential cognitive activation initialized at Level 1. Stepwise unlocking minimizes patient executive load while fostering daily positive habit formation.
+      </div>
+<div class="p-3.5 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface-variant leading-relaxed">
+<strong>Care Partner Note:</strong> Patient responds with highest emotional comfort when Mindy the Owl provides celebratory audio and visual prompts.
+      </div>
+</div>
+<button class="mt-5 w-full h-12 rounded-xl bg-surface-container text-on-surface font-clinical-label font-bold hover:bg-surface-container-high transition-colors" onclick="closeCareTeamModal()">
+      Dismiss Note
+    </button>
+</div>
+</div>
+<!-- ========================================================== -->
+<!-- SCRIPT: STEP-BY-STEP GRADUAL PROGRESSION SYSTEM            -->
+<!-- ========================================================== -->
+<script>
+  // Configuration of Pathway Levels
+  const LEVELS = [
+    {
+      level: 1,
+      name: "1. Gentle Awakening",
+      icon: "wb_sunny",
+      modalBadge: "Gentle Awakening",
+      question: "Which calming anchor helps your mind greet the morning peacefully?",
+      description: "Take a slow breath. Select the mindful step that eases you into clarity.",
+      speechPrompt: "Which calming anchor helps your mind greet the morning peacefully? Option one: Drink a glass of water and take three quiet breaths. Option two: Rush to check urgent emails in the dark.",
+      options: [
+        { text: "Drink a glass of water and take three quiet breaths", icon: "water_drop", correct: true },
+        { text: "Rush to check stressful paperwork immediately", icon: "mail", correct: false },
+        { text: "Skip daylight and stay in gloomy silence", icon: "dark_mode", correct: false }
+      ],
+      correctExplanation: "Wonderful! Gentle hydration and slow breathing activate steady alertness without strain."
+    },
+    {
+      level: 2,
+      name: "2. Word Harmony",
+      icon: "menu_book",
+      modalBadge: "Word Harmony",
+      question: "Select the word that best matches the calm feeling of 'Sunrise':",
+      description: "Match the harmonious morning concept to strengthen language retrieval.",
+      speechPrompt: "Select the word that best matches the calm feeling of Sunrise. Option one: Warmth. Option two: Storm. Option three: Clock.",
+      options: [
+        { text: "Warmth & Soft Light", icon: "wb_twilight", correct: true },
+        { text: "Sudden Storm", icon: "thunderstorm", correct: false },
+        { text: "Loud Alarm Siren", icon: "notifications_active", correct: false }
+      ],
+      correctExplanation: "Excellent recall! 'Warmth & Soft Light' creates harmonious semantic resonance."
+    },
+    {
+      level: 3,
+      name: "3. Morning Sequence",
+      icon: "star",
+      modalBadge: "Morning Sequence Recall",
+      question: "What gentle step comes first when you start your morning routine?",
+      description: "Recall the serene sequence to ground your daily schedule.",
+      speechPrompt: "What gentle step comes first when you start your morning routine? Option one: Open the window for fresh morning air. Option two: Skip breakfast and rush out.",
+      options: [
+        { text: "Open the window curtains to let in daylight", icon: "curtains", correct: true },
+        { text: "Skip breakfast and rush out unprepared", icon: "alarm_off", correct: false },
+        { text: "Worry about unfinished chores from last month", icon: "priority_high", correct: false }
+      ],
+      correctExplanation: "Spot on! Natural daylight anchors circadian rhythms and sharpens spatial recall."
+    },
+    {
+      level: 4,
+      name: "4. Picture Pairing",
+      icon: "auto_awesome",
+      modalBadge: "Picture Pairing",
+      question: "Pair the familiar morning object with its comforting partner:",
+      description: "Match the ceramic tea cup with its soothing companion item.",
+      speechPrompt: "Pair the familiar morning object with its comforting partner. Option one: Herbal tea pot and honey spoon. Option two: Heavy hammer.",
+      options: [
+        { text: "Herbal tea pot & honey spoon", icon: "local_cafe", correct: true },
+        { text: "Heavy hardware hammer", icon: "construction", correct: false },
+        { text: "Dusty luggage bag", icon: "luggage", correct: false }
+      ],
+      correctExplanation: "Perfect pairing! Visual association strengthening activates bilateral parietal pathways."
+    },
+    {
+      level: 5,
+      name: "5. Calm Mosaic",
+      icon: "palette",
+      modalBadge: "Calm Mosaic",
+      question: "Which soothing color blend brings you a sense of balanced peace?",
+      description: "Arrange gentle tones to complete your daily harmony mosaic.",
+      speechPrompt: "Which soothing color blend brings you a sense of balanced peace? Option one: Soft sage green and morning sky blue.",
+      options: [
+        { text: "Soft sage green & gentle sky blue", icon: "eco", correct: true },
+        { text: "Harsh neon strobe patterns", icon: "warning", correct: false },
+        { text: "Gloomy heavy shadows", icon: "blur_on", correct: false }
+      ],
+      correctExplanation: "Beautiful choice! Soft natural tones lower cortisol and settle the visual cortex."
+    }
+  ];
+
+  // State
+  let currentActiveLevel = 1;
+  let gemCount = 600;
+  let streakCount = 12;
+  let selectedIsCorrect = false;
+
+  function getProgress() {
+    return window.MINDNER_GAME_PROGRESS.load();
+  }
+
+  function launchAssignedGame(level) {
+    const assignment = window.MINDNER_GAME_PROGRESS.ensureAssignment(level);
+    window.location.href = `./games/${assignment.path}?level=${level}&game=${assignment.gameKey}`;
+  }
+
+  function assignmentForLevel(level) {
+    return window.MINDNER_GAME_PROGRESS.getAssignment(level) || window.MINDNER_GAME_PROGRESS.ensureAssignment(level);
+  }
+
+  // Mascot coordinate mapping per level
+  const mascotPositions = {
+    1: { top: "0px", right: "28px", left: "auto", cheer: "Welcome! Tap Level 1 to start 🌿" },
+    2: { top: "156px", right: "28px", left: "auto", cheer: "Keep going! Level 2 is ready 🐦" },
+    3: { top: "312px", right: "auto", left: "28px", cheer: "Halfway through! You're brilliant ✨" },
+    4: { top: "468px", right: "auto", left: "28px", cheer: "Almost at Mastery! Step 4 awaits 🌸" },
+    5: { top: "624px", right: "28px", left: "auto", cheer: "Final challenge! Level 5 Mosaic 🎨" },
+    6: { top: "780px", right: "auto", left: "28px", cheer: "Unit 1 Trophy Mastered! 🏆" }
+  };
+
+  function updateMascotPosition(level) {
+    const pos = mascotPositions[level] || mascotPositions[1];
+    const mascot = document.getElementById('mascotWrapper');
+    mascot.style.top = pos.top;
+    mascot.style.right = pos.right;
+    mascot.style.left = pos.left;
+    document.getElementById('mascotSpeech').innerText = pos.cheer;
+  }
+
+  function renderLevelState() {
+    const progress = getProgress();
+    currentActiveLevel = Math.min(Math.max(Number(progress.currentLevel) || 1, 1), 5);
+    const activeAssignment = currentActiveLevel <= 5 ? assignmentForLevel(currentActiveLevel) : null;
+
+    // 1. Update Unit Header Progress
+    const completedCount = progress.completedLevels.length;
+    const progressPercent = Math.min(100, Math.round((completedCount / 10) * 100));
+    document.getElementById('unitProgressLabel').innerText = `Milestones Completed: ${completedCount} of 5`;
+    document.getElementById('unitProgressBar').style.width = `${progressPercent}%`;
+    if (activeAssignment) {
+      document.querySelector('h1.text-headline-md').innerText = `Level ${currentActiveLevel}: ${activeAssignment.gameName}`;
+      document.querySelector('section.w-full.max-w-xl.bg-gradient-to-r p').innerText = `Difficulty ${activeAssignment.difficulty} of 5 - selected for this level and kept for replay.`;
+    }
+
+    // 2. Remove existing START tooltip from DOM
+    const existingTooltip = document.getElementById('startTooltip');
+    if (existingTooltip) existingTooltip.remove();
+
+    // 3. Render Nodes 1 to 5
+    for (let i = 1; i <= 5; i++) {
+      const btn = document.getElementById(`nodeBtn${i}`);
+      const icon = document.getElementById(`nodeIcon${i}`);
+      const label = document.getElementById(`nodeLabel${i}`);
+      const ring = document.getElementById(`ringWrapper${i}`);
+      
+      // Clean previous rings SVG
+      const oldSvg = ring.querySelector('svg');
+      if (oldSvg) oldSvg.remove();
+
+      const assignment = assignmentForLevel(i);
+      const isFailed = progress.failedLevels.includes(i);
+      const isCompleted = progress.completedLevels.includes(i);
+      label.innerText = `${i}. ${assignment.gameName} - Difficulty ${assignment.difficulty}`;
+
+      if (isCompleted) {
+        // COMPLETED STATE: Golden
+        btn.className = "duo-node-3d duo-node-gold w-20 h-20 rounded-full flex items-center justify-center text-white border-4 border-amber-200 cursor-pointer";
+        icon.className = "material-symbols-outlined material-symbols-fill text-4xl text-amber-950";
+        icon.setAttribute("data-icon", "check");
+        icon.innerText = "check";
+        
+        label.className = "mt-2 text-xs font-clinical-label font-bold text-on-surface bg-surface-container-lowest border border-outline-variant px-2.5 py-0.5 rounded-full shadow-xs text-center whitespace-nowrap";
+      } else if (i === currentActiveLevel) {
+        // ACTIVE STATE: red means incomplete; green means ready for the first attempt.
+        btn.className = isFailed
+          ? "duo-node-3d w-20 h-20 rounded-full flex items-center justify-center text-white border-4 border-rose-200 bg-rose-600 shadow-lg cursor-pointer transition-all"
+          : "duo-node-3d duo-node-active w-20 h-20 rounded-full flex items-center justify-center text-white border-4 border-secondary-fixed focus:outline-none focus:ring-4 focus:ring-primary-fixed cursor-pointer transition-all";
+        icon.className = "material-symbols-outlined material-symbols-fill text-4xl";
+        icon.setAttribute("data-icon", isFailed ? "replay" : "play_arrow");
+        icon.innerText = isFailed ? "replay" : "play_arrow";
+
+        label.className = isFailed
+          ? "mt-2 text-xs font-clinical-label font-bold text-rose-700 bg-rose-100 border border-rose-300 px-3 py-1 rounded-full shadow-xs text-center whitespace-nowrap"
+          : "mt-2 text-xs font-clinical-label font-bold text-primary bg-primary-fixed/40 border border-primary/30 px-3 py-1 rounded-full shadow-xs text-center whitespace-nowrap";
+
+        // Inject Pulsing SVG Ring
+        const ringSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        ringSvg.setAttribute("class", "absolute inset-0 w-full h-full -rotate-90 pointer-events-none");
+        ringSvg.setAttribute("viewBox", "0 0 100 100");
+        ringSvg.innerHTML = `
+          <circle cx="50" cy="50" fill="transparent" r="44" stroke="#e2e8f0" stroke-width="5"></circle>
+          <circle cx="50" cy="50" fill="transparent" r="44" stroke="#127c56" stroke-dasharray="276" stroke-dashoffset="90" stroke-linecap="round" stroke-width="5" class="animate-pulse"></circle>
+        `;
+        ring.prepend(ringSvg);
+
+        // Inject Floating START Tooltip
+        const nodeContainer = btn.closest('.flex-col');
+        const tooltip = document.createElement('div');
+        tooltip.id = 'startTooltip';
+        tooltip.className = 'absolute -top-12 z-30 animate-tooltip';
+        tooltip.innerHTML = `
+          <button class="bg-surface-container-lowest border-2 ${isFailed ? 'border-rose-600 text-rose-700' : 'border-primary text-primary'} font-patient-action-lg text-sm px-4 py-1.5 rounded-2xl shadow-md flex items-center gap-1.5 hover:bg-primary-fixed/30 transition-all cursor-pointer" onclick="openExerciseForCurrentLevel()">
+            <span class="tracking-wider font-bold">${isFailed ? 'RETRY' : 'START'}</span>
+            <span class="material-symbols-outlined text-base material-symbols-fill" data-icon="play_arrow">play_arrow</span>
+          </button>
+          <div class="w-3 h-3 bg-surface-container-lowest border-r-2 border-b-2 border-primary transform rotate-45 mx-auto -mt-1.5"></div>
+        `;
+        nodeContainer.prepend(tooltip);
+
+      } else {
+        // LOCKED STATE: Muted Gray
+        btn.className = "duo-node-3d duo-node-locked w-20 h-20 rounded-full flex items-center justify-center text-outline border-4 border-slate-200 cursor-not-allowed transition-all";
+        icon.className = "material-symbols-outlined material-symbols-fill text-3xl";
+        icon.setAttribute("data-icon", "lock");
+        icon.innerText = "lock";
+
+        label.className = "mt-2 text-xs font-clinical-label font-medium text-outline bg-surface-container border border-outline-variant px-2.5 py-0.5 rounded-full text-center whitespace-nowrap";
+      }
+    }
+
+    // 4. Render Connecting SVG Paths
+    for (let p = 1; p <= 5; p++) {
+      const pathSeg = document.getElementById(`pathSegment${p}`);
+      if (p < currentActiveLevel) {
+        // Path is illuminated emerald green
+        pathSeg.setAttribute("stroke", "#90f7c4");
+        pathSeg.removeAttribute("stroke-dasharray");
+        pathSeg.setAttribute("stroke-width", "14");
+      } else {
+        // Path is locked dashed slate
+        pathSeg.setAttribute("stroke", "#cbd5e1");
+        pathSeg.setAttribute("stroke-dasharray", "6 6");
+        pathSeg.setAttribute("stroke-width", "12");
+      }
+    }
+
+    // 5. Render Finale Trophy
+    const trophyBtn = document.getElementById('trophyBtn');
+    const trophyIcon = document.getElementById('trophyIcon');
+    const trophyLabel = document.getElementById('trophyLabel');
+    if (currentActiveLevel > 5) {
+      trophyBtn.className = "duo-node-3d duo-node-gold w-24 h-24 rounded-3xl flex items-center justify-center text-amber-950 border-4 border-amber-300 cursor-pointer";
+      trophyIcon.className = "material-symbols-outlined material-symbols-fill text-5xl text-amber-950 animate-bounce";
+      trophyLabel.className = "mt-2 text-xs font-clinical-label font-bold text-amber-900 bg-amber-100 border border-amber-300 px-3 py-1 rounded-full shadow-xs text-center whitespace-nowrap";
+    } else {
+      trophyBtn.className = "duo-node-3d duo-node-locked w-24 h-24 rounded-3xl flex items-center justify-center text-outline cursor-not-allowed border-4 border-slate-200 transition-all";
+      trophyIcon.className = "material-symbols-outlined material-symbols-fill text-4xl text-outline";
+      trophyLabel.className = "mt-2 text-xs font-clinical-label font-bold text-on-surface-variant bg-surface-container border border-outline-variant px-3 py-1 rounded-full text-center whitespace-nowrap";
+    }
+
+    // Position Mascot
+    updateMascotPosition(currentActiveLevel);
+  }
+
+  function handleNodeClick(levelNum) {
+    const progress = getProgress();
+    if (progress.completedLevels.includes(levelNum)) {
+      launchAssignedGame(levelNum);
+    } else if (levelNum === currentActiveLevel) {
+      launchAssignedGame(levelNum);
+    } else {
+      alert(`Milestone ${levelNum} is resting quietly. Complete the active lesson above to unlock this next step.`);
+    }
+  }
+
+  function openExerciseForCurrentLevel() {
+    launchAssignedGame(currentActiveLevel);
+  }
+
+  function populateModalForLevel(lvl) {
+    const data = LEVELS[lvl - 1];
+    document.getElementById('modalExerciseStep').innerText = `Level ${lvl} Cognitive Activity`;
+    document.getElementById('modalBadge').innerHTML = `<span class="material-symbols-outlined text-sm" data-icon="${data.icon}">${data.icon}</span> ${data.modalBadge}`;
+    document.getElementById('modalQuestion').innerText = data.question;
+    document.getElementById('modalDescription').innerText = data.description;
+    
+    // Fill Options
+    const optContainer = document.getElementById('modalOptionsContainer');
+    optContainer.innerHTML = '';
+
+    data.options.forEach((opt) => {
+      const btn = document.createElement('button');
+      btn.className = "quiz-option w-full p-4 rounded-2xl border-2 border-outline-variant hover:border-primary-container bg-surface flex items-center justify-between transition-all active:scale-[0.98] cursor-pointer text-left";
+      btn.onclick = () => selectQuizOption(btn, opt.correct);
+      btn.innerHTML = `
+        <div class="flex items-center gap-3">
+          <span class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary text-xl flex-shrink-0">
+            <span class="material-symbols-outlined" data-icon="${opt.icon}">${opt.icon}</span>
+          </span>
+          <span class="text-patient-body-md font-semibold text-on-surface">${opt.text}</span>
+        </div>
+        <div class="w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center check-circle flex-shrink-0"></div>
+      `;
+      optContainer.appendChild(btn);
+    });
+
+    // Reset Modal Views
+    document.getElementById('quizStage1').classList.remove('hidden');
+    document.getElementById('quizCelebration').classList.add('hidden');
+    const feedback = document.getElementById('quizFeedback');
+    feedback.classList.add('hidden');
+    feedback.innerHTML = '';
+
+    const submitBtn = document.getElementById('submitAnswerBtn');
+    submitBtn.disabled = true;
+    submitBtn.className = "flex-1 h-touch-min rounded-2xl bg-slate-200 text-slate-400 font-patient-action-lg transition-all cursor-not-allowed flex items-center justify-center gap-2 shadow-sm";
+    selectedIsCorrect = false;
+  }
+
+  function selectQuizOption(buttonEl, isCorrect) {
+    selectedIsCorrect = isCorrect;
+    document.querySelectorAll('.quiz-option').forEach(el => {
+      el.classList.remove('border-primary', 'bg-secondary-fixed/20');
+      el.classList.add('border-outline-variant', 'bg-surface');
+      el.querySelector('.check-circle').innerHTML = '';
+    });
+
+    buttonEl.classList.remove('border-outline-variant', 'bg-surface');
+    buttonEl.classList.add('border-primary', 'bg-secondary-fixed/20');
+    buttonEl.querySelector('.check-circle').innerHTML = '<span class="w-3 h-3 rounded-full bg-primary"></span>';
+
+    const submitBtn = document.getElementById('submitAnswerBtn');
+    submitBtn.disabled = false;
+    submitBtn.className = "flex-1 h-touch-min rounded-2xl bg-primary text-white hover:bg-primary-container font-patient-action-lg transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md";
+  }
+
+  function verifyAnswer() {
+    const feedback = document.getElementById('quizFeedback');
+    feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+
+    if (selectedIsCorrect) {
+      const currentData = LEVELS[currentActiveLevel - 1];
+      feedback.classList.add('bg-emerald-100', 'text-emerald-900');
+      feedback.innerHTML = `<span class="material-symbols-outlined text-emerald-700" data-icon="check_circle">check_circle</span> ${currentData.correctExplanation}`;
+
+      setTimeout(() => {
+        document.getElementById('quizStage1').classList.add('hidden');
+        document.getElementById('celebrationTitle').innerText = `Level ${currentActiveLevel} Complete!`;
+        document.getElementById('celebrationSubtitle').innerText = "Calm focus confirmed. The next milestone on your pathway has been revealed!";
+        document.getElementById('quizCelebration').classList.remove('hidden');
+      }, 700);
+
+    } else {
+      feedback.classList.add('bg-amber-100', 'text-amber-900');
+      feedback.innerHTML = `<span class="material-symbols-outlined text-amber-700" data-icon="info">info</span> Let's choose the gentlest option that brings clarity. Tap that one!`;
+    }
+  }
+
+  function completeAndUnlockNextLevel() {
+    window.MINDNER_GAME_PROGRESS.markCompleted(currentActiveLevel);
+    closeExerciseModal();
+
+    // Reward calculations
+    gemCount += 25;
+    document.getElementById('gemCount').innerText = gemCount;
+
+    showProgressionToast(`Milestone ${currentActiveLevel} Mastered!`, "+25 Gems • Next Level Unlocked");
+
+    currentActiveLevel = Math.min(currentActiveLevel + 1, 6);
+    renderLevelState();
+    if (currentActiveLevel === 10) triggerConfetti();
+  }
+
+  function openExerciseModal() {
+    document.getElementById('exerciseModal').classList.remove('hidden');
+  }
+
+  function closeExerciseModal() {
+    document.getElementById('exerciseModal').classList.add('hidden');
+  }
+
+  function openGuidebookModal() {
+    document.getElementById('guidebookModal').classList.remove('hidden');
+  }
+
+  function closeGuidebookModal() {
+    document.getElementById('guidebookModal').classList.add('hidden');
+  }
+
+  function openCareTeamModal() {
+    document.getElementById('careTeamModal').classList.remove('hidden');
+  }
+
+  function closeCareTeamModal() {
+    document.getElementById('careTeamModal').classList.add('hidden');
+  }
+
+  function showProgressionToast(title, subtitle) {
+    const toast = document.getElementById('progressionToast');
+    document.getElementById('toastTitle').innerText = title;
+    document.getElementById('toastSubtitle').innerText = subtitle;
+
+    toast.classList.remove('opacity-0', '-translate-y-20', 'pointer-events-none');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', '-translate-y-20', 'pointer-events-none');
+    }, 3200);
+  }
+
+  function advanceLevelDemo() {
+    if (currentActiveLevel <= 5) {
+      completeAndUnlockNextLevel();
+    } else {
+      alert("All levels in Unit 1 are mastered! Resetting to Level 1 allows you to experience the journey again.");
+    }
+  }
+
+  function resetPathwayToLevel1() {
+    window.MINDNER_GAME_PROGRESS.reset();
+    currentActiveLevel = 1;
+    gemCount = 600;
+    document.getElementById('gemCount').innerText = gemCount;
+    renderLevelState();
+    showProgressionToast("Reset to Level 1", "Starting strictly from Milestone 1: Gentle Awakening");
+  }
+
+  function pokeMascot() {
+    const cheers = [
+      "Take all the time you need! 🌸",
+      "One step each morning creates lasting memory! 🌿",
+      "You are doing wonderfully today! ✨",
+      "Breathe in calm, breathe out ease. 🍃"
+    ];
+    const randomCheer = cheers[Math.floor(Math.random() * cheers.length)];
+    document.getElementById('mascotSpeech').innerText = randomCheer;
+  }
+
+  function speakCurrentPrompt() {
+    const promptText = LEVELS[currentActiveLevel - 1] ? LEVELS[currentActiveLevel - 1].speechPrompt : "Take your time and listen closely to your inner calm.";
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(promptText);
+      utterance.rate = 0.85;
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert(`Audio Prompt: "${promptText}"`);
+    }
+  }
+
+  function celebrateMasteryFinal() {
+    triggerConfetti();
+    alert("🎉 Congratulations! You have fully mastered Unit 1: Morning Calm & Daily Sequencing! Dr. Vance's clinical telemetry confirms robust morning sequencing memory.");
+  }
+
+  function triggerConfetti() {
+    const colors = ['#90f7c4', '#ffc83b', '#127c56', '#ffdcc3', '#7cd9ac'];
+    for (let i = 0; i < 40; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = `${Math.random() * 100}%`;
+      piece.style.top = `${Math.random() * 100 + window.scrollY}px`;
+      piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.transform = `scale(${Math.random() * 0.8 + 0.6})`;
+      document.body.appendChild(piece);
+
+      setTimeout(() => piece.remove(), 2900);
+    }
+  }
+
+  document.getElementById('audioGuidanceBtn').addEventListener('click', function() {
+    if ('speechSynthesis' in window) {
+      const msg = `Welcome to MINDNER Pathway. You are currently on Level ${Math.min(5, currentActiveLevel)}. Tap the Start button to begin today's calm exercise.`;
+      const utterance = new SpeechSynthesisUtterance(msg);
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+  });
+
+  // INITIAL BOOTSTRAP: Strict Level 1 Start
+  window.addEventListener('DOMContentLoaded', () => {
+    renderLevelState();
+  });
+</script>
+</body></html>

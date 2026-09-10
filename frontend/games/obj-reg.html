@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MINDNER - Object Recognition & Everyday Recall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        mindner: {
+          50: '#f1f8f3',
+          100: '#dceee0',
+          200: '#b8dfbf',
+          500: '#127c56',
+          600: '#0e6545',
+          700: '#0a4f35',
+          800: '#073a27',
+          900: '#042619',
+        },
+        surface: '#F8FAF8',
+        card: '#FFFFFF',
+        slateText: '#1E293B',
+        subText: '#475569'
+      },
+      fontFamily: {
+        sans: ['Manrope', 'system-ui', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+  body {
+    background-color: #F6F9F6;
+    background-image: radial-gradient(at 0% 0%, rgba(18, 124, 86, 0.05) 0px, transparent 50%),
+                      radial-gradient(at 100% 100%, rgba(18, 124, 86, 0.04) 0px, transparent 50%);
+  }
+  .card-glow {
+    box-shadow: 0 12px 36px -4px rgba(18, 124, 86, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  }
+  .option-btn {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .option-btn:hover:not(:disabled) {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 28px -6px rgba(18, 124, 86, 0.16);
+    border-color: #127c56;
+  }
+  .option-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+  }
+  .option-btn.is-correct {
+    border-color: #127c56 !important;
+    background-color: #ecfdf5 !important;
+    ring: 4px solid rgba(18, 124, 86, 0.25);
+    
+    animation: correctPop 0.5s ease;
+  }
+  .option-btn.is-wrong {
+    border-color: #f87171 !important;
+    background-color: #fef2f2 !important;
+    animation: shakeSoft 0.45s ease;
+  }
+  @keyframes shakeSoft {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+  @keyframes correctPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+  .fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+<script src="game-progress.js"></script>
+</head>
+<body class="font-sans text-slateText min-h-screen flex flex-col antialiased selection:bg-mindner-100 selection:text-mindner-800">
+
+  <!-- Header / Nav (Unified with MINDNER Design System) -->
+  <header class="w-full bg-white/95 backdrop-blur-md border-b border-emerald-900/10 sticky top-0 z-40 transition-shadow">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="#" onclick="showStartScreen(); return false;" class="flex items-center gap-3 group focus:outline-none">
+          <div class="w-11 h-11 rounded-2xl bg-emerald-700 text-white flex items-center justify-center shadow-md shadow-emerald-900/15 group-hover:bg-emerald-800 transition">
+            <span class="material-symbols-outlined text-2xl">spa</span>
+          </div>
+          <div>
+            <span class="font-display font-extrabold text-2xl tracking-tight text-emerald-900">MINDNER</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/70">Cognitive Suite</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Right Utility Bar -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="audioGuideToggle" type="button" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200/80 hover:bg-emerald-100 transition focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+          <span class="material-symbols-outlined text-xl text-emerald-700">volume_up</span>
+          <span class="hidden md:inline">Audio Guide</span>
+        </button>
+        <button type="button" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition focus:outline-none">
+          <span class="material-symbols-outlined text-lg">format_size</span>
+          <span>A/A+</span>
+        </button>
+        <div class="h-6 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+        <div class="flex items-center gap-2 pl-1">
+          <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-800 font-bold text-sm">
+            AL
+          </div>
+          <span class="text-sm font-bold text-slate-800 hidden lg:inline">Alex Parker</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Game Container -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 sm:py-8 flex flex-col justify-center">
+
+    <!-- ================= 1. START SCREEN ================= -->
+    <section id="startScreen" class="w-full max-w-2xl mx-auto fade-in-up">
+      <div class="bg-white rounded-3xl p-6 sm:p-10 card-glow border border-emerald-950/5 text-center relative overflow-hidden">
+        
+        <!-- Gentle badge -->
+        <div class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-xs sm:text-sm font-bold tracking-wide uppercase mb-4 border border-emerald-200/60">
+          <span class="material-symbols-outlined text-base">psychology</span>
+          Daily Focus & Visual Memory
+        </div>
+
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-3">
+          Object Recognition
+        </h1>
+        <p class="text-slate-600 text-base sm:text-lg max-w-lg mx-auto leading-relaxed mb-8">
+          Look at the target everyday object, listen to its gentle voice prompt, and choose the matching picture. Take all the time you need.
+        </p>
+
+        <!-- 3 Key Features -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 max-w-lg mx-auto mb-8">
+          <div class="bg-slate-50/80 rounded-2xl p-3.5 border border-slate-200/70 text-center">
+            <span class="block text-2xl sm:text-3xl font-extrabold text-emerald-700">10</span>
+            <span class="text-xs sm:text-sm text-slate-600 font-semibold">Real Objects</span>
+          </div>
+          <div class="bg-slate-50/80 rounded-2xl p-3.5 border border-slate-200/70 text-center">
+            <span class="block text-2xl sm:text-3xl font-extrabold text-emerald-700">4</span>
+            <span class="text-xs sm:text-sm text-slate-600 font-semibold">Pictures Each</span>
+          </div>
+          <div class="bg-slate-50/80 rounded-2xl p-3.5 border border-slate-200/70 text-center">
+            <span class="material-symbols-outlined text-2xl sm:text-3xl text-emerald-700 font-bold leading-none my-1">campaign</span>
+            <span class="text-xs sm:text-sm text-slate-600 font-semibold block">Spoken Audio</span>
+          </div>
+        </div>
+
+        <!-- Saved Progress Banner -->
+        <div id="welcomeBack" class="hidden mb-6 bg-emerald-50/80 border border-emerald-200 rounded-2xl p-4 text-left flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+              <span class="material-symbols-outlined">restart_alt</span>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-emerald-950">Welcome back, Alex!</p>
+              <p class="text-xs text-emerald-800">You previously reached <strong id="welcomeLevel" class="font-bold underline">Level 1</strong>.</p>
+            </div>
+          </div>
+          <button id="continueGameBtn" type="button" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-bold rounded-xl shadow transition">
+            Continue →
+          </button>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <button id="startGameBtn" type="button" class="w-full sm:w-auto px-8 py-4 bg-emerald-700 hover:bg-emerald-800 text-white text-lg font-bold rounded-2xl shadow-lg shadow-emerald-800/25 transition transform active:scale-95 flex items-center justify-center gap-2 min-w-[200px]">
+            <span class="material-symbols-outlined text-2xl">play_circle</span>
+            Start Game
+          </button>
+          <button id="resetProgressBtn" type="button" class="text-sm font-semibold text-slate-500 hover:text-rose-600 py-2 px-3 transition hidden">
+            Reset Progress
+          </button>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-2 text-xs font-semibold text-slate-500">
+          <span class="material-symbols-outlined text-sm text-emerald-600">verified</span>
+          Calibrated with Geriatric Cognitive Baseline Protocols &bull; No time pressure
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================= 2. GAME SCREEN ================= -->
+    <section id="gameScreen" class="w-full max-w-3xl mx-auto hidden fade-in-up">
+      
+      <!-- Top Status & Progress Bar -->
+      <div class="mb-5 bg-white rounded-2xl p-4 sm:p-5 card-glow border border-emerald-950/5 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <button id="homeBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-slate-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-xl transition">
+            <span class="material-symbols-outlined text-lg">arrow_back</span>
+            Home
+          </button>
+
+          <div class="flex items-center gap-2">
+            <span id="levelPill" class="px-3.5 py-1 rounded-full bg-emerald-100/80 text-emerald-800 text-xs sm:text-sm font-extrabold tracking-wide uppercase border border-emerald-200">
+              Level 1 / 10
+            </span>
+          </div>
+
+          <div class="flex items-center gap-1.5 text-xs font-bold text-slate-500">
+            <span class="material-symbols-outlined text-base text-amber-500">schedule</span>
+            <span id="liveTimer">00:00</span>
+          </div>
+        </div>
+
+        <!-- Progress Track -->
+        <div class="w-full bg-emerald-100/60 rounded-full h-3.5 overflow-hidden p-0.5 border border-emerald-200/50">
+          <div id="progressFill" class="bg-gradient-to-r from-emerald-600 to-emerald-500 h-full rounded-full transition-all duration-500 ease-out" style="width: 10%;"></div>
+        </div>
+      </div>
+
+      <!-- Main Game Board -->
+      <div class="bg-white rounded-3xl p-5 sm:p-8 card-glow border border-emerald-950/5 flex flex-col items-center text-center">
+        
+        <!-- Spoken Target Card -->
+        <div class="w-full max-w-md mx-auto mb-6">
+          <p class="text-xs sm:text-sm font-extrabold text-emerald-800 uppercase tracking-wider mb-2">Target Everyday Item</p>
+          <h2 id="promptText" class="font-display text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4">
+            Find the Pen
+          </h2>
+
+          <!-- Featured Target Image with Soft Border -->
+          <div class="relative w-48 h-48 sm:w-56 sm:h-56 mx-auto bg-emerald-50/50 rounded-3xl border-2 border-emerald-200/80 p-4 flex items-center justify-center shadow-inner overflow-hidden group">
+            <img id="targetImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3moDCSiD6F2NYW2VjGCq0eF2WjLlHZjE8voepz_dZZJEe3NvnpNQfoMzAnvbL2iA8LRq53e4VE7GubZfZbyHr7EN6lu-TlBqPytyiyKqTjeUg28-LQYSpF8ANfEjQMFXnFxHcJvMZKevu9xnza57ubcYgqFbp8C9Z3phbw5RyNdcw1G5IaJT1kldq8tD9_GnbgEttSgMlqP8LqGOvOUpMnX7gb3NyWfIR0N0bIqDH3da17hd--eo" alt="Target object" class="max-w-full max-h-full object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
+          </div>
+
+          <!-- Spoken Audio Prompt Button -->
+          <div class="mt-4 flex flex-col items-center">
+            <button id="listenBtn" type="button" class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-2 border-emerald-600 font-bold text-base sm:text-lg shadow-sm transition transform active:scale-95">
+              <span class="material-symbols-outlined text-2xl text-emerald-700">volume_up</span>
+              <span>Listen Again</span>
+            </button>
+            <p id="speechFallback" class="text-xs text-slate-500 mt-2 hidden">Voice narration active.</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Feedback Callout -->
+        <div id="feedbackBox" class="min-h-[48px] flex items-center justify-center mb-3">
+          <p id="feedbackText" class="text-lg sm:text-xl font-bold text-emerald-800 opacity-0 transition-opacity duration-200 flex items-center gap-2">
+            <!-- Populated via script -->
+          </p>
+        </div>
+
+        <!-- 4 Picture Options Grid -->
+        <div class="w-full max-w-xl">
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Choose the matching picture:</p>
+          <div id="optionsGrid" class="grid grid-cols-2 gap-3 sm:gap-5" role="group" aria-label="Select the correct object">
+            <!-- Injected by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Next Level Action -->
+        <div class="w-full max-w-sm mt-6">
+          <button id="nextLevelBtn" type="button" class="w-full py-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-lg rounded-2xl shadow-lg shadow-emerald-900/20 transition transform active:scale-95 flex items-center justify-center gap-2 hidden">
+            <span>Next Level</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================= 3. RESULTS SCREEN ================= -->
+    <section id="resultsScreen" class="w-full max-w-2xl mx-auto hidden fade-in-up">
+      <div class="bg-white rounded-3xl p-6 sm:p-10 card-glow border border-emerald-950/5 text-center">
+        
+        <div class="w-20 h-20 mx-auto rounded-3xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mb-4 shadow-sm">
+          <span class="material-symbols-outlined text-4xl font-bold">military_tech</span>
+        </div>
+
+        <div class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold uppercase tracking-wide mb-2">
+          Exercise Completed
+        </div>
+
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight mb-2">
+          Wonderful Job, Alex!
+        </h1>
+        <p class="text-slate-600 text-base sm:text-lg mb-8 max-w-md mx-auto">
+          You successfully identified all 10 everyday objects with calm focus and visual precision.
+        </p>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          <div class="bg-emerald-50/60 rounded-2xl p-4 border border-emerald-200/60 text-center">
+            <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Score</span>
+            <span id="statScore" class="font-extrabold text-2xl sm:text-3xl text-emerald-800">10 / 10</span>
+          </div>
+          <div class="bg-emerald-50/60 rounded-2xl p-4 border border-emerald-200/60 text-center">
+            <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Accuracy</span>
+            <span id="statAccuracy" class="font-extrabold text-2xl sm:text-3xl text-emerald-800">100%</span>
+          </div>
+          <div class="bg-emerald-50/60 rounded-2xl p-4 border border-emerald-200/60 text-center">
+            <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Attempts</span>
+            <span id="statAttempts" class="font-extrabold text-2xl sm:text-3xl text-emerald-800">10</span>
+          </div>
+          <div class="bg-emerald-50/60 rounded-2xl p-4 border border-emerald-200/60 text-center">
+            <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Total Time</span>
+            <span id="statTime" class="font-extrabold text-2xl sm:text-3xl text-emerald-800">01:45</span>
+          </div>
+        </div>
+
+        <!-- Clinical Telemetry Note -->
+        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-left mb-8 flex items-start gap-3">
+          <span class="material-symbols-outlined text-emerald-700 mt-0.5">verified_user</span>
+          <div class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <span class="font-bold text-slate-800">Session saved to Dr. Vance's Portal:</span> Visual recognition latency is within your steady morning baseline with zero agitation indicators.
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button id="playAgainBtn" type="button" class="px-8 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-base rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined">replay</span>
+            Play Again
+          </button>
+          <button id="resultsHomeBtn" type="button" class="px-8 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base rounded-2xl transition">
+            Return to MINDNER Home
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Reset Confirmation Modal -->
+  <div id="resetModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 card-glow border border-slate-200 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 mx-auto flex items-center justify-center mb-4">
+        <span class="material-symbols-outlined text-3xl">restart_alt</span>
+      </div>
+      <h3 class="font-display font-extrabold text-2xl text-slate-900 mb-2">Reset All Progress?</h3>
+      <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+        This will clear your completed levels and historical response times, returning to Level 1.
+      </p>
+      <div class="flex gap-3">
+        <button id="cancelResetBtn" type="button" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">
+          Cancel
+        </button>
+        <button id="confirmResetBtn" type="button" class="flex-1 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl shadow transition">
+          Yes, Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ariaAnnouncer" class="sr-only" aria-live="assertive"></div>
+
+  <!-- Game Logic Script -->
+  <script>
+  (function() {
+    "use strict";
+
+    /* Realistic studio photo references for the 10 everyday items */
+    const LEVELS = [
+      { id: 1, name: "Pen", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3moDCSiD6F2NYW2VjGCq0eF2WjLlHZjE8voepz_dZZJEe3NvnpNQfoMzAnvbL2iA8LRq53e4VE7GubZfZbyHr7EN6lu-TlBqPytyiyKqTjeUg28-LQYSpF8ANfEjQMFXnFxHcJvMZKevu9xnza57ubcYgqFbp8C9Z3phbw5RyNdcw1G5IaJT1kldq8tD9_GnbgEttSgMlqP8LqGOvOUpMnX7gb3NyWfIR0N0bIqDH3da17hd--eo" },
+      { id: 2, name: "Phone", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBmo1H3t0pCr1iEwBhPL82_GpvZ67ifBL-whHbS6Am14ZidEUT1blJ6Kse4tAz4OQ1U21B1lnXXEOE1SzFuHkneMGvlqs1v82u8nIVQSBJvc3OvKV1vgmRJDSOQvp11bmDAlHLuHxLAsNcS3jDw53cNzEtADUKt8D89Di_N8RF9nS0JTe2o3shhy_J9ZB76RG3CUxziJpot8OdFmRkf8H5WIKBzJW4JVmti8QrOfSUWYsQqmcQpKLk" },
+      { id: 3, name: "Spoon", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDzoKpQTb555St8PwAtD9iWNzgwPhzd7c1PHyalkg_by1p34z-3HBoq9YyJYcxQTQDLPd9kWClOLx7wSS-J49wBL-M6GGIkf4OWhERuMn3IWgKs0kFqgGLg63v0-aJ-OaQINLo_kzVyZgU8AJcKUxuJs10CUC4P-Q1E8OIBZ8vnqCQaG2c4zsL-YgXQx8O-exyq0tj7KQ1IiaewUCQtEQp-_t-Dmw2iO0xnN9UkfCP6r0YSs8KJobg" },
+      { id: 4, name: "Book", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAvuLzQM217YoVjkvcbdha8frINYSqq5VV22QD1TO9CZ-BtLsSq6fa50NePwKyoik-mEOuTAGM4fP2kyjCxnZ9ubeQ6YKfITe-MWICbPheUswbwvhXfdYGdXAEslmcWp4A_GasFstNlIzMGrobarVHqyYhRewsvQjF0Qa3rEReQrECOOs7OkqPbsfRdQ14FpXw_sr88S47vakjPJ__fu-4uP8poxnr2h_JPcmT0JxbGXjj0zhvAg2Y" },
+      { id: 5, name: "Key", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDf-Ke32dGcvs6RtzXZ44lK2QiqEuAiMi1DBaoz4YVxVTv5_xcRyDe7N3qb5ZyzNe4r60RGIsKVcJVSPiVDYK5gOm3a58I4CFtoZGIUGR0a726j8NPn8OhF5XQnra2dIXTUTp4Cqmzcmff4mOLFn6lNjtHE8_tB7vSLM3kqfSHGOmfl_9FTXSn4K5oUBX0odl1sJQoZrVmvSQL9ksPXU3SCWGfrU_0Z0htK6XYTHbTGe7Au-NEijqY" },
+      { id: 6, name: "Water Bottle", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCGOUV1Cq1Q5NUpJgX2rADCWj4xggL0u6Xi_XnOIuKIuICpUY7biIVELaG4jFnzMq8tZku-UoSKAkNslZ0NWpkHnL6ewx7aSEJiNE3UoVb2yoMN-n4qJ4SClJ7nPd9J0he-uEwALzd7XgnoOm6ReXF4NIkqE-uhvfHF9jyuXQOaF4qNTGPCNfVPnST2DhImEXmyZzqhViXWNpl_ENEeFO74Il-tQF09SAy6uyO6rfR-XWfC31c6Ias" },
+      { id: 7, name: "Apple", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBm0X3_IVx4hIC0Dg6eXEq1w0KMmEYSmRxyGl89_pT8jGmUBzpNfZe7-9fRq6JZC5zVHtgsFsUfGha0OhhIa48A-AsDHghj7qXxtMnjmHA8A4AYcb6pWv0kGfaB6fLYojBhhwFJ_YnP3GHd-LSLBlMH-wx0L5i7JwNawkm_TeQF-JhYvZz6nN1T5kFyg4qsirJEMWXQQldEDXT0L-Nk4QqO7dHzCJSvYVRYxj8cfL1_K4MqmnF_dd4" },
+      { id: 8, name: "Bedside Clock", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAGX9INwi9HDV2d7r3IkkAIGGVUci1z9inUMWHkr5bE3v99kxMuNYyzn-9bYUZiQ1plKoRzGn65a5zM89sxrHW7YLVwl2B_94JJN3_vqnVzupGjYkTymCJUlXTqRkWG24plAodkg9ZuL1yZ2A8pQitqhbp3lV_vXlILuwB0wOgSOlqoIUvw51tfaDpjNz_KW__-eqEQsxXIkPaDgMQPlzfTwn5F7aDFbjWjxP8q5ci0FDrsAvOF8So" },
+      { id: 9, name: "Shoe", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCg4KOcu-9TbtzLDuDX06WuTx_bifiXT6ZCF91IBa5mPZ4-o87XZ7AsZhuRIYapcKY15jWLGF2pLCi8S_EyVI_U681kZ5GC1g_27hAR9tgDXufwAgIMfvHFbrc0PmT12coKH-ovsX5N0MEuelnv59Zg0MP8pj8SYQhkmeTvY3bb6c17eG9nkjn2B_sBvliAHFoMDHJFdOG1VUCYxHUxVXsJc8MWKWmHF_giwjLVmFxON0SfkSV7IRg" },
+      { id: 10, name: "Cup", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnsaJu0pDst_VMcoxxAnJrn7n6d-o_4XRAfE2lXgjQNYOI8YT810lsY410hfuISypl-0kgeXHNGT3WtMPIxSuWDoRtoEVhN3zzRjgqk_77iXpItLsisG1qnhGWERPGUl9_zZkYNm0yAvon6lXL-tPeqKnYmYcUATrfyp7Uyux-omQSsto5N3f6xKro3c8nxf3Dbkg_pRXEgFzTrOawuehtT8jHIgZZo9J22xfDJo4dNOQOhqUMjQ0" }
+    ];
+
+    const TOTAL_LEVELS = LEVELS.length;
+    const STORAGE_KEY = "mindner_object_recognition_v2";
+
+    const el = {
+      startScreen: document.getElementById("startScreen"),
+      gameScreen: document.getElementById("gameScreen"),
+      resultsScreen: document.getElementById("resultsScreen"),
+
+      welcomeBack: document.getElementById("welcomeBack"),
+      welcomeLevel: document.getElementById("welcomeLevel"),
+      startGameBtn: document.getElementById("startGameBtn"),
+      continueGameBtn: document.getElementById("continueGameBtn"),
+      resetProgressBtn: document.getElementById("resetProgressBtn"),
+
+      homeBtn: document.getElementById("homeBtn"),
+      levelPill: document.getElementById("levelPill"),
+      progressFill: document.getElementById("progressFill"),
+      promptText: document.getElementById("promptText"),
+      targetImage: document.getElementById("targetImage"),
+      listenBtn: document.getElementById("listenBtn"),
+      speechFallback: document.getElementById("speechFallback"),
+      feedbackText: document.getElementById("feedbackText"),
+      optionsGrid: document.getElementById("optionsGrid"),
+      nextLevelBtn: document.getElementById("nextLevelBtn"),
+      liveTimer: document.getElementById("liveTimer"),
+
+      statScore: document.getElementById("statScore"),
+      statAccuracy: document.getElementById("statAccuracy"),
+      statAttempts: document.getElementById("statAttempts"),
+      statTime: document.getElementById("statTime"),
+      playAgainBtn: document.getElementById("playAgainBtn"),
+      resultsHomeBtn: document.getElementById("resultsHomeBtn"),
+
+      resetModal: document.getElementById("resetModal"),
+      cancelResetBtn: document.getElementById("cancelResetBtn"),
+      confirmResetBtn: document.getElementById("confirmResetBtn"),
+      announcer: document.getElementById("ariaAnnouncer")
+    };
+
+    function getDefaultProgress() {
+      return {
+        currentLevel: 1,
+        completedLevels: [],
+        score: 0,
+        totalAttempts: 0,
+        correctAnswers: 0,
+        wrongAttempts: 0,
+        levelTimes: {},
+        totalGameTime: 0
+      };
+    }
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return getDefaultProgress();
+        const data = JSON.parse(raw);
+        return data || getDefaultProgress();
+      } catch (e) {
+        return getDefaultProgress();
+      }
+    }
+
+    function saveProgress(data) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    let progress = loadProgress();
+    const requestedLevel = Number(new URLSearchParams(window.location.search).get("level"));
+    if (requestedLevel >= 1 && requestedLevel <= TOTAL_LEVELS) {
+      progress.currentLevel = requestedLevel;
+      saveProgress(progress);
+    }
+    let session = {
+      levelIndex: 0,
+      options: [],
+      answered: false,
+      levelStartedAt: null,
+      gameStartedAt: null,
+      timerInterval: null
+    };
+
+    function announce(msg) {
+      el.announcer.textContent = "";
+      requestAnimationFrame(() => { el.announcer.textContent = msg; });
+    }
+
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function formatTime(totalSecs) {
+      const safe = Math.max(0, Math.round(totalSecs || 0));
+      const mins = Math.floor(safe / 60);
+      const secs = safe % 60;
+      return String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+    }
+
+    function startTimer() {
+      if (session.timerInterval) clearInterval(session.timerInterval);
+      session.gameStartedAt = Date.now();
+      session.timerInterval = setInterval(() => {
+        const elapsed = (Date.now() - session.gameStartedAt) / 1000;
+        el.liveTimer.textContent = formatTime(elapsed);
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (session.timerInterval) clearInterval(session.timerInterval);
+    }
+
+    /* Speech synthesis */
+    function speakObject(name) {
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance("Find the " + name);
+          utter.rate = 0.85;
+          utter.pitch = 1.0;
+          window.speechSynthesis.speak(utter);
+        } catch(e) {
+          el.speechFallback.classList.remove("hidden");
+        }
+      }
+    }
+
+    window.showStartScreen = function() {
+      stopTimer();
+      el.gameScreen.classList.add("hidden");
+      el.resultsScreen.classList.add("hidden");
+      el.startScreen.classList.remove("hidden");
+
+      const hasSaved = progress.currentLevel > 1 || progress.completedLevels.length > 0;
+      if (hasSaved) {
+        el.welcomeBack.classList.remove("hidden");
+        el.welcomeLevel.textContent = "Level " + Math.min(progress.currentLevel, TOTAL_LEVELS);
+        el.resetProgressBtn.classList.remove("hidden");
+      } else {
+        el.welcomeBack.classList.add("hidden");
+        el.resetProgressBtn.classList.add("hidden");
+      }
+    };
+
+    function showGameScreen() {
+      el.startScreen.classList.add("hidden");
+      el.resultsScreen.classList.add("hidden");
+      el.gameScreen.classList.remove("hidden");
+    }
+
+    function showGameComplete() {
+      MINDNER_GAME_PROGRESS.markCompleted(MINDNER_GAME_PROGRESS.currentLevel());
+      stopTimer();
+      el.gameScreen.classList.add("hidden");
+      el.startScreen.classList.add("hidden");
+      el.resultsScreen.classList.remove("hidden");
+
+      const totalTime = Object.values(progress.levelTimes).reduce((a, b) => a + b, 0);
+      const acc = progress.totalAttempts > 0 ? Math.round((progress.correctAnswers / progress.totalAttempts) * 100) : 100;
+
+      el.statScore.textContent = progress.correctAnswers + " / " + TOTAL_LEVELS;
+      el.statAccuracy.textContent = acc + "%";
+      el.statAttempts.textContent = String(progress.totalAttempts);
+      el.statTime.textContent = formatTime(totalTime);
+
+      announce("Congratulations Alex! You have completed all 10 everyday object levels.");
+
+      // Redirect to home with success message after delay
+      setTimeout(function() {
+        var level = MINDNER_GAME_PROGRESS.currentLevel();
+        MINDNER_GAME_PROGRESS.goHome(level);
+      }, 2000);
+    }
+
+    function startGame(fromBeginning) {
+      if (fromBeginning) {
+        progress = getDefaultProgress();
+        saveProgress(progress);
+      }
+      session.levelIndex = Math.min(progress.currentLevel - 1, TOTAL_LEVELS - 1);
+      showGameScreen();
+      startTimer();
+      loadLevel(session.levelIndex);
+    }
+
+    function loadLevel(index) {
+      if (index < 0 || index >= TOTAL_LEVELS) index = 0;
+      session.levelIndex = index;
+      session.answered = false;
+      session.levelStartedAt = Date.now();
+
+      const lvl = LEVELS[index];
+      const lvlNum = index + 1;
+
+      el.levelPill.textContent = "Level " + lvlNum + " / " + TOTAL_LEVELS;
+      el.promptText.textContent = "Find the " + lvl.name;
+      el.targetImage.src = lvl.image;
+      el.targetImage.alt = "Picture of " + lvl.name;
+
+      el.feedbackText.textContent = "";
+      el.feedbackText.classList.remove("opacity-100");
+      el.feedbackText.classList.add("opacity-0");
+      el.nextLevelBtn.classList.add("hidden");
+
+      // Progress Fill percentage
+      const percent = Math.round((index / TOTAL_LEVELS) * 100);
+      el.progressFill.style.width = Math.max(8, percent) + "%";
+
+      // Pick 3 distractors
+      const others = LEVELS.filter(l => l.id !== lvl.id);
+      const distractors = shuffle(others).slice(0, 3);
+      session.options = shuffle([lvl, ...distractors]);
+
+      renderOptions(lvl);
+      announce("Level " + lvlNum + ". Find the " + lvl.name + ".");
+      speakObject(lvl.name);
+    }
+
+    function renderOptions(correctLvl) {
+      el.optionsGrid.innerHTML = "";
+      session.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn bg-emerald-50/40 border-2 border-slate-200/90 rounded-2xl sm:rounded-3xl p-3 sm:p-4 aspect-square flex flex-col items-center justify-center relative overflow-hidden group shadow-sm";
+        btn.setAttribute("aria-label", opt.name);
+
+        const img = document.createElement("img");
+        img.src = opt.image;
+        img.alt = opt.name;
+        img.className = "w-full h-full object-contain filter drop-shadow-sm pointer-events-none group-hover:scale-105 transition-transform duration-200";
+
+        btn.appendChild(img);
+        btn.addEventListener("click", () => checkChoice(opt, btn, correctLvl));
+        el.optionsGrid.appendChild(btn);
+      });
+    }
+
+    function checkChoice(selected, btnEl, correctLvl) {
+      if (session.answered) return;
+
+      progress.totalAttempts += 1;
+      const isCorrect = selected.id === correctLvl.id;
+
+      if (isCorrect) {
+        session.answered = true;
+        progress.correctAnswers += 1;
+        progress.score += 1;
+        const elapsed = (Date.now() - session.levelStartedAt) / 1000;
+        progress.levelTimes[correctLvl.id] = elapsed;
+
+        if (!progress.completedLevels.includes(correctLvl.id)) {
+          progress.completedLevels.push(correctLvl.id);
+        }
+
+        const isLast = session.levelIndex === TOTAL_LEVELS - 1;
+        saveProgress(progress);
+
+        btnEl.classList.add("is-correct");
+        
+        // Disable other buttons gently
+        const allBtns = el.optionsGrid.querySelectorAll("button");
+        allBtns.forEach(b => {
+          b.disabled = true;
+          if (b !== btnEl) b.classList.add("opacity-50");
+        });
+
+        el.feedbackText.innerHTML = '<span class="material-symbols-outlined text-2xl text-emerald-600">check_circle</span> Perfect! That is the ' + correctLvl.name + '.';
+        el.feedbackText.classList.remove("opacity-0", "text-rose-600");
+        el.feedbackText.classList.add("opacity-100", "text-emerald-800");
+
+        el.nextLevelBtn.classList.remove("hidden");
+        el.nextLevelBtn.querySelector("span").textContent = isLast ? "Finish Game ✓" : "Next Level";
+        el.nextLevelBtn.focus();
+        announce("Correct! That is the " + correctLvl.name + ".");
+      } else {
+        MINDNER_GAME_PROGRESS.markFailed(MINDNER_GAME_PROGRESS.currentLevel());
+        progress.wrongAttempts += 1;
+        saveProgress(progress);
+
+        btnEl.classList.add("is-wrong");
+        setTimeout(() => {
+          btnEl.classList.remove("is-wrong");
+        }, 500);
+
+        el.feedbackText.innerHTML = '<span class="material-symbols-outlined text-2xl text-amber-600">lightbulb</span> Gentle try! Look closely at the picture above.';
+        el.feedbackText.classList.remove("opacity-0", "text-emerald-800");
+        el.feedbackText.classList.add("opacity-100", "text-amber-800");
+        announce("Great try, again! Look at the picture of the " + correctLvl.name + ".");
+      }
+    }
+
+    function nextLevel() {
+      if (!session.answered) return;
+
+      MINDNER_GAME_PROGRESS.markCompleted(MINDNER_GAME_PROGRESS.currentLevel());
+
+      if (session.levelIndex === TOTAL_LEVELS - 1) {
+        progress.currentLevel = TOTAL_LEVELS;
+        saveProgress(progress);
+        showGameComplete();
+      } else {
+        progress.currentLevel = session.levelIndex + 2;
+        saveProgress(progress);
+        loadLevel(session.levelIndex + 1);
+      }
+    }
+
+    // Event Bindings
+    el.startGameBtn.addEventListener("click", () => startGame(true));
+    el.continueGameBtn.addEventListener("click", () => startGame(false));
+    el.listenBtn.addEventListener("click", () => {
+      const current = LEVELS[session.levelIndex];
+      speakObject(current.name);
+    });
+    el.homeBtn.addEventListener("click", showStartScreen);
+    el.nextLevelBtn.addEventListener("click", nextLevel);
+    el.playAgainBtn.addEventListener("click", () => startGame(true));
+    el.resultsHomeBtn.addEventListener("click", showStartScreen);
+
+    el.resetProgressBtn.addEventListener("click", () => {
+      el.resetModal.classList.remove("hidden");
+    });
+    el.cancelResetBtn.addEventListener("click", () => {
+      el.resetModal.classList.add("hidden");
+    });
+    el.confirmResetBtn.addEventListener("click", () => {
+      progress = getDefaultProgress();
+      saveProgress(progress);
+      el.resetModal.classList.add("hidden");
+      showStartScreen();
+    });
+
+    // Start on home
+    showStartScreen();
+  })();
+  </script>
+</body>
+</html>

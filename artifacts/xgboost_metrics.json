@@ -1,0 +1,26 @@
+{
+  "saved_at_utc": "2026-09-08T01:48:11.725991+00:00",
+  "random_state": 42,
+  "best_cv_roc_auc": 0.9804183159316399,
+  "test_accuracy": 0.9583333333333334,
+  "test_roc_auc": 0.981924360400445,
+  "best_parameters": {
+    "subsample": 0.85,
+    "n_estimators": 240,
+    "min_child_weight": 1,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "gamma": 0,
+    "colsample_bytree": 1.0
+  },
+  "confusion_matrix": [
+    [
+      123,
+      1
+    ],
+    [
+      9,
+      107
+    ]
+  ]
+}

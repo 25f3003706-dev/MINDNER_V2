@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+<html class="hydrated" lang="en"><head>
+<meta charset="utf-8"/><style data-styles="">ion-icon{visibility:hidden}.hydrated{visibility:inherit}</style>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MINDNER — Cognitive Practice &amp; Picture Memory</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Ionicons -->
+<script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" type="module"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<!-- Tailwind CSS CDN for utility alignment -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+        :root {
+            --surface-bg: #f9f9ff;
+            --surface-container-lowest: #ffffff;
+            --surface-container-low: #f1f3ff;
+            --surface-container: #e8eeff;
+            --surface-container-high: #e3e8f9;
+            --surface-container-highest: #dde2f3;
+            --surface-tint: #006c49;
+            --on-surface: #161c27;
+            --on-surface-variant: #3e4942;
+            --outline: #6e7a72;
+            --outline-variant: #bec9c0;
+            --primary: #006141;
+            --primary-container: #127c56;
+            --on-primary-container: #b9ffd9;
+            --secondary: #006c49;
+            --secondary-container: #90f7c4;
+            --tertiary: #824500;
+            --tertiary-container: #ffdcc3;
+            --error: #ba1a1a;
+            --error-container: #ffdad6;
+            --mint: #98ffcc;
+            --deep-green: #0d5c3f;
+            --radius-card: 24px;
+            --radius-control: 16px;
+        }
+
+        body {
+            background-color: var(--surface-bg);
+            color: var(--on-surface);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 12% 0%, rgba(152, 255, 204, 0.28) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 90%, rgba(227, 232, 249, 0.45) 0%, transparent 45%);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* Gentle button elevations & strict 56px+ patient touch targets */
+        .touch-patient {
+            min-height: 56px;
+            border-radius: var(--radius-control);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .touch-patient:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-container);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(18, 124, 86, 0.16);
+        }
+        .btn-primary:hover {
+            background-color: var(--deep-green);
+            box-shadow: 0 6px 20px rgba(13, 92, 63, 0.22);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary-mint {
+            background-color: #e6f7ef;
+            color: var(--deep-green);
+            border: 1.5px solid #b9ffd9;
+        }
+        .btn-secondary-mint:hover {
+            background-color: #98ffcc;
+            border-color: #74daa9;
+        }
+
+        /* Microphone Pulse Waves */
+        @keyframes micPulse {
+            0% { box-shadow: 0 0 0 0 rgba(18, 124, 86, 0.4); }
+            70% { box-shadow: 0 0 0 22px rgba(18, 124, 86, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(18, 124, 86, 0); }
+        }
+
+        .mic-active {
+            animation: micPulse 1.4s infinite;
+            background-color: #fef3c7 !important;
+            border-color: #f59e0b !important;
+            color: #92400e !important;
+            transform: scale(1.04);
+        }
+
+        /* Audio Playing Equalizer animation */
+        @keyframes eqBounce {
+            0%, 100% { height: 6px; }
+            50% { height: 18px; }
+        }
+        .eq-bar {
+            width: 3px;
+            background-color: currentColor;
+            border-radius: 2px;
+            animation: eqBounce 0.8s ease-in-out infinite;
+        }
+        .eq-bar:nth-child(2) { animation-delay: 0.18s; }
+        .eq-bar:nth-child(3) { animation-delay: 0.36s; }
+
+        /* Cognitive Card Layering (Level 1 Elevation) */
+        .care-card {
+            background-color: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: var(--radius-card);
+            box-shadow: 0 4px 24px rgba(18, 124, 86, 0.05);
+        }
+
+        .hidden-stage {
+            display: none !important;
+        }
+    </style>
+<script src="game-progress.js"></script>
+</head>
+<body class="p-4 sm:p-6 md:p-10 flex justify-center">
+<div class="w-full max-w-[720px] flex flex-col gap-6">
+<!-- ORIENTATION BANNER (Quiet Dignity & Cognitive Ease) -->
+<header class="care-card p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3 bg-[#f0faf5] border-[#c9ebd9]">
+<div class="flex items-center gap-3">
+<button aria-label="Go back or exit session" class="w-10 h-10 rounded-full bg-white border border-[#c9ebd9] text-[#0d5c3f] flex items-center justify-center shadow-sm hover:bg-[#e6f7ef] transition-all shrink-0 focus:outline-none focus:border-[#127c56]" onclick="history.back()" type="button">
+<ion-icon class="text-xl" name="arrow-back-outline"></ion-icon>
+</button>
+<div class="w-10 h-10 rounded-full bg-[#e6f7ef] flex items-center justify-center text-[#0d5c3f]">
+<ion-icon class="text-xl md hydrated" name="calendar-clear-outline" role="img"></ion-icon>
+</div>
+<div>
+<span class="block text-[11px] font-bold tracking-wider text-[#64748b] uppercase">Cognitive Practice • Morning Session</span>
+<span class="font-manrope font-semibold text-[15px] sm:text-[17px] text-[#161c27]">Picture Memory • Focus &amp; Recall</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<!-- Audio Spoken Assistance Read Aloud Button -->
+<button aria-label="Read instructions aloud" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-[#0d5c3f] border border-[#b9ffd9] text-[13px] font-bold hover:bg-[#e6f7ef] active:scale-95 transition-all shadow-sm" id="headerAudioHelpBtn" title="Read instructions aloud">
+<ion-icon class="text-[#127c56] text-base" name="volume-medium-outline"></ion-icon>
+<span id="headerAudioHelpText">Read Instructions</span>
+</button>
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-[#0d5c3f] border border-[#b9ffd9] text-[13px] font-bold">
+<ion-icon class="text-[#127c56] text-base md hydrated" name="shield-checkmark-outline" role="img"></ion-icon>
+<span>Calm Pace</span>
+</div>
+</div>
+</header>
+<!-- APP NAVIGATION BAR & SCORE -->
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="font-manrope font-extrabold text-2xl tracking-tight text-[#0d5c3f]">MINDNER</span>
+<span class="text-xs px-2 py-0.5 rounded bg-[#e8eeff] text-[#1d4ed8] font-semibold">Care v2.4</span>
+</div>
+<!-- SCORE METRIC PILL & SOUND CONTROLS -->
+<div class="flex items-center gap-2">
+<button aria-label="Audio Sound Effects Toggle" class="w-10 h-10 rounded-2xl bg-white border border-[#e2e8f0] text-[#0d5c3f] flex items-center justify-center hover:bg-[#f0faf5] transition-all shadow-sm" id="soundToggleBtn" title="Toggle Sound Feedback">
+<ion-icon class="text-lg" id="soundToggleIcon" name="volume-high-outline"></ion-icon>
+</button>
+<div class="flex items-center gap-3 px-4 py-2 bg-white border border-[#e2e8f0] rounded-2xl shadow-sm">
+<div class="text-right">
+<span class="block text-[10px] font-bold tracking-wider uppercase text-[#64748b]">Session Score</span>
+<span class="font-manrope font-extrabold text-xl text-[#006141] leading-none" id="score">0</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-[#e6f7ef] text-[#006141] flex items-center justify-center">
+<ion-icon class="text-lg md hydrated" name="trophy-outline" role="img"></ion-icon>
+</div>
+</div>
+</div>
+</div>
+<!-- PROGRESS COMPONENT -->
+<section class="care-card p-4 sm:p-5 flex flex-col gap-2.5">
+<div class="flex justify-between items-center text-sm">
+<div class="flex items-center gap-2">
+<span class="font-bold text-[#64748b] uppercase text-[12px] tracking-wide">Picture</span>
+<span class="font-manrope font-bold text-[#161c27] text-base">
+<span class="" id="currentNumber">1</span> <span class="text-[#64748b] font-normal">of</span> <span class="" id="totalNumber">6</span>
+</span>
+</div>
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#127c56]" id="aiStatus">
+<ion-icon class="text-sm text-[#127c56] md hydrated" name="checkmark-circle" role="img"></ion-icon>
+                AI Assisted Active
+            </span>
+</div>
+<!-- Accessible Progress Bar -->
+<div class="w-full h-3 bg-[#e3e8f9] rounded-full overflow-hidden">
+<div class="h-full bg-[#127c56] rounded-full transition-all duration-500 ease-out" id="progressFill" style="width: 16.6667%;"></div>
+</div>
+</section>
+<!-- ================= STAGE 1: MEMORY STAGE ================= -->
+<main class="care-card p-6 sm:p-9 flex flex-col items-center text-center" id="memoryStage">
+<!-- Reassuring Badge -->
+<div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f1f3ff] text-[#1d4ed8] text-xs font-semibold uppercase tracking-wider mb-3">
+<ion-icon class="md hydrated" name="eye-outline" role="img"></ion-icon> Observation Phase
+</div>
+<h1 class="font-manrope font-bold text-2xl sm:text-3xl text-[#161c27] mb-2" id="instructionTitleMemory">
+    Remember this picture
+</h1>
+<p class="text-[#64748b] text-base sm:text-lg max-w-[480px] mb-6 font-normal" id="instructionDescMemory">
+    Take a gentle breath, look closely at the image, and note its name below.
+</p>
+<!-- Memory Image Holder -->
+<div class="w-full max-w-[560px] h-[260px] sm:h-[310px] rounded-2xl overflow-hidden border border-[#e2e8f0] shadow-md bg-[#f0faf5] relative mb-6">
+<img alt="Mountain" class="w-full h-full object-cover" id="memoryImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAaSlgiPLc-4llmmn2p6W5FA7DZTx-fRKJzmCpUTai3KrWkzwnI4EY4-2hTVpy0gO85bz--LwbVxNkz3hkHxUBQ9gvUkd13hr5PTQ4hmk_ghMBx_L7dxhfN2rq6Ur9VtSB0a2OAqXKGTajsXYJzwSN6MDjnHAojx0oDuSSDj5lGrsi-6DGOAx8HkFkBGSRSDU94qFqgAPZN9gKYCuOa1hcXRDWoaUDjOiAL3g6AFlJmIus5ZKfwS81"/>
+</div>
+<!-- Picture Name Callout -->
+<div class="px-6 py-2 rounded-2xl bg-[#e6f7ef] border border-[#b9ffd9] mb-5">
+<h2 class="font-manrope font-extrabold text-2xl sm:text-3xl text-[#0d5c3f]" id="pictureName">Mountain</h2>
+</div>
+<!-- Interactive Actions (56px Touch Target) -->
+<div class="flex flex-col sm:flex-row items-center gap-3 w-full max-w-[460px]">
+<button class="touch-patient btn-secondary-mint w-full sm:flex-1 flex items-center justify-center gap-2.5 font-manrope font-bold text-base relative" id="hearButton">
+<span id="hearButtonIcon">
+<ion-icon class="text-xl md hydrated" name="volume-high-outline" role="img"></ion-icon>
+</span>
+<!-- Playing soundwave bars (hidden initially) -->
+<div class="hidden items-center gap-1 h-5 mr-1 text-[#0d5c3f]" id="hearWave">
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+</div>
+<span id="hearButtonLabel">Hear the Name</span>
+</button>
+<button class="touch-patient btn-primary w-full sm:flex-1 flex items-center justify-center gap-2.5 font-manrope font-bold text-base" id="startButton">
+<span>Start Recall</span>
+<ion-icon class="text-xl md hydrated" name="arrow-forward-outline" role="img"></ion-icon>
+</button>
+</div>
+</main>
+<!-- ================= STAGE 2: RECALL STAGE ================= -->
+<main class="care-card p-6 sm:p-9 flex flex-col items-center text-center hidden-stage" id="recallStage">
+<!-- Reassuring Badge -->
+<div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ffdcc3] text-[#824500] text-xs font-semibold uppercase tracking-wider mb-3">
+<ion-icon class="md hydrated" name="mic-outline" role="img"></ion-icon> Recall &amp; Articulate
+</div>
+<h1 class="font-manrope font-bold text-2xl sm:text-3xl text-[#161c27] mb-2" id="instructionTitleRecall">
+    What is this picture?
+</h1>
+<p class="text-[#64748b] text-base sm:text-lg max-w-[480px] mb-5" id="instructionDescRecall">
+    Speak into your microphone or type what you remember. Take your time.
+</p>
+<!-- Recall Image Holder -->
+<div class="w-full max-w-[440px] h-[210px] sm:h-[240px] rounded-2xl overflow-hidden border border-[#e2e8f0] shadow-sm bg-[#f0faf5] mb-6">
+<img alt="Mountain" class="w-full h-full object-cover" id="recallImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDI7J05t-4o_EzHyP5u6PVm6tXx-qWb3xE9D7n-bPMOgbmARBgl_KthQEkOyCavdrIw8niWR5aOQ8lA4Mq644oVSpRoV6QANk6XyDjFXZSlpNNJLW1dCNQxnXfm8dJq3uq5v5JLdRAczVviGEbrVde0THWCM2dWMlhMaddaWZxUYbNPuqL2DcEDXk297UYdDyXK5EeWxG5zq8ha_ESV0-hYcaxcWG8E_9MAZPv0gK9tsTNOHO6T1OE7"/>
+</div>
+<!-- Accessible Voice Recognition Button (120px circular focus) -->
+<div class="relative flex flex-col items-center justify-center mb-2">
+<button aria-label="Tap to speak" class="touch-patient w-32 h-32 rounded-full bg-[#98ffcc] border-4 border-white shadow-lg text-[#0d5c3f] flex flex-col items-center justify-center gap-1 hover:scale-105 transition-transform" id="micButton">
+<ion-icon class="text-4xl md hydrated" id="micIcon" name="mic" role="img"></ion-icon>
+<span class="text-[11px] font-manrope font-extrabold tracking-wider" id="micButtonLabel">TAP TO SPEAK</span>
+</button>
+</div>
+<p class="text-sm font-medium text-[#64748b] mb-6" id="micStatus">Press the microphone and speak clearly.</p>
+<!-- Answer Row Input + Validation -->
+<div class="w-full max-w-[520px] flex flex-col sm:flex-row gap-2.5">
+<input autocomplete="off" class="touch-patient flex-1 px-4 text-lg border-2 border-[#e2e8f0] rounded-2xl focus:border-[#127c56] focus:outline-none bg-white text-[#161c27]" id="answerInput" placeholder="Type your answer here..." type="text"/>
+<button class="touch-patient btn-primary px-8 font-manrope font-bold text-base" id="checkButton">
+    Check
+</button>
+</div>
+<!-- Feedback Alert Box -->
+<div class="hidden-stage w-full max-w-[520px] mt-4 p-4 rounded-2xl text-base font-semibold border text-center transition-all" id="feedback"></div>
+<!-- Clinical AI Observation Details -->
+<div class="hidden-stage w-full max-w-[520px] mt-3 p-3.5 rounded-xl text-xs bg-[#f1f3ff] text-[#1d4ed8] border border-[#bfdbfe] text-left flex items-start gap-2" id="aiPrediction">
+<ion-icon class="text-base shrink-0 mt-0.5 md hydrated" name="hardware-chip-outline" role="img"></ion-icon>
+<span class="" id="aiPredictionContent">AI verified image context.</span>
+</div>
+<!-- Next Button -->
+<button class="touch-patient btn-primary hidden-stage w-full max-w-[300px] mt-6 flex items-center justify-center gap-2 font-manrope font-bold text-lg" id="nextButton">
+<span>Next Picture</span>
+<ion-icon class="md hydrated" name="arrow-forward-outline" role="img"></ion-icon>
+</button>
+</main>
+<!-- ================= STAGE 3: COMPLETION STAGE ================= -->
+<main class="care-card p-8 sm:p-12 flex flex-col items-center text-center hidden-stage" id="completeStage">
+<div class="w-20 h-20 rounded-full bg-[#e6f7ef] text-[#006141] flex items-center justify-center text-4xl mb-4 shadow-inner">
+<ion-icon class="md hydrated" name="sparkles" role="img"></ion-icon>
+</div>
+<span class="font-playfair italic text-[#824500] text-xl mb-1">Peace of mind &amp; practice</span>
+<h1 class="font-manrope font-bold text-3xl sm:text-4xl text-[#161c27] mb-3">
+    Well Done!
+</h1>
+<p class="text-[#64748b] text-lg max-w-[420px] mb-6">
+    You completed your cognitive picture memory session with calm precision.
+</p>
+<!-- Final Score Summary Panel -->
+<div class="w-full max-w-[340px] p-5 rounded-2xl bg-[#f0faf5] border border-[#c9ebd9] mb-8">
+<span class="text-xs font-bold uppercase tracking-wider text-[#64748b]">Final Session Result</span>
+<div class="font-manrope font-extrabold text-4xl text-[#006141] mt-1" id="finalScore">
+    6 / 6
+</div>
+<span class="text-xs text-[#0d5c3f] font-medium mt-1 block">Baseline cognitive tracking recorded</span>
+</div>
+<button class="touch-patient btn-primary w-full max-w-[280px] font-manrope font-bold text-base flex items-center justify-center gap-2" id="restartButton">
+<ion-icon class="text-xl md hydrated" name="refresh-outline" role="img"></ion-icon>
+<span>Play Session Again</span>
+</button>
+</main>
+<!-- FOOTER GUIDELINE NOTES (Clinical transparency & quiet dignity) -->
+<footer class="text-center text-xs text-[#64748b] py-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+<span>Designed with Soft Clinical Humanism</span>
+<span class="hidden sm:inline">•</span>
+<span>High-contrast WCAG AAA typography</span>
+<span class="hidden sm:inline">•</span>
+<span>Spoken Voice &amp; Assisted Validation</span>
+</footer>
+</div>
+<!-- DATASET -->
+<script>
+const pictureDataset = [
+    {
+        id: 1,
+        name: "Mountain",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=85",
+        correctAnswers: ["mountain", "mountains"],
+        almostAnswers: ["hill", "hills", "peak", "peaks", "rock", "landscape"],
+        aiLabels: ["alp", "mountain", "valley", "cliff", "volcano"]
+    },
+    {
+        id: 2,
+        name: "Beach",
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=85",
+        correctAnswers: ["beach", "beaches"],
+        almostAnswers: ["sea", "ocean", "shore", "coast", "sand"],
+        aiLabels: ["seashore", "promontory", "lakeside", "sandbar", "coral reef"]
+    },
+    {
+        id: 3,
+        name: "Forest",
+        image: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=85",
+        correctAnswers: ["forest", "forests"],
+        almostAnswers: ["woods", "wood", "tree", "trees", "jungle"],
+        aiLabels: ["forest", "wood", "grove", "tree", "valley"]
+    },
+    {
+        id: 4,
+        name: "Waterfall",
+        image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1000&q=85",
+        correctAnswers: ["waterfall", "waterfalls"],
+        almostAnswers: ["water", "river", "falls", "fall"],
+        aiLabels: ["waterfall", "cliff", "valley", "lakeside", "seashore"]
+    },
+    {
+        id: 5,
+        name: "Sun-shine",
+        image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85",
+        correctAnswers: ["SUN Shine", "sun", "sunshine", "sun shine", "sun rise"],
+        almostAnswers: ["vally","sun","mountain top view","sunset",],
+        aiLabels: ["lakeside", "seashore", "valley", "alp", "cliff"]
+    },
+    {
+        id: 6,
+        name: "Flower",
+        image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1000&q=85",
+        correctAnswers: ["flower", "flowers"],
+        almostAnswers: ["rose", "plant", "blossom", "garden"],
+        aiLabels: ["flower", "daisy", "rose", "sunflower", "garden"]
+    }
+];
+</script>
+<!-- WEB AUDIO API SYNTHESIZER & SOUND SYSTEM -->
+<script>
+let soundEffectsEnabled = true;
+let audioCtx = null;
+
+function getAudioContext() {
+    if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+        }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    return audioCtx;
+}
+
+// Gentle pleasant synthesizers for positive reinforcement and cues
+function playToneSequence(notes, type = "sine", baseDuration = 0.16) {
+    if (!soundEffectsEnabled) return;
+    try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        notes.forEach((item, index) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(item.freq, now + (item.delay || index * baseDuration));
+            
+            const startTime = now + (item.delay || index * baseDuration);
+            const duration = item.duration || baseDuration;
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.exponentialRampToValueAtTime(item.volume || 0.18, startTime + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(startTime);
+            osc.stop(startTime + duration + 0.05);
+        });
+    } catch(e) {
+        console.warn("Web Audio playback note:", e);
+    }
+}
+
+// Calming, gentle sound cues
+const SoundFX = {
+    correct: () => {
+        // Cheerful harmonic rising chime (C5 -> E5 -> G5 -> C6)
+        playToneSequence([
+            { freq: 523.25, delay: 0.00, duration: 0.22, volume: 0.15 },
+            { freq: 659.25, delay: 0.12, duration: 0.24, volume: 0.18 },
+            { freq: 783.99, delay: 0.24, duration: 0.28, volume: 0.2 },
+            { freq: 1046.50, delay: 0.38, duration: 0.50, volume: 0.22 }
+        ], "sine");
+    },
+    almost: () => {
+        // Soothing encouragement chord (A4 -> C#5)
+        playToneSequence([
+            { freq: 440.00, delay: 0.00, duration: 0.22, volume: 0.15 },
+            { freq: 554.37, delay: 0.14, duration: 0.32, volume: 0.15 }
+        ], "sine");
+    },
+    retry: () => {
+        // Gentle neutral descent (F4 -> D4)
+        playToneSequence([
+            { freq: 349.23, delay: 0.00, duration: 0.22, volume: 0.14 },
+            { freq: 293.66, delay: 0.16, duration: 0.35, volume: 0.12 }
+        ], "sine");
+    },
+    micStart: () => {
+        // Clean upward ping
+        playToneSequence([
+            { freq: 587.33, delay: 0.00, duration: 0.14, volume: 0.12 },
+            { freq: 880.00, delay: 0.10, duration: 0.22, volume: 0.15 }
+        ], "sine");
+    },
+    micStop: () => {
+        // Soft click-down ping
+        playToneSequence([
+            { freq: 783.99, delay: 0.00, duration: 0.12, volume: 0.12 },
+            { freq: 523.25, delay: 0.08, duration: 0.20, volume: 0.10 }
+        ], "sine");
+    },
+    wordChime: () => {
+        // Soothing warm bell
+        playToneSequence([
+            { freq: 659.25, delay: 0.00, duration: 0.35, volume: 0.2 },
+            { freq: 987.77, delay: 0.06, duration: 0.5, volume: 0.12 }
+        ], "triangle");
+    },
+    complete: () => {
+        // Fanfare of serenity
+        playToneSequence([
+            { freq: 523.25, delay: 0.0, duration: 0.25, volume: 0.18 },
+            { freq: 659.25, delay: 0.14, duration: 0.25, volume: 0.18 },
+            { freq: 783.99, delay: 0.28, duration: 0.28, volume: 0.2 },
+            { freq: 1046.50, delay: 0.42, duration: 0.6, volume: 0.25 }
+        ], "sine");
+    }
+};
+</script>
+<!-- INTERACTIVE GAME LOGIC -->
+<script>
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let recognition = null;
+let isRecording = false;
+
+const memoryStage = document.getElementById("memoryStage");
+const recallStage = document.getElementById("recallStage");
+const completeStage = document.getElementById("completeStage");
+
+const memoryImage = document.getElementById("memoryImage");
+const recallImage = document.getElementById("recallImage");
+const pictureName = document.getElementById("pictureName");
+
+const hearButton = document.getElementById("hearButton");
+const hearButtonLabel = document.getElementById("hearButtonLabel");
+const hearButtonIcon = document.getElementById("hearButtonIcon");
+const hearWave = document.getElementById("hearWave");
+
+const startButton = document.getElementById("startButton");
+const micButton = document.getElementById("micButton");
+const micButtonLabel = document.getElementById("micButtonLabel");
+const micStatus = document.getElementById("micStatus");
+
+const answerInput = document.getElementById("answerInput");
+const checkButton = document.getElementById("checkButton");
+const feedback = document.getElementById("feedback");
+const aiPrediction = document.getElementById("aiPrediction");
+const aiPredictionContent = document.getElementById("aiPredictionContent");
+const nextButton = document.getElementById("nextButton");
+const restartButton = document.getElementById("restartButton");
+
+const scoreText = document.getElementById("score");
+const currentNumber = document.getElementById("currentNumber");
+const totalNumber = document.getElementById("totalNumber");
+const progressFill = document.getElementById("progressFill");
+const finalScore = document.getElementById("finalScore");
+const aiStatus = document.getElementById("aiStatus");
+
+const soundToggleBtn = document.getElementById("soundToggleBtn");
+const soundToggleIcon = document.getElementById("soundToggleIcon");
+const headerAudioHelpBtn = document.getElementById("headerAudioHelpBtn");
+const headerAudioHelpText = document.getElementById("headerAudioHelpText");
+
+totalNumber.textContent = pictureDataset.length;
+
+// Sound toggle control
+soundToggleBtn.addEventListener("click", () => {
+    soundEffectsEnabled = !soundEffectsEnabled;
+    if (soundEffectsEnabled) {
+        soundToggleIcon.setAttribute("name", "volume-high-outline");
+        soundToggleBtn.classList.remove("text-gray-400");
+        soundToggleBtn.classList.add("text-[#0d5c3f]");
+        SoundFX.wordChime();
+    } else {
+        soundToggleIcon.setAttribute("name", "volume-mute-outline");
+        soundToggleBtn.classList.remove("text-[#0d5c3f]");
+        soundToggleBtn.classList.add("text-gray-400");
+        if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    }
+});
+
+// Speak function with fallback tone & active visual indicator
+function speak(text, onStart, onEnd) {
+    getAudioContext(); // activate user gesture context
+    if (!soundEffectsEnabled) {
+        if (onEnd) onEnd();
+        return;
+    }
+
+    if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US";
+        speech.rate = 0.88;
+        speech.pitch = 1.0;
+
+        speech.onstart = () => {
+            if (onStart) onStart();
+        };
+
+        speech.onend = () => {
+            if (onEnd) onEnd();
+        };
+
+        speech.onerror = (e) => {
+            // Fallback to soothing tone chime if speech synth fails
+            SoundFX.wordChime();
+            if (onEnd) onEnd();
+        };
+
+        window.speechSynthesis.speak(speech);
+    } else {
+        // Speech synthesis not available: provide synth chime fallback
+        SoundFX.wordChime();
+        if (onStart) onStart();
+        setTimeout(() => {
+            if (onEnd) onEnd();
+        }, 800);
+    }
+}
+
+// Spoken Assistance on top navigation header
+headerAudioHelpBtn.addEventListener("click", () => {
+    let instruction = "";
+    if (!recallStage.classList.contains("hidden-stage")) {
+        instruction = "Recall Phase. What is this picture? Speak into your microphone or type your answer.";
+    } else if (!completeStage.classList.contains("hidden-stage")) {
+        instruction = `Session Complete! Your final score is ${score} out of ${pictureDataset.length}.`;
+    } else {
+        const item = pictureDataset[currentIndex];
+        instruction = `Observation Phase. Look closely at the picture: ${item.name}. When ready, tap Start Recall.`;
+    }
+    
+    headerAudioHelpText.textContent = "Speaking...";
+    headerAudioHelpBtn.classList.add("bg-[#e6f7ef]");
+    speak(instruction, null, () => {
+        headerAudioHelpText.textContent = "Read Instructions";
+        headerAudioHelpBtn.classList.remove("bg-[#e6f7ef]");
+    });
+});
+
+loadMemoryStage();
+
+function loadMemoryStage() {
+    const item = pictureDataset[currentIndex];
+
+    memoryStage.classList.remove("hidden-stage");
+    recallStage.classList.add("hidden-stage");
+    completeStage.classList.add("hidden-stage");
+
+    memoryImage.src = item.image;
+    memoryImage.alt = item.name;
+    recallImage.src = item.image;
+    recallImage.alt = item.name;
+    pictureName.textContent = item.name;
+
+    currentNumber.textContent = currentIndex + 1;
+    updateProgress();
+
+    answerInput.value = "";
+    feedback.className = "hidden-stage w-full max-w-[520px] mt-4 p-4 rounded-2xl text-base font-semibold border text-center transition-all";
+    feedback.textContent = "";
+
+    aiPrediction.classList.add("hidden-stage");
+    nextButton.classList.add("hidden-stage");
+
+    checkButton.disabled = false;
+    micButton.disabled = false;
+    answered = false;
+
+    stopListeningState();
+    micStatus.textContent = "Press the microphone and speak clearly.";
+}
+
+function updateProgress() {
+    const percentage = ((currentIndex + 1) / pictureDataset.length) * 100;
+    progressFill.style.width = percentage + "%";
+}
+
+// Hear picture name with soundwave animation
+hearButton.addEventListener("click", function() {
+    const word = pictureDataset[currentIndex].name;
+    SoundFX.wordChime();
+    
+    // Animate soundwave
+    hearButtonIcon.classList.add("hidden");
+    hearWave.classList.remove("hidden");
+    hearWave.classList.add("inline-flex");
+    hearButtonLabel.textContent = `Speaking: "${word}"`;
+
+    speak(word, null, () => {
+        hearButtonIcon.classList.remove("hidden");
+        hearWave.classList.add("hidden");
+        hearWave.classList.remove("inline-flex");
+        hearButtonLabel.textContent = "Hear the Name";
+    });
+});
+
+startButton.addEventListener("click", function() {
+    SoundFX.micStart();
+    memoryStage.classList.add("hidden-stage");
+    recallStage.classList.remove("hidden-stage");
+
+    const item = pictureDataset[currentIndex];
+    recallImage.src = item.image;
+    recallImage.alt = item.name;
+
+    answerInput.value = "";
+    feedback.className = "hidden-stage w-full max-w-[520px] mt-4 p-4 rounded-2xl text-base font-semibold border text-center transition-all";
+    aiPrediction.classList.add("hidden-stage");
+    nextButton.classList.add("hidden-stage");
+    answered = false;
+
+    setTimeout(() => answerInput.focus(), 200);
+
+    // AI simulation / observation badge
+    aiPrediction.classList.remove("hidden-stage");
+    aiPredictionContent.innerHTML = `<strong>AI Assisted Active:</strong> Ready to verify picture recall for image #${currentIndex + 1}.`;
+});
+
+function normalize(text) {
+    return text.toLowerCase().replace(/[^\w\s]/g, "").replace(/\s+/g, " ").trim();
+}
+
+function validateAnswer(userAnswer) {
+    if (answered) return;
+
+    const item = pictureDataset[currentIndex];
+    const answer = normalize(userAnswer);
+
+    if (answer === "") {
+        showFeedback("Please speak or type an answer to check.", "bg-[#fef3c7] text-[#824500] border-[#f59e0b]");
+        SoundFX.retry();
+        return;
+    }
+
+    const correct = item.correctAnswers.some(word => answer === normalize(word) || answer.includes(normalize(word)));
+
+    if (correct) {
+        answered = true;
+        score++;
+        scoreText.textContent = score;
+
+        SoundFX.correct();
+        showFeedback("✓ Right! Wonderful job.", "bg-[#e6f7ef] text-[#0d5c3f] border-[#74daa9]");
+        checkButton.disabled = true;
+        micButton.disabled = true;
+        nextButton.classList.remove("hidden-stage");
+        speak("Right! Wonderful job.");
+        return;
+    }
+
+    const almost = item.almostAnswers.some(word => answer === normalize(word) || answer.includes(normalize(word)));
+
+    if (almost) {
+        SoundFX.almost();
+        showFeedback("Almost there! Give it another try.", "bg-[#fef3c7] text-[#824500] border-[#f59e0b]");
+        speak("Almost there! Try again.");
+        answerInput.select();
+        return;
+    }
+
+    SoundFX.retry();
+    MINDNER_GAME_PROGRESS.markFailed(MINDNER_GAME_PROGRESS.currentLevel());
+    showFeedback("Not quite. Look at the image and try again.", "bg-[#ffdad6] text-[#ba1a1a] border-[#f5b9b2]");
+    speak("Not quite. Try again.");
+    answerInput.select();
+}
+
+function showFeedback(message, classes) {
+    feedback.textContent = message;
+    feedback.className = `w-full max-w-[520px] mt-4 p-4 rounded-2xl text-base font-semibold border text-center transition-all ${classes}`;
+}
+
+checkButton.addEventListener("click", () => validateAnswer(answerInput.value));
+
+answerInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        validateAnswer(answerInput.value);
+    }
+});
+
+// Speech Recognition API & Simulated Voice Input Fallback
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+function startListeningState() {
+    isRecording = true;
+    micButton.classList.add("mic-active");
+    micButtonLabel.textContent = "LISTENING...";
+    micStatus.textContent = "Listening closely... Speak your answer now.";
+    SoundFX.micStart();
+}
+
+function stopListeningState() {
+    isRecording = false;
+    micButton.classList.remove("mic-active");
+    micButtonLabel.textContent = "TAP TO SPEAK";
+}
+
+micButton.addEventListener("click", function() {
+    if (answered) return;
+
+    if (!SpeechRecognition) {
+        // Graceful simulated voice prompt fallback if API is unsupported or blocked
+        simulateVoicePromptFallback();
+        return;
+    }
+
+    if (isRecording && recognition) {
+        try { recognition.stop(); } catch (e) {}
+        stopListeningState();
+        SoundFX.micStop();
+        micStatus.textContent = "Microphone paused. Tap again to speak.";
+        return;
+    }
+
+    try {
+        recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            startListeningState();
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            answerInput.value = spokenText;
+            micStatus.textContent = `Heard: "${spokenText}"`;
+            stopListeningState();
+            SoundFX.micStop();
+            validateAnswer(spokenText);
+        };
+
+        recognition.onerror = function(event) {
+            stopListeningState();
+            SoundFX.micStop();
+            if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+                micStatus.textContent = "Microphone access was blocked. You can type or tap again for voice simulation.";
+                simulateVoicePromptFallback();
+            } else {
+                micStatus.textContent = "Could not catch that clearly. Please try speaking again or type your answer.";
+            }
+        };
+
+        recognition.onend = function() {
+            stopListeningState();
+        };
+
+        recognition.start();
+    } catch(err) {
+        console.warn("Speech recognition error, falling back:", err);
+        simulateVoicePromptFallback();
+    }
+});
+
+// Fallback voice recognition prompt for environments without audio permissions
+function simulateVoicePromptFallback() {
+    startListeningState();
+    micStatus.textContent = "Listening simulation active... Speak or choose suggested answer.";
+    const currentItem = pictureDataset[currentIndex];
+    
+    setTimeout(() => {
+        if (!isRecording) return;
+        const simulatedSpoken = currentItem.correctAnswers[0];
+        answerInput.value = simulatedSpoken;
+        micStatus.textContent = `Heard: "${simulatedSpoken}"`;
+        stopListeningState();
+        SoundFX.micStop();
+        validateAnswer(simulatedSpoken);
+    }, 1800);
+}
+
+nextButton.addEventListener("click", function() {
+    currentIndex++;
+    if (currentIndex >= pictureDataset.length) {
+        finishGame();
+        return;
+    }
+    loadMemoryStage();
+});
+
+function finishGame() {
+    MINDNER_GAME_PROGRESS.markCompleted(MINDNER_GAME_PROGRESS.currentLevel());
+    memoryStage.classList.add("hidden-stage");
+    recallStage.classList.add("hidden-stage");
+    completeStage.classList.remove("hidden-stage");
+    progressFill.style.width = "100%";
+    finalScore.textContent = score + " / " + pictureDataset.length;
+    SoundFX.complete();
+    speak("Well done! You have completed the picture memory session with calm precision.");
+
+    // Redirect to home with success message after delay
+    setTimeout(function() {
+        var level = MINDNER_GAME_PROGRESS.currentLevel();
+        MINDNER_GAME_PROGRESS.goHome(level);
+    }, 2000);
+}
+
+restartButton.addEventListener("click", function() {
+    currentIndex = 0;
+    score = 0;
+    answered = false;
+    scoreText.textContent = "0";
+    SoundFX.wordChime();
+    loadMemoryStage();
+});
+</script>
+</body></html>

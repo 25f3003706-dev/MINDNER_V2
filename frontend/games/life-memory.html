@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MINDNER - Daily Life Challenge</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;family=Playfair+Display:ital,wght@0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-primary-fixed": "#002113",
+          "surface-container-highest": "#dde2f3",
+          "on-tertiary-container": "#ffede1",
+          "on-surface-variant": "#3e4942",
+          "on-tertiary-fixed": "#2f1500",
+          "surface-dim": "#d4daea",
+          "secondary-fixed": "#90f7c4",
+          "secondary-fixed-dim": "#74daa9",
+          "on-secondary-fixed-variant": "#005236",
+          "on-primary-container": "#b9ffd9",
+          "primary-container": "#127c56",
+          "primary": "#006141",
+          "surface-container": "#e8eeff",
+          "on-secondary-fixed": "#002113",
+          "on-surface": "#161c27",
+          "surface-container-lowest": "#ffffff",
+          "inverse-primary": "#7cd9ac",
+          "on-error-container": "#93000a",
+          "surface-container-high": "#e3e8f9",
+          "tertiary-container": "#a65900",
+          "inverse-on-surface": "#ecf0ff",
+          "on-secondary": "#ffffff",
+          "primary-fixed-dim": "#7cd9ac",
+          "error": "#ba1a1a",
+          "surface-bright": "#f9f9ff",
+          "secondary-container": "#90f7c4",
+          "tertiary": "#824500",
+          "on-tertiary": "#ffffff",
+          "tertiary-fixed-dim": "#ffb77d",
+          "on-primary": "#ffffff",
+          "secondary": "#006c49",
+          "on-error": "#ffffff",
+          "tertiary-fixed": "#ffdcc3",
+          "inverse-surface": "#2a303d",
+          "surface-container-low": "#f1f3ff",
+          "surface-variant": "#dde2f3",
+          "on-tertiary-fixed-variant": "#6e3900",
+          "surface": "#f9f9ff",
+          "on-background": "#161c27",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#98f5c7",
+          "surface-tint": "#006c49",
+          "on-secondary-container": "#00734e",
+          "background": "#f9f9ff",
+          "outline": "#6e7a72",
+          "outline-variant": "#bec9c0",
+          "on-primary-fixed-variant": "#005236"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-sm": "0.75rem",
+          "touch-min": "3.5rem",
+          "space-xl": "2rem",
+          "space-xs": "0.5rem",
+          "touch-lg": "4.25rem",
+          "space-3xl": "4.5rem",
+          "space-md": "1rem",
+          "space-lg": "1.5rem",
+          "space-xxs": "0.25rem",
+          "space-2xl": "3rem",
+          "container-pad-mobile": "1.25rem",
+          "gutter-grid": "1.5rem",
+          "container-pad-desktop": "3rem"
+        },
+        "fontFamily": {
+          "display-hero-mobile": ["Manrope"],
+          "display-hero": ["Manrope"],
+          "headline-md": ["Manrope"],
+          "clinical-label": ["Inter"],
+          "label-caption": ["Inter"],
+          "headline-lg-mobile": ["Manrope"],
+          "headline-lg": ["Manrope"],
+          "patient-body-md": ["Inter"],
+          "clinical-metric": ["Manrope"],
+          "patient-body-lg": ["Inter"],
+          "patient-action-lg": ["Manrope"],
+          "headline-sm": ["Manrope"],
+          "quote-accent": ["Playfair Display"],
+          "clinical-body": ["Inter"]
+        },
+        "fontSize": {
+          "display-hero-mobile": ["34px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+          "display-hero": ["48px", { "lineHeight": "60px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+          "headline-md": ["26px", { "lineHeight": "36px", "fontWeight": "600" }],
+          "clinical-label": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+          "label-caption": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+          "headline-lg-mobile": ["28px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+          "headline-lg": ["36px", { "lineHeight": "46px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+          "patient-body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+          "clinical-metric": ["28px", { "lineHeight": "34px", "fontWeight": "700" }],
+          "patient-body-lg": ["20px", { "lineHeight": "32px", "fontWeight": "400" }],
+          "patient-action-lg": ["20px", { "lineHeight": "28px", "fontWeight": "700" }],
+          "headline-sm": ["22px", { "lineHeight": "32px", "fontWeight": "600" }],
+          "quote-accent": ["24px", { "lineHeight": "36px", "letterSpacing": "0", "fontWeight": "500" }],
+          "clinical-body": ["15px", { "lineHeight": "22px", "fontWeight": "400" }]
+        }
+      },
+    },
+  }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.05); }
+    }
+    .pulse-subtle {
+      animation: gentlePulse 2.8s ease-in-out infinite;
+    }
+    @keyframes soundBar {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .sound-wave-1 { animation: soundBar 1.1s ease-in-out infinite 0.1s; }
+    .sound-wave-2 { animation: soundBar 0.9s ease-in-out infinite 0.3s; }
+    .sound-wave-3 { animation: soundBar 1.3s ease-in-out infinite 0.2s; }
+    .sound-wave-4 { animation: soundBar 1.0s ease-in-out infinite 0.4s; }
+  </style>
+<script src="game-progress.js"></script>
+</head>
+<body class="bg-background text-on-surface font-patient-body-md antialiased min-h-screen flex flex-col selection:bg-secondary-container selection:text-on-secondary-container" id="app-root">
+<!-- TOP APP BAR -->
+<header class="bg-surface sticky top-0 z-40 shadow-sm border-b border-outline-variant">
+<div class="flex justify-between items-center w-full px-container-pad-mobile md:px-container-pad-desktop h-touch-min max-w-7xl mx-auto">
+<!-- Brand Anchor -->
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-primary leading-none">MINDNER</span>
+<span class="font-clinical-label text-clinical-label text-on-surface-variant font-medium">Cognitive Care Suite</span>
+</div>
+</div>
+<!-- Navigation Links (Contextual mapping: Activities is ACTIVE) -->
+<nav aria-label="Main Navigation" class="hidden md:flex items-center gap-space-lg">
+<a class="text-on-surface-variant font-patient-body-md hover:text-primary pb-1 transition-colors duration-200" href="#">Today's Routine</a>
+<a aria-current="page" class="text-primary border-b-2 border-primary pb-1 font-patient-action-lg text-patient-body-md flex items-center gap-1.5" href="#">
+<span>Activities</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-clinical-label bg-secondary-fixed text-on-secondary-fixed font-bold">Challenge Active</span>
+</a>
+<a class="text-on-surface-variant font-patient-body-md hover:text-primary pb-1 transition-colors duration-200" href="#">My Progress</a>
+<a class="text-on-surface-variant font-patient-body-md hover:text-primary pb-1 transition-colors duration-200" href="#">Care Team</a>
+</nav>
+<!-- Trailing Action Cluster & Accessibility Controls -->
+<div class="flex items-center gap-space-xs sm:gap-space-sm">
+<!-- Audio Guidance Control -->
+<button class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-clinical-label text-clinical-label hover:bg-secondary-container transition-all active:scale-[0.98] border border-primary/20 shadow-sm" id="audio-toggle-btn" onclick="toggleAudioGuidance()" title="Toggle Audio Reader">
+<span class="w-2.5 h-2.5 rounded-full bg-primary pulse-subtle" id="audio-indicator-dot"></span>
+<span class="material-symbols-outlined text-lg">volume_up</span>
+<span class="hidden sm:inline font-bold" id="audio-status-text">Audio Guidance: On</span>
+<span class="sm:hidden font-bold">Audio</span>
+</button>
+<!-- Font Zoom Switcher (A / A+) -->
+<div aria-label="Text size options" class="inline-flex items-center p-1 rounded-xl bg-surface-container border border-outline-variant/60" role="group">
+<button class="px-2.5 py-1 rounded-lg text-xs font-bold font-clinical-label bg-surface-container-lowest text-primary shadow-xs transition-all" id="font-normal-btn" onclick="setFontScale('normal')" title="Default Text Size">A</button>
+<button class="px-2.5 py-1 rounded-lg text-xs font-bold font-clinical-label text-on-surface-variant hover:text-primary transition-all" id="font-large-btn" onclick="setFontScale('large')" title="Large Comfortable Text Size">A+</button>
+</div>
+<!-- Exit to Routine Button -->
+<button class="hidden lg:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-outline-variant text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-clinical-label text-clinical-label transition-colors" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+<span class="material-symbols-outlined text-lg">close</span>
+<span>Exit to Routine</span>
+</button>
+</div>
+</div>
+</header>
+<!-- SPOKEN TRANSCRIPT SUBTITLE BANNER (Hidden by default, activated on audio play) -->
+<div class="hidden bg-primary-container text-on-primary-container px-4 py-2.5 shadow-sm transition-all duration-300" id="audio-speech-banner">
+<div class="max-w-3xl mx-auto flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="flex items-end gap-1 h-5 w-5 pb-0.5">
+<div class="w-1 bg-secondary-fixed rounded-full sound-wave-1"></div>
+<div class="w-1 bg-secondary-fixed rounded-full sound-wave-2"></div>
+<div class="w-1 bg-secondary-fixed rounded-full sound-wave-3"></div>
+<div class="w-1 bg-secondary-fixed rounded-full sound-wave-4"></div>
+</div>
+<p class="font-patient-body-md text-patient-body-md text-white font-medium" id="audio-speech-text">
+          Spoken narrative is currently reading scenario instructions...
+        </p>
+</div>
+<button class="text-white hover:text-on-primary-container p-1 rounded" onclick="stopSpokenAudio()" title="Dismiss speech bar">
+<span class="material-symbols-outlined text-lg">cancel</span>
+</button>
+</div>
+</div>
+<!-- MAIN CANVAS: Centered Single Stream (<760px) for Zero Cognitive Anxiety -->
+<main class="flex-grow w-full max-w-[760px] mx-auto px-container-pad-mobile sm:px-space-lg py-space-md sm:py-space-xl">
+<!-- 1. CALMING COGNITIVE ORIENTATION & STEPPER -->
+<section class="space-y-space-sm mb-space-lg">
+<!-- Context & Segmented Tracker -->
+<div class="flex flex-wrap items-center justify-between gap-2 pb-1">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-primary font-clinical-label text-clinical-label border border-outline-variant/40">
+<span class="material-symbols-outlined text-base text-primary">wb_twilight</span>
+<span id="session-routine-context">Morning Routine • Everyday Decision Making</span>
+</div>
+<!-- Scenario Step Counter -->
+<div class="flex items-center gap-2">
+<span class="font-clinical-label text-clinical-label font-bold text-on-surface" id="scenario-counter-label">Scenario 2 of 4</span>
+<!-- Soft Segmented Progress Pill Dots -->
+<div aria-hidden="true" class="flex items-center gap-1.5">
+<button class="w-7 h-2 rounded-full bg-primary-container transition-all hover:opacity-80" onclick="loadScenario(1)" title="Go to Scenario 1"></button>
+<button class="w-9 h-2 rounded-full bg-primary transition-all shadow-xs ring-2 ring-primary/20" onclick="loadScenario(2)" title="Current Scenario 2"></button>
+<button class="w-7 h-2 rounded-full bg-outline-variant/60 transition-all hover:bg-outline-variant" onclick="loadScenario(3)" title="Go to Scenario 3"></button>
+<button class="w-7 h-2 rounded-full bg-outline-variant/60 transition-all hover:bg-outline-variant" onclick="loadScenario(4)" title="Go to Scenario 4"></button>
+</div>
+</div>
+</div>
+<!-- Reassuring Low-Anxiety Banner -->
+<div class="bg-surface-container-lowest border border-outline-variant/70 rounded-2xl p-3.5 sm:p-4 flex items-center gap-3 shadow-xs">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+<p class="font-patient-body-md text-patient-body-md text-on-surface-variant font-normal leading-relaxed m-0">
+          Take your time. There is no rush — choose whatever feels most natural to you.
+        </p>
+</div>
+</section>
+<!-- 2. RICH CONTEXTUAL SCENARIO CARD -->
+<article class="bg-surface-container-lowest border border-outline-variant/80 rounded-3xl p-5 sm:p-7 shadow-sm mb-space-lg transition-all duration-300">
+<!-- Visual Illustration Canvas with Ambient Overlay -->
+<div class="relative w-full h-56 sm:h-72 rounded-2xl overflow-hidden mb-5 border border-outline-variant/50 group bg-surface-container">
+<!-- Scenario Visual Prompt with strict data-alt compliance -->
+<img alt="Home entryway looking toward a rainy garden outside" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" data-alt="A warm and peaceful residential entryway with light wooden floors, a cozy wooden bench, and a brass coat rack with an umbrella stand next to the door. Large French glass windows reveal a gentle spring rain falling upon lush green garden foliage outside under soft overcast sky. The atmosphere is soothing, tidy, safe, and tranquil, with natural diffused daylight filling the room in a gentle clinical wellness aesthetic." id="scenario-hero-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmX4YzT4blR1woaRX6RGERdpNNV3OoOwS0MZcV1o_2lsNpYEPB1_LQzFlRLpKRp1TUrUAW4Qvor1ld8It1JIV3OV5nvYl6bhq-g8IcT68vie8rF2iykeg3gn99xQ25FFrZcBcfDfitVdSzzvNSUcn-9VuzYqgL03UYjtDDl814XXjMTBPm7HlXaRzKJiTDWA2n1e5xV2zS_7wS3rf7FhsqkfXsqrkIunUXw6hsSKnlIwJwcsnYyV0"/>
+<!-- Gradient Ambient Vignette -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none"></div>
+<!-- Floating Badge & Audio Prompt Pill -->
+<div class="absolute top-4 left-4">
+<span class="px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-sm text-primary font-clinical-label text-clinical-label font-bold shadow-sm inline-flex items-center gap-1.5 border border-white" id="scenario-pill-tag">
+<span class="material-symbols-outlined text-base text-primary">rainy</span>
+<span id="scenario-tag-text">Morning Walk Scenario</span>
+</span>
+</div>
+<!-- Prominent Audio Button Inside Hero Card -->
+<button aria-label="Listen to spoken scenario description" class="absolute bottom-4 right-4 bg-white/95 hover:bg-white text-primary px-4 py-2.5 rounded-full shadow-md flex items-center gap-2.5 font-patient-action-lg text-patient-body-md active:scale-95 transition-all border border-outline-variant/40" id="listen-scenario-btn" onclick="speakCurrentScenario()">
+<div class="w-8 h-8 rounded-full bg-primary-container text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</div>
+<span class="font-semibold pr-1">Listen to Scenario</span>
+</button>
+</div>
+<!-- Clear Headline & Cognitive Prompt Text -->
+<div class="space-y-3">
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight" id="scenario-headline">
+          It is raining outside and you are getting ready for a morning walk.
+        </h1>
+<p class="font-patient-body-lg text-patient-body-lg text-primary font-semibold" id="scenario-question">
+          What would be most helpful to bring along with you?
+        </p>
+</div>
+</article>
+<!-- 3. ACCESSIBLE TOUCH-TARGET ANSWER OPTIONS -->
+<section aria-label="Available decisions" class="space-y-3.5 mb-space-xl">
+<!-- Option 1: Recommended Choice (Umbrella) -->
+<button aria-checked="false" class="scenario-option w-full text-left bg-surface-container-lowest hover:bg-surface-container-low border-2 border-outline-variant/60 focus:border-primary rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 active:scale-[0.99] min-h-touch-lg group cursor-pointer shadow-xs" id="option-card-1" onclick="handleSelectOption(1)" role="radio">
+<div class="flex items-center gap-4 sm:gap-5">
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-secondary-container transition-colors flex-shrink-0">
+<span class="material-symbols-outlined text-3xl">beach_access</span>
+</div>
+<div class="space-y-0.5">
+<h2 class="font-patient-action-lg text-patient-action-lg text-on-surface font-bold">Umbrella</h2>
+<p class="font-patient-body-md text-patient-body-md text-on-surface-variant">Keeps you dry and shielded from the rain</p>
+</div>
+</div>
+<!-- Radio Target Footprint -->
+<div class="w-9 h-9 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary flex-shrink-0 transition-all radio-indicator">
+<span class="w-4 h-4 rounded-full bg-transparent radio-dot transition-all"></span>
+</div>
+</button>
+<!-- Option 2: Sunglasses -->
+<button aria-checked="false" class="scenario-option w-full text-left bg-surface-container-lowest hover:bg-surface-container-low border-2 border-outline-variant/60 focus:border-primary rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 active:scale-[0.99] min-h-touch-lg group cursor-pointer shadow-xs" id="option-card-2" onclick="handleSelectOption(2)" role="radio">
+<div class="flex items-center gap-4 sm:gap-5">
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-secondary-container transition-colors flex-shrink-0">
+<span class="material-symbols-outlined text-3xl">wb_sunny</span>
+</div>
+<div class="space-y-0.5">
+<h2 class="font-patient-action-lg text-patient-action-lg text-on-surface font-bold">Sunglasses</h2>
+<p class="font-patient-body-md text-patient-body-md text-on-surface-variant">Protects eyes from bright sunlight</p>
+</div>
+</div>
+<div class="w-9 h-9 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary flex-shrink-0 transition-all radio-indicator">
+<span class="w-4 h-4 rounded-full bg-transparent radio-dot transition-all"></span>
+</div>
+</button>
+<!-- Option 3: Beach Towel -->
+<button aria-checked="false" class="scenario-option w-full text-left bg-surface-container-lowest hover:bg-surface-container-low border-2 border-outline-variant/60 focus:border-primary rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 active:scale-[0.99] min-h-touch-lg group cursor-pointer shadow-xs" id="option-card-3" onclick="handleSelectOption(3)" role="radio">
+<div class="flex items-center gap-4 sm:gap-5">
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-secondary-container transition-colors flex-shrink-0">
+<span class="material-symbols-outlined text-3xl">pool</span>
+</div>
+<div class="space-y-0.5">
+<h2 class="font-patient-action-lg text-patient-action-lg text-on-surface font-bold">Beach Towel</h2>
+<p class="font-patient-body-md text-patient-body-md text-on-surface-variant">Helpful for swimming or lying on the sand</p>
+</div>
+</div>
+<div class="w-9 h-9 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary flex-shrink-0 transition-all radio-indicator">
+<span class="w-4 h-4 rounded-full bg-transparent radio-dot transition-all"></span>
+</div>
+</button>
+<!-- Option 4: Reading Book -->
+<button aria-checked="false" class="scenario-option w-full text-left bg-surface-container-lowest hover:bg-surface-container-low border-2 border-outline-variant/60 focus:border-primary rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 active:scale-[0.99] min-h-touch-lg group cursor-pointer shadow-xs" id="option-card-4" onclick="handleSelectOption(4)" role="radio">
+<div class="flex items-center gap-4 sm:gap-5">
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-secondary-container transition-colors flex-shrink-0">
+<span class="material-symbols-outlined text-3xl">menu_book</span>
+</div>
+<div class="space-y-0.5">
+<h2 class="font-patient-action-lg text-patient-action-lg text-on-surface font-bold">Reading Book</h2>
+<p class="font-patient-body-md text-patient-body-md text-on-surface-variant">Comfortable for a quiet afternoon indoors</p>
+</div>
+</div>
+<div class="w-9 h-9 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary flex-shrink-0 transition-all radio-indicator">
+<span class="w-4 h-4 rounded-full bg-transparent radio-dot transition-all"></span>
+</div>
+</button>
+</section>
+<!-- 4. GENTLE POSITIVE FEEDBACK PANEL (Dynamic Reveal) -->
+<div class="hidden transition-all duration-300 transform translate-y-2 opacity-0 mb-space-xl" id="feedback-panel">
+<div class="rounded-3xl p-6 sm:p-7 border-2 shadow-sm flex flex-col gap-4" id="feedback-box">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" id="feedback-icon-container">
+<span class="material-symbols-outlined text-2xl" id="feedback-icon" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="space-y-1">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface" id="feedback-title">Great choice!</h3>
+<p class="font-patient-body-lg text-patient-body-lg text-on-surface-variant leading-relaxed" id="feedback-desc">
+              An umbrella will help keep you warm and dry during your walk in the rain.
+            </p>
+</div>
+</div>
+<!-- Action Button Row -->
+<div class="flex flex-wrap items-center gap-3 pt-2" id="feedback-action-row">
+<button class="h-touch-min px-8 rounded-2xl bg-primary text-on-primary font-patient-action-lg text-patient-body-md hover:bg-primary-container active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 transition-all" id="feedback-primary-action-btn" onclick="advanceNextScenario()">
+<span>Next Scenario</span>
+<span class="material-symbols-outlined text-xl">arrow_forward</span>
+</button>
+<button class="hidden h-touch-min px-6 rounded-2xl border-2 border-outline-variant text-on-surface font-patient-action-lg text-patient-body-md hover:bg-surface-container active:scale-[0.98] flex items-center justify-center gap-2 transition-all" id="feedback-retry-action-btn" onclick="resetCurrentQuestion()">
+<span class="material-symbols-outlined text-xl">refresh</span>
+<span>Try Another Choice</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 5. SCENARIO TESTER / SIMULATION SWITCHER (For Testing 4 Scenarios) -->
+<div class="bg-surface-container-low border border-outline-variant/60 rounded-2xl p-4 mb-space-lg">
+<div class="flex items-center justify-between mb-3">
+<span class="font-clinical-label text-clinical-label font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-primary">swap_horiz</span>
+<span>Simulation Scenario Switcher</span>
+</span>
+<span class="font-label-caption text-label-caption text-on-surface-variant">Tap to test other cognitive routines</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<button class="scenario-nav-btn py-2.5 px-3 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-primary text-left text-xs font-clinical-label flex flex-col gap-0.5 transition-colors" id="nav-step-1" onclick="loadScenario(1)">
+<span class="font-bold text-on-surface">1. Breakfast</span>
+<span class="text-on-surface-variant text-[11px]">Making oatmeal</span>
+</button>
+<button class="scenario-nav-btn py-2.5 px-3 rounded-xl border-2 border-primary bg-secondary-fixed/40 text-left text-xs font-clinical-label flex flex-col gap-0.5 transition-colors" id="nav-step-2" onclick="loadScenario(2)">
+<span class="font-bold text-primary">2. Rainy Walk</span>
+<span class="text-on-surface-variant text-[11px]">Selecting gear</span>
+</button>
+<button class="scenario-nav-btn py-2.5 px-3 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-primary text-left text-xs font-clinical-label flex flex-col gap-0.5 transition-colors" id="nav-step-3" onclick="loadScenario(3)">
+<span class="font-bold text-on-surface">3. Grocery Trip</span>
+<span class="text-on-surface-variant text-[11px]">Planning list</span>
+</button>
+<button class="scenario-nav-btn py-2.5 px-3 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-primary text-left text-xs font-clinical-label flex flex-col gap-0.5 transition-colors" id="nav-step-4" onclick="loadScenario(4)">
+<span class="font-bold text-on-surface">4. Medication</span>
+<span class="text-on-surface-variant text-[11px]">Evening routine</span>
+</button>
+</div>
+</div>
+<!-- 6. LOWER ACCESSIBILITY ACTION BAR -->
+<footer class="pt-2 pb-space-2xl border-t border-outline-variant/40 flex flex-wrap items-center justify-between gap-3">
+<button class="min-h-touch-min px-5 py-2.5 rounded-2xl bg-surface-container-lowest border border-outline-variant hover:border-primary text-on-surface flex items-center gap-2 font-patient-action-lg text-patient-body-md transition-all active:scale-98 shadow-xs" onclick="spokenHint()">
+<span class="material-symbols-outlined text-primary text-2xl">lightbulb</span>
+<span>Spoken Hint</span>
+</button>
+<div class="flex items-center gap-2">
+<button class="min-h-touch-min px-4 py-2.5 rounded-2xl bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:text-primary hover:bg-surface-container-low flex items-center gap-2 font-clinical-label text-clinical-label transition-all" onclick="pauseChallengeModal()">
+<span class="material-symbols-outlined text-xl">pause_circle</span>
+<span>Pause Activity</span>
+</button>
+<button class="min-h-touch-min px-6 py-2.5 rounded-2xl bg-secondary-fixed hover:bg-secondary-fixed-dim text-on-secondary-fixed-variant font-patient-action-lg text-patient-body-md flex items-center gap-2 transition-all shadow-xs active:scale-98" onclick="saveAndFinish()">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">check</span>
+<span>Save &amp; Finish</span>
+</button>
+</div>
+</footer>
+</main>
+<!-- GENTLE TOAST / MODAL DIALOG CONTAINER FOR PAUSE OR SAVE -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity" id="modal-container">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-lg space-y-4">
+<div class="w-12 h-12 rounded-2xl bg-secondary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" id="modal-icon">bookmark</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface" id="modal-title">Progress Saved</h3>
+<p class="font-patient-body-md text-patient-body-md text-on-surface-variant" id="modal-text">
+        Your current session steps have been gently noted in your personal routine log. You can resume anytime.
+      </p>
+<div class="pt-2 flex justify-end gap-3">
+<button class="min-h-touch-min px-6 rounded-xl bg-primary text-on-primary font-patient-action-lg text-patient-body-md hover:bg-primary-container transition-all" onclick="closeModal()">
+          Continue
+        </button>
+</div>
+</div>
+</div>
+<!-- JAVASCRIPT STATE ENGINE -->
+<script>
+    // State management for MINDNER challenge
+    const scenarios = [
+      {
+        id: 1,
+        stepLabel: "Scenario 1 of 4",
+        routineTag: "Morning Routine • Kitchen Preparation",
+        pillTag: "Breakfast Scenario",
+        icon: "wb_sunny",
+        headline: "You are getting ready to prepare a warm bowl of morning oatmeal.",
+        question: "Which kitchen item is most helpful to heat the milk or water safely?",
+        correctOption: 2,
+        options: [
+          { id: 1, title: "Garden Trowel", desc: "Used outdoors for potting plants in soil", icon: "yard" },
+          { id: 2, title: "Small Cooking Pot", desc: "Heats liquids safely on the stovetop", icon: "skillet" },
+          { id: 3, title: "Tape Measure", desc: "Calculates distances and furniture size", icon: "straighten" },
+          { id: 4, title: "Sun Hat", desc: "Shields your head when gardening in sunshine", icon: "nature_people" }
+        ],
+        successText: "Wonderful choice! A small cooking pot gently warms milk or water to perfection on the stovetop.",
+        altPromptText: "A warm and bright kitchen counter with a stainless steel cooking pot, rolled oats in a ceramic jar, and sliced apples on a wooden cutting board with morning sunshine streaming through clean curtains in a calm wellness aesthetic."
+      },
+      {
+        id: 2,
+        stepLabel: "Scenario 2 of 4",
+        routineTag: "Morning Routine • Everyday Decision Making",
+        pillTag: "Morning Walk Scenario",
+        icon: "rainy",
+        headline: "It is raining outside and you are getting ready for a morning walk.",
+        question: "What would be most helpful to bring along with you?",
+        correctOption: 1,
+        options: [
+          { id: 1, title: "Umbrella", desc: "Keeps you dry and shielded from the rain", icon: "beach_access" },
+          { id: 2, title: "Sunglasses", desc: "Protects eyes from bright sunlight", icon: "wb_sunny" },
+          { id: 3, title: "Beach Towel", desc: "Helpful for swimming or lying on the sand", icon: "pool" },
+          { id: 4, title: "Reading Book", desc: "Comfortable for a quiet afternoon indoors", icon: "menu_book" }
+        ],
+        successText: "Great choice! An umbrella will help keep you warm and dry during your walk in the rain.",
+        altPromptText: "A warm and peaceful residential entryway with light wooden floors, a cozy wooden bench, and a brass coat rack with an umbrella stand next to the door. Large French glass windows reveal a gentle spring rain falling upon lush green garden foliage outside under soft overcast sky. The atmosphere is soothing, tidy, safe, and tranquil, with natural diffused daylight filling the room in a gentle clinical wellness aesthetic."
+      },
+      {
+        id: 3,
+        stepLabel: "Scenario 3 of 4",
+        routineTag: "Midday Activity • Errand Organization",
+        pillTag: "Grocery Planning Scenario",
+        icon: "shopping_basket",
+        headline: "You want to buy fresh apples, bread, and milk at the market this afternoon.",
+        question: "What helps you remember every item without feeling rushed?",
+        correctOption: 3,
+        options: [
+          { id: 1, title: "Alarm Clock", desc: "Rings loudly in the morning to wake you", icon: "alarm" },
+          { id: 2, title: "Winter Scarf", desc: "Wraps around your neck for frosty breezes", icon: "checkroom" },
+          { id: 3, title: "Written Grocery List", desc: "Clearly lists each item so you can take your time", icon: "checklist" },
+          { id: 4, title: "Garden Hose", desc: "Waters flowerbeds in the outdoor yard", icon: "water_drop" }
+        ],
+        successText: "Splendid idea! A written grocery list keeps everything organized so you can enjoy your leisurely market visit.",
+        altPromptText: "A cozy dining table with a neat handwritten grocery checklist beside a freshly sharpened pencil, a wooden bowl of green apples, and a canvas tote bag in soft natural morning daylight with a clean, dignified home healthcare aesthetic."
+      },
+      {
+        id: 4,
+        stepLabel: "Scenario 4 of 4",
+        routineTag: "Evening Care • Peaceful Health Ritual",
+        pillTag: "Evening Medication Scenario",
+        icon: "medication",
+        headline: "It is 8:00 PM and you are preparing for a restful evening at home.",
+        question: "Where can you check to ensure your evening vitamins are taken properly?",
+        correctOption: 4,
+        options: [
+          { id: 1, title: "Car Keys", desc: "Used to start the vehicle in the driveway", icon: "key" },
+          { id: 2, title: "Television Remote", desc: "Changes channels for evening programs", icon: "tv" },
+          { id: 3, title: "Bird Feeder", desc: "Provides seeds for morning songbirds outside", icon: "flutter" },
+          { id: 4, title: "Organized Pill Box", desc: "Clearly labeled with evening compartments for peace of mind", icon: "medication" }
+        ],
+        successText: "Excellent care! An organized pill organizer provides clarity and effortless peace of mind before bed.",
+        altPromptText: "A tidy bedside nightstand with an organized weekly pill dispenser container, a glass of clear water, and a warm bedside lamp casting a comforting soft amber glow across a calm, dignified modern bedroom."
+      }
+    ];
+
+    let currentScenarioIndex = 1; // 0-based: index 1 is Scenario 2
+    let audioGuidanceActive = true;
+    let currentSpeechSynthesisUtterance = null;
+
+    function initPage() {
+      renderScenario(currentScenarioIndex);
+    }
+
+    function loadScenario(scenarioNumber) {
+      currentScenarioIndex = scenarioNumber - 1;
+      renderScenario(currentScenarioIndex);
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    function renderScenario(idx) {
+      const data = scenarios[idx];
+      
+      // Update orientation and header context
+      document.getElementById('scenario-counter-label').textContent = data.stepLabel;
+      document.getElementById('session-routine-context').textContent = data.routineTag;
+      document.getElementById('scenario-tag-text').textContent = data.pillTag;
+      document.getElementById('scenario-headline').textContent = data.headline;
+      document.getElementById('scenario-question').textContent = data.question;
+      
+      // Update scenario image prompt
+      const heroImg = document.getElementById('scenario-hero-img');
+      heroImg.setAttribute('data-alt', data.altPromptText);
+
+      // Update switcher button highlights
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`nav-step-1` ? `nav-step-${i}` : null);
+        if (btn) {
+          if (i === (idx + 1)) {
+            btn.className = "scenario-nav-btn py-2.5 px-3 rounded-xl border-2 border-primary bg-secondary-fixed/40 text-left text-xs font-clinical-label flex flex-col gap-0.5 transition-colors";
+            btn.querySelector('span:first-child').className = "font-bold text-primary";
+          } else {
+            btn.className = "scenario-nav-btn py-2.5 px-3 rounded-xl border border-outline-variant bg-surface-container-lowest hover:border-primary text-left text-xs font-clinical-label flex flex-col gap-0.5 transition-colors";
+            btn.querySelector('span:first-child').className = "font-bold text-on-surface";
+          }
+        }
+      }
+
+      // Render 4 options
+      for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById(`option-card-${i}`);
+        const optData = data.options[i - 1];
+        
+        // Reset state
+        card.setAttribute('aria-checked', 'false');
+        card.className = "scenario-option w-full text-left bg-surface-container-lowest hover:bg-surface-container-low border-2 border-outline-variant/60 focus:border-primary rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 active:scale-[0.99] min-h-touch-lg group cursor-pointer shadow-xs";
+        
+        const dot = card.querySelector('.radio-dot');
+        const indicator = card.querySelector('.radio-indicator');
+        dot.className = "w-4 h-4 rounded-full bg-transparent radio-dot transition-all";
+        indicator.className = "w-9 h-9 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary flex-shrink-0 transition-all radio-indicator";
+
+        // Content
+        const titleEl = card.querySelector('h2');
+        const descEl = card.querySelector('p');
+        const iconSpan = card.querySelector('.material-symbols-outlined');
+        
+        titleEl.textContent = optData.title;
+        descEl.textContent = optData.desc;
+        iconSpan.textContent = optData.icon;
+      }
+
+      // Hide feedback
+      hideFeedback();
+
+      // If audio active, spoken hint is ready
+      if (audioGuidanceActive) {
+        showSpeechBanner(`Scenario ${idx + 1}: ${data.headline}`);
+      }
+    }
+
+    function handleSelectOption(optionIndex) {
+      const data = scenarios[currentScenarioIndex];
+      const isCorrect = (optionIndex === data.correctOption);
+
+      // Reset all cards styling
+      for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById(`option-card-${i}`);
+        card.setAttribute('aria-checked', 'false');
+        card.className = "scenario-option w-full text-left bg-surface-container-lowest hover:bg-surface-container-low border-2 border-outline-variant/60 focus:border-primary rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 active:scale-[0.99] min-h-touch-lg group cursor-pointer shadow-xs";
+        
+        const dot = card.querySelector('.radio-dot');
+        const indicator = card.querySelector('.radio-indicator');
+        dot.className = "w-4 h-4 rounded-full bg-transparent radio-dot transition-all";
+        indicator.className = "w-9 h-9 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary flex-shrink-0 transition-all radio-indicator";
+      }
+
+      // Highlight selected option
+      const chosenCard = document.getElementById(`option-card-${optionIndex}`);
+      chosenCard.setAttribute('aria-checked', 'true');
+      chosenCard.className = "scenario-option w-full text-left bg-secondary-container/30 border-2 border-primary-container rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 min-h-touch-lg group cursor-pointer shadow-sm";
+      
+      const chosenDot = chosenCard.querySelector('.radio-dot');
+      const chosenIndicator = chosenCard.querySelector('.radio-indicator');
+      chosenDot.className = "w-4 h-4 rounded-full bg-primary radio-dot transition-all";
+      chosenIndicator.className = "w-9 h-9 rounded-full border-2 border-primary ring-4 ring-secondary-fixed/50 flex items-center justify-center flex-shrink-0 transition-all radio-indicator";
+
+      // Show gentle, reassuring feedback without failure shame
+      showFeedback(isCorrect, optionIndex, data);
+    }
+
+    function showFeedback(isCorrect, optionIndex, data) {
+      const panel = document.getElementById('feedback-panel');
+      const box = document.getElementById('feedback-box');
+      const icon = document.getElementById('feedback-icon');
+      const iconContainer = document.getElementById('feedback-icon-container');
+      const title = document.getElementById('feedback-title');
+      const desc = document.getElementById('feedback-desc');
+      const retryBtn = document.getElementById('feedback-retry-action-btn');
+      const nextBtn = document.getElementById('feedback-primary-action-btn');
+
+      if (isCorrect) {
+        box.className = "rounded-3xl p-6 sm:p-7 border-2 border-primary-container bg-surface-container-lowest shadow-sm flex flex-col gap-4";
+        iconContainer.className = "w-12 h-12 rounded-full bg-secondary-fixed text-primary flex items-center justify-center flex-shrink-0";
+        icon.textContent = "check_circle";
+        title.textContent = "Great choice!";
+        desc.textContent = data.successText;
+        retryBtn.classList.add('hidden');
+        nextBtn.innerHTML = `<span>Next Scenario</span><span class="material-symbols-outlined text-xl">arrow_forward</span>`;
+        
+        speakText(title.textContent + ". " + desc.textContent);
+      } else {
+        MINDNER_GAME_PROGRESS.markFailed(MINDNER_GAME_PROGRESS.currentLevel());
+        const chosenItemTitle = data.options[optionIndex - 1].title;
+        box.className = "rounded-3xl p-6 sm:p-7 border-2 border-secondary-fixed bg-surface-container-lowest shadow-sm flex flex-col gap-4";
+        iconContainer.className = "w-12 h-12 rounded-full bg-surface-container text-primary flex items-center justify-center flex-shrink-0";
+        icon.textContent = "sentiment_satisfied";
+        title.textContent = `Good thought with the ${chosenItemTitle}.`;
+        desc.textContent = `That is always handy to have! For this particular situation, an umbrella will keep you especially dry and warm.`;
+        retryBtn.classList.remove('hidden');
+        nextBtn.innerHTML = `<span>Continue to Next</span><span class="material-symbols-outlined text-xl">arrow_forward</span>`;
+        
+        speakText(title.textContent + ". " + desc.textContent);
+      }
+
+      panel.classList.remove('hidden');
+      setTimeout(() => {
+        panel.classList.remove('opacity-0', 'translate-y-2');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+
+    function hideFeedback() {
+      const panel = document.getElementById('feedback-panel');
+      panel.classList.add('opacity-0', 'translate-y-2');
+      setTimeout(() => {
+        panel.classList.add('hidden');
+      }, 200);
+    }
+
+    function resetCurrentQuestion() {
+      hideFeedback();
+      for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById(`option-card-${i}`);
+        card.setAttribute('aria-checked', 'false');
+        card.className = "scenario-option w-full text-left bg-surface-container-lowest hover:bg-surface-container-low border-2 border-outline-variant/60 focus:border-primary rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 active:scale-[0.99] min-h-touch-lg group cursor-pointer shadow-xs";
+        
+        const dot = card.querySelector('.radio-dot');
+        const indicator = card.querySelector('.radio-indicator');
+        dot.className = "w-4 h-4 rounded-full bg-transparent radio-dot transition-all";
+        indicator.className = "w-9 h-9 rounded-full border-2 border-outline-variant flex items-center justify-center group-hover:border-primary flex-shrink-0 transition-all radio-indicator";
+      }
+    }
+
+    function advanceNextScenario() {
+      if (currentScenarioIndex < scenarios.length - 1) {
+        currentScenarioIndex++;
+        renderScenario(currentScenarioIndex);
+        window.scrollTo({ top: 120, behavior: 'smooth' });
+      } else {
+        // Finished all 4
+        saveAndFinish();
+      }
+    }
+
+    // Accessibility Speech Simulation
+    function speakCurrentScenario() {
+      const data = scenarios[currentScenarioIndex];
+      const speech = `${data.headline}. ${data.question}`;
+      speakText(speech);
+    }
+
+    function spokenHint() {
+      const data = scenarios[currentScenarioIndex];
+      const correctItem = data.options[data.correctOption - 1];
+      const hint = `Gentle Hint: Think about what protects you from rain drops while moving along the sidewalk. The ${correctItem.title} is designed specifically for this.`;
+      speakText(hint);
+    }
+
+    function speakText(text) {
+      showSpeechBanner(text);
+      if ('speechSynthesis' in window && audioGuidanceActive) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.9; // gentle and unhurried pacing
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function showSpeechBanner(text) {
+      const banner = document.getElementById('audio-speech-banner');
+      const textEl = document.getElementById('audio-speech-text');
+      textEl.textContent = text;
+      banner.classList.remove('hidden');
+    }
+
+    function stopSpokenAudio() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      document.getElementById('audio-speech-banner').classList.add('hidden');
+    }
+
+    function toggleAudioGuidance() {
+      audioGuidanceActive = !audioGuidanceActive;
+      const statusText = document.getElementById('audio-status-text');
+      const dot = document.getElementById('audio-indicator-dot');
+      const btn = document.getElementById('audio-toggle-btn');
+      
+      if (audioGuidanceActive) {
+        statusText.textContent = "Audio Guidance: On";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-primary pulse-subtle";
+        btn.className = "flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-clinical-label text-clinical-label hover:bg-secondary-container transition-all active:scale-[0.98] border border-primary/20 shadow-sm";
+        speakText("Audio guidance has been activated.");
+      } else {
+        statusText.textContent = "Audio Guidance: Off";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-outline";
+        btn.className = "flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-clinical-label text-clinical-label hover:bg-surface-variant transition-all active:scale-[0.98] border border-outline-variant shadow-none";
+        stopSpokenAudio();
+      }
+    }
+
+    // Font Scaling Handler
+    function setFontScale(scale) {
+      const root = document.getElementById('app-root');
+      const normBtn = document.getElementById('font-normal-btn');
+      const largeBtn = document.getElementById('font-large-btn');
+
+      if (scale === 'large') {
+        document.documentElement.style.fontSize = '18px';
+        largeBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold font-clinical-label bg-surface-container-lowest text-primary shadow-xs transition-all";
+        normBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold font-clinical-label text-on-surface-variant hover:text-primary transition-all";
+      } else {
+        document.documentElement.style.fontSize = '16px';
+        normBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold font-clinical-label bg-surface-container-lowest text-primary shadow-xs transition-all";
+        largeBtn.className = "px-2.5 py-1 rounded-lg text-xs font-bold font-clinical-label text-on-surface-variant hover:text-primary transition-all";
+      }
+    }
+
+    // Modals
+    function pauseChallengeModal() {
+      document.getElementById('modal-title').textContent = "Activity Paused";
+      document.getElementById('modal-icon').textContent = "pause_circle";
+      document.getElementById('modal-text').textContent = "Your progress has been paused safely. Take a deep breath and relax. Whenever you are ready, simply click Continue.";
+      document.getElementById('modal-container').classList.remove('hidden');
+    }
+
+    function saveAndFinish() {
+      MINDNER_GAME_PROGRESS.markCompleted(MINDNER_GAME_PROGRESS.currentLevel());
+      document.getElementById('modal-title').textContent = "Great Job Today!";
+      document.getElementById('modal-icon').textContent = "task_alt";
+      document.getElementById('modal-text').textContent = "You completed your Daily Life Challenge routine with calm focus. Your session notes have been recorded for Dr. Elena Vance and your care team.";
+      document.getElementById('modal-container').classList.remove('hidden');
+      speakText("Wonderful job. Your daily life routine is complete and safely recorded.");
+
+      // Redirect to home with success message after delay
+      setTimeout(function() {
+        var level = MINDNER_GAME_PROGRESS.currentLevel();
+        MINDNER_GAME_PROGRESS.goHome(level);
+      }, 2000);
+    }
+
+    function closeModal() {
+      document.getElementById('modal-container').classList.add('hidden');
+    }
+
+    // Run on load
+    window.addEventListener('DOMContentLoaded', initPage);
+  </script>
+</body></html>

@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MINDNER — Shape Recognition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#127c56',
+                            600: '#0e6545',
+                            700: '#0a4f36',
+                            800: '#063826',
+                        },
+                        mint: {
+                            50: '#f4fbf7',
+                            100: '#e5f6ec',
+                            200: '#ccecdc',
+                            300: '#a3dbbf',
+                            soft: '#f1f8f3',
+                        },
+                        paper: '#fafaf6',
+                        ink: '#192620',
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'system-ui', 'sans-serif'],
+                        serif: ['Fraunces', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f7f9f7;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(18, 124, 86, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(18, 124, 86, 0.04) 0px, transparent 50%);
+            font-family: 'Manrope', sans-serif;
+            color: #192620;
+        }
+
+        .shape-card {
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .shape-card:hover:not(:disabled) {
+            transform: translateY(-4px) scale(1.02);
+            border-color: #127c56;
+            box-shadow: 0 16px 28px -8px rgba(18, 124, 86, 0.18);
+        }
+
+        .shape-card:active:not(:disabled) {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .shape-card.correct {
+            background-color: #dcfce7 !important;
+            border-color: #127c56 !important;
+            box-shadow: 0 0 0 4px rgba(18, 124, 86, 0.25);
+            animation: pulseGreen 0.6s ease;
+        }
+
+        .shape-card.wrong {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-8px);
+            }
+
+            40% {
+                transform: translateX(8px);
+            }
+
+            60% {
+                transform: translateX(-5px);
+            }
+
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        @keyframes pulseGreen {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.04);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .level-dot-btn {
+            transition: all 0.15s ease;
+        }
+
+        .level-dot-btn:hover:not(:disabled) {
+            transform: scale(1.08);
+        }
+
+        /* Accessibility high-contrast focus */
+        button:focus-visible {
+            outline: 3px solid #0e6545;
+            outline-offset: 3px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-brand-100 selection:text-brand-800">
+
+    <!-- TOP CLINICAL / PATIENT HEADER -->
+    <header class="w-full bg-white/80 backdrop-blur-md border-b border-stone-200/80 sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-11 h-11 rounded-2xl bg-brand-500 text-white flex items-center justify-center shadow-md shadow-brand-500/20">
+                    <span class="material-symbols-outlined text-2xl">neurology</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-serif text-xl font-bold tracking-tight text-stone-900">MINDNER</span>
+                        <span
+                            class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-brand-700 font-semibold uppercase tracking-wider">Cognitive
+                            Suite</span>
+                    </div>
+                    <p class="text-xs text-stone-500 font-medium">Shape & Visual Geometry Calibration</p>
+                </div>
+            </div>
+
+            <!-- Header actions -->
+            <div class="flex items-center gap-3">
+                <!-- Audio assistant global toggle -->
+                <button id="globalAudioBtn"
+                    class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-mint-100 text-brand-700 hover:bg-mint-200 font-medium text-sm transition">
+                    <span class="material-symbols-outlined text-lg">volume_up</span>
+                    <span class="hidden sm:inline">Voice Assistant</span>
+                </button>
+
+                <!-- High contrast / Font size helper -->
+                <button id="textSizeBtn"
+                    class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-200 hover:bg-stone-50 text-stone-700 font-semibold text-sm transition"
+                    title="Adjust text size">
+                    <span class="material-symbols-outlined text-base">format_size</span>
+                    <span>A/A+</span>
+                </button>
+
+                <!-- User Profile Pill -->
+                <div class="hidden md:flex items-center gap-2.5 pl-3 border-l border-stone-200">
+                    <div
+                        class="w-9 h-9 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center text-sm border border-brand-200">
+                        AP
+                    </div>
+                    <div class="text-left leading-tight">
+                        <p class="text-xs font-semibold text-stone-800">Alex Parker</p>
+                        <p class="text-[11px] text-stone-500">Care Baseline Level 1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN VIEWPORT CONTAINER -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-8 sm:py-10 flex flex-col justify-center">
+
+        <!-- ==================== HOME / INTRO SCREEN ==================== -->
+        <section id="homeView" class="w-full max-w-2xl mx-auto flex flex-col items-center text-center animate-fade-in">
+
+            <!-- Top badge -->
+            <div
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/70 text-brand-700 text-sm font-semibold mb-6 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                Gentle Visual Perception Training
+            </div>
+
+            <!-- Main card -->
+            <div
+                class="w-full bg-white rounded-3xl border border-stone-200/80 p-8 sm:p-12 shadow-xl shadow-stone-200/50 relative overflow-hidden">
+
+                <!-- Soft decorative background aura -->
+                <div
+                    class="absolute -right-16 -top-16 w-52 h-52 bg-emerald-50 rounded-full blur-3xl pointer-events-none">
+                </div>
+                <div
+                    class="absolute -left-16 -bottom-16 w-52 h-52 bg-teal-50 rounded-full blur-3xl pointer-events-none">
+                </div>
+
+                <div class="relative z-10 flex flex-col items-center">
+
+                    <!-- Large gentle shape icon cluster -->
+                    <div
+                        class="w-24 h-24 rounded-3xl bg-brand-50 text-brand-600 flex items-center justify-center mb-6 shadow-inner border border-brand-100">
+                        <svg class="w-14 h-14" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="36" cy="36" r="22" fill="#127c56" fill-opacity="0.2" stroke="#127c56"
+                                stroke-width="5" />
+                            <polygon points="68,20 86,52 50,52" fill="#127c56" fill-opacity="0.85" />
+                            <rect x="44" y="56" width="34" height="34" rx="6" stroke="#127c56" stroke-width="5"
+                                fill="#dcfce7" />
+                        </svg>
+                    </div>
+
+                    <h1
+                        class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 tracking-tight mb-3">
+                        Shape Recognition
+                    </h1>
+
+                    <p class="text-stone-600 text-lg sm:text-xl max-w-lg mb-8 leading-relaxed">
+                        Listen to the gentle shape name, observe the geometric contours, and tap the matching card. Take
+                        all the time you need.
+                    </p>
+
+                    <!-- 3 Feature reassurance pills -->
+                    <div class="grid grid-cols-3 gap-3 w-full max-w-md mb-8">
+                        <div class="p-3 bg-stone-50 rounded-2xl border border-stone-100 flex flex-col items-center">
+                            <span class="material-symbols-outlined text-brand-600 mb-1 text-2xl">shapes</span>
+                            <span class="text-xs font-bold text-stone-700">7 Core Shapes</span>
+                        </div>
+                        <div class="p-3 bg-stone-50 rounded-2xl border border-stone-100 flex flex-col items-center">
+                            <span
+                                class="material-symbols-outlined text-brand-600 mb-1 text-2xl">record_voice_over</span>
+                            <span class="text-xs font-bold text-stone-700">Spoken Audio</span>
+                        </div>
+                        <div class="p-3 bg-stone-50 rounded-2xl border border-stone-100 flex flex-col items-center">
+                            <span
+                                class="material-symbols-outlined text-brand-600 mb-1 text-2xl">hourglass_disabled</span>
+                            <span class="text-xs font-bold text-stone-700">No Time Limits</span>
+                        </div>
+                    </div>
+
+                    <!-- Primary Start Button -->
+                    <button id="homeStartBtn"
+                        class="w-full sm:w-auto min-w-[280px] px-8 py-5 rounded-2xl bg-brand-500 hover:bg-brand-600 active:scale-[0.99] text-white font-bold text-xl shadow-lg shadow-brand-500/30 transition flex items-center justify-center gap-3">
+                        <span class="material-symbols-outlined text-2xl">play_circle</span>
+                        Start Game
+                    </button>
+
+                    <!-- Active Level indicator banner -->
+                    <div class="mt-8 flex items-center gap-6 text-sm text-stone-500 font-medium">
+                        <div class="flex items-center gap-2">
+                            <span class="text-stone-400">Current Level:</span>
+                            <span id="savedLevelBadge"
+                                class="font-bold text-brand-700 bg-brand-50 px-2.5 py-0.5 rounded-lg border border-brand-200">Level
+                                1</span>
+                        </div>
+                        <div class="w-1 h-1 rounded-full bg-stone-300"></div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-stone-400">Session Score:</span>
+                            <span id="savedScoreBadge" class="font-bold text-stone-800">0 pts</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- LEVEL SELECTOR CAROUSEL -->
+            <div
+                class="w-full max-w-2xl mt-8 bg-white/70 backdrop-blur rounded-3xl border border-stone-200 p-6 text-left">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-brand-600">tune</span>
+                        <h3 class="font-bold text-stone-800 text-base">Select Level Progress</h3>
+                    </div>
+                    <span class="text-xs text-stone-400 font-medium">10 Graduated Stages</span>
+                </div>
+
+                <div id="homeLevelGrid" class="grid grid-cols-5 sm:grid-cols-10 gap-2">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== ACTIVE GAMEPLAY SCREEN ==================== -->
+        <section id="gameView" class="w-full max-w-3xl mx-auto hidden flex flex-col">
+
+            <!-- Top Game HUD Bar -->
+            <div
+                class="bg-white rounded-2xl border border-stone-200/80 p-4 sm:px-6 shadow-sm mb-6 flex items-center justify-between">
+
+                <!-- Back to Home -->
+                <button id="gameExitBtn"
+                    class="flex items-center gap-1 text-stone-600 hover:text-stone-900 font-semibold text-sm px-3 py-2 rounded-xl hover:bg-stone-100 transition">
+                    <span class="material-symbols-outlined text-lg">arrow_back</span>
+                    <span>Home</span>
+                </button>
+
+                <!-- Center Level Pill & Progress -->
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center gap-2">
+                        <span id="hudLevelPill"
+                            class="text-xs font-bold uppercase tracking-wider bg-brand-50 text-brand-700 border border-brand-200 px-3 py-0.5 rounded-full">
+                            Level 1 of 10
+                        </span>
+                        <span class="text-xs font-medium text-stone-400">Step <span
+                                id="hudQuestionStep">1</span>/5</span>
+                    </div>
+                    <!-- 5-bar progress dots for the 5 level questions -->
+                    <div id="questionStepDots" class="flex items-center gap-1.5 mt-2">
+                        <div class="w-2.5 h-1.5 rounded-full bg-brand-500"></div>
+                        <div class="w-2.5 h-1.5 rounded-full bg-stone-200"></div>
+                        <div class="w-2.5 h-1.5 rounded-full bg-stone-200"></div>
+                        <div class="w-2.5 h-1.5 rounded-full bg-stone-200"></div>
+                        <div class="w-2.5 h-1.5 rounded-full bg-stone-200"></div>
+                    </div>
+                </div>
+
+                <!-- Score Counter -->
+                <div class="flex items-center gap-2 bg-stone-50 px-3.5 py-1.5 rounded-xl border border-stone-100">
+                    <span class="material-symbols-outlined text-amber-500 text-lg">hotel_class</span>
+                    <div class="text-right">
+                        <span class="text-[10px] text-stone-400 block font-semibold leading-none">SCORE</span>
+                        <span id="hudScoreText" class="text-sm font-bold text-stone-800 leading-none">0</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- MAIN QUESTION PROMPT BOX -->
+            <div
+                class="bg-white rounded-3xl border border-stone-200/90 p-8 sm:p-10 shadow-lg shadow-stone-200/40 text-center mb-8 relative">
+
+                <p class="text-xs font-bold tracking-widest text-brand-600 uppercase mb-2">Target Shape</p>
+                <p class="text-stone-500 text-sm font-medium mb-4">Look at the word or press listen to hear the audio
+                    guide:</p>
+
+                <!-- Question Row -->
+                <div class="flex items-center justify-center gap-4 my-2">
+                    <span id="questionTargetWord"
+                        class="font-serif text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 tracking-tight capitalize">
+                        Circle
+                    </span>
+
+                    <!-- Large Spoken Audio Button -->
+                    <button id="hudSpeakBtn"
+                        class="w-14 h-14 rounded-2xl bg-brand-50 hover:bg-brand-100 text-brand-600 border-2 border-brand-500 active:scale-95 flex items-center justify-center transition shadow-md shadow-brand-500/10"
+                        aria-label="Listen to shape name" title="Listen to pronunciation">
+                        <span class="material-symbols-outlined text-3xl">volume_up</span>
+                    </button>
+                </div>
+
+                <!-- Subtle Audio Hint -->
+                <p class="text-xs text-stone-400 mt-3 flex items-center justify-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-brand-500">info</span>
+                    Audio pronounces clearly in calm speech pacing.
+                </p>
+            </div>
+
+            <!-- 4 SHAPE CARDS GRID -->
+            <div class="w-full mb-6">
+                <div class="text-center mb-4">
+                    <h2 class="text-stone-700 font-semibold text-base sm:text-lg">
+                        Choose the matching shape below:
+                    </h2>
+                </div>
+
+                <div id="shapeOptionsGrid" class="grid grid-cols-2 gap-4 sm:gap-6">
+                    <!-- 4 Interactive Shape Option Cards Rendered via JS -->
+                </div>
+            </div>
+
+            <!-- FEEDBACK & NEXT QUESTION ACTION BAR -->
+            <div
+                class="min-h-[76px] flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/90 backdrop-blur rounded-2xl border border-stone-200 p-4 px-6">
+
+                <!-- Feedback message text -->
+                <div id="feedbackContainer" class="flex items-center gap-3">
+                    <div id="feedbackIcon"
+                        class="w-8 h-8 rounded-full bg-stone-100 text-stone-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-lg">touch_app</span>
+                    </div>
+                    <p id="feedbackText" class="text-base font-semibold text-stone-600">
+                        Select one of the 4 shapes above.
+                    </p>
+                </div>
+
+                <!-- Next Question Button -->
+                <button id="nextQuestionBtn"
+                    class="hidden w-full sm:w-auto px-6 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 active:scale-95 text-white font-bold text-base shadow-md shadow-brand-500/20 transition flex items-center justify-center gap-2">
+                    <span>Next Shape</span>
+                    <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER CLINICAL TELEMETRY STRIP -->
+    <footer class="w-full bg-white border-t border-stone-200/80 py-4 px-4 text-xs text-stone-500">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span class="font-semibold text-stone-700">MINDNER Clinical Protocol #COG-SHAPE-02</span>
+                <span class="text-stone-300">|</span>
+                <span>Geriatric Visual Geometry & Form Discrimination</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span>Accuracy Baseline: <strong id="footerAccuracy" class="text-stone-800">100%</strong></span>
+                <span>Latency: <strong class="text-stone-800">Normal (No Time Pressure)</strong></span>
+                <button id="resetAllDataBtn"
+                    class="text-stone-400 hover:text-red-600 underline text-[11px] transition">Reset Progress</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LEVEL COMPLETION MODAL POPUP -->
+    <div id="levelCompleteModal"
+        class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div
+            class="bg-white rounded-3xl border border-stone-200 p-8 sm:p-10 max-w-md w-full text-center shadow-2xl animate-fade-in relative overflow-hidden">
+
+            <div
+                class="w-20 h-20 rounded-full bg-brand-50 text-brand-600 mx-auto mb-5 flex items-center justify-center border-4 border-brand-100 shadow-lg">
+                <span class="material-symbols-outlined text-4xl">celebration</span>
+            </div>
+
+            <h2 id="modalTitle" class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mb-2">
+                Level 1 Completed!
+            </h2>
+            <p id="modalDesc" class="text-stone-600 text-base mb-6 leading-relaxed">
+                Splendid visual recall! You successfully identified all 5 shapes in this session.
+            </p>
+
+            <div class="bg-stone-50 rounded-2xl p-4 border border-stone-100 flex justify-around mb-6">
+                <div>
+                    <span class="text-xs text-stone-400 block font-medium">Completed</span>
+                    <span class="text-lg font-bold text-brand-700">5 / 5</span>
+                </div>
+                <div class="w-px bg-stone-200"></div>
+                <div>
+                    <span class="text-xs text-stone-400 block font-medium">Score</span>
+                    <span id="modalScore" class="text-lg font-bold text-stone-800">+5 pts</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="modalHomeBtn"
+                    class="flex-1 py-3.5 px-4 rounded-xl border border-stone-200 hover:bg-stone-50 text-stone-700 font-semibold text-sm transition">
+                    Return Home
+                </button>
+                <button id="modalNextLevelBtn"
+                    class="flex-1 py-3.5 px-4 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-sm shadow-md shadow-brand-500/20 transition flex items-center justify-center gap-1.5">
+                    <span>Continue Level</span>
+                    <span class="material-symbols-outlined text-base">arrow_forward</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RESET CONFIRMATION MODAL -->
+    <div id="resetModal"
+        class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl border border-stone-200 p-8 max-w-sm w-full text-center shadow-xl">
+            <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 mx-auto mb-4 flex items-center justify-center">
+                <span class="material-symbols-outlined text-3xl">restart_alt</span>
+            </div>
+            <h3 class="text-xl font-bold text-stone-900 mb-2">Reset All Progress?</h3>
+            <p class="text-sm text-stone-500 mb-6">This will reset your unlocked levels and score back to Level 1.</p>
+            <div class="flex gap-3">
+                <button id="cancelResetBtn"
+                    class="flex-1 py-2.5 rounded-xl border border-stone-200 text-stone-700 font-medium hover:bg-stone-50 text-sm">Cancel</button>
+                <button id="confirmResetBtn"
+                    class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium text-sm">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT GAME LOGIC -->
+    <script>
+        /* =========================================================
+           MINDNER SHAPE RECOGNITION — CORE LOGIC
+           Full vanilla JS with localStorage persistence & high-contrast SVG
+        ========================================================= */
+
+        // 7 Core Geometric Shapes with precision SVG paths matching MINDNER brand green #127c56
+        const SHAPE_CATALOG = [
+            {
+                name: "Circle",
+                type: "circle",
+                description: "A perfectly round curved shape with no corners",
+                render: () => `
+          <svg viewBox="0 0 160 160" class="w-24 h-24 sm:w-28 sm:h-28" aria-hidden="true">
+            <circle cx="80" cy="80" r="54" fill="#127c56" fill-opacity="0.12" stroke="#127c56" stroke-width="8"/>
+          </svg>`
+            },
+            {
+                name: "Square",
+                type: "square",
+                description: "Four equal straight sides and four right angles",
+                render: () => `
+          <svg viewBox="0 0 160 160" class="w-24 h-24 sm:w-28 sm:h-28" aria-hidden="true">
+            <rect x="30" y="30" width="100" height="100" rx="12" fill="#127c56" fill-opacity="0.12" stroke="#127c56" stroke-width="8"/>
+          </svg>`
+            },
+            {
+                name: "Triangle",
+                type: "triangle",
+                description: "Three straight sides and three points",
+                render: () => `
+          <svg viewBox="0 0 160 160" class="w-24 h-24 sm:w-28 sm:h-28" aria-hidden="true">
+            <polygon points="80,24 24,136 136,136" stroke-linejoin="round" fill="#127c56" fill-opacity="0.12" stroke="#127c56" stroke-width="8"/>
+          </svg>`
+            },
+            {
+                name: "Rectangle",
+                type: "rectangle",
+                description: "Four straight sides with opposite sides equal length",
+                render: () => `
+          <svg viewBox="0 0 160 160" class="w-24 h-24 sm:w-28 sm:h-28" aria-hidden="true">
+            <rect x="20" y="44" width="120" height="72" rx="10" fill="#127c56" fill-opacity="0.12" stroke="#127c56" stroke-width="8"/>
+          </svg>`
+            },
+            {
+                name: "Oval",
+                type: "oval",
+                description: "An elongated round shape resembling an egg",
+                render: () => `
+          <svg viewBox="0 0 160 160" class="w-24 h-24 sm:w-28 sm:h-28" aria-hidden="true">
+            <ellipse cx="80" cy="80" rx="64" ry="42" fill="#127c56" fill-opacity="0.12" stroke="#127c56" stroke-width="8"/>
+          </svg>`
+            },
+            {
+                name: "Diamond",
+                type: "diamond",
+                description: "A quadrilateral with four equal sides turned on its point",
+                render: () => `
+          <svg viewBox="0 0 160 160" class="w-24 h-24 sm:w-28 sm:h-28" aria-hidden="true">
+            <polygon points="80,18 142,80 80,142 18,80" stroke-linejoin="round" fill="#127c56" fill-opacity="0.12" stroke="#127c56" stroke-width="8"/>
+          </svg>`
+            },
+            {
+                name: "Star",
+                type: "star",
+                description: "A classic five-pointed radiant star shape",
+                render: () => `
+          <svg viewBox="0 0 160 160" class="w-24 h-24 sm:w-28 sm:h-28" aria-hidden="true">
+            <polygon points="80,18 97,60 142,62 106,90 120,134 80,108 40,134 54,90 18,62 63,60" stroke-linejoin="round" fill="#127c56" fill-opacity="0.12" stroke="#127c56" stroke-width="8"/>
+          </svg>`
+            }
+        ];
+
+        const TOTAL_LEVELS = 10;
+        const QUESTIONS_PER_LEVEL = 5;
+
+        // State
+        let currentLevel = parseInt(localStorage.getItem("mindner_shape_level")) || 1;
+        let unlockedLevel = parseInt(localStorage.getItem("mindner_shape_unlocked")) || 1;
+        let currentScore = parseInt(localStorage.getItem("mindner_shape_score")) || 0;
+        let questionsCompletedInLevel = 0;
+        let currentQuestion = null;
+        let hasAnswered = false;
+        let totalAttempts = parseInt(localStorage.getItem("mindner_shape_attempts")) || 0;
+        let correctAttempts = parseInt(localStorage.getItem("mindner_shape_correct")) || 0;
+
+        // DOM Elements
+        const homeView = document.getElementById("homeView");
+        const gameView = document.getElementById("gameView");
+        const homeStartBtn = document.getElementById("homeStartBtn");
+        const homeLevelGrid = document.getElementById("homeLevelGrid");
+        const savedLevelBadge = document.getElementById("savedLevelBadge");
+        const savedScoreBadge = document.getElementById("savedScoreBadge");
+
+        const gameExitBtn = document.getElementById("gameExitBtn");
+        const hudLevelPill = document.getElementById("hudLevelPill");
+        const hudQuestionStep = document.getElementById("hudQuestionStep");
+        const hudScoreText = document.getElementById("hudScoreText");
+        const questionStepDots = document.getElementById("questionStepDots");
+
+        const questionTargetWord = document.getElementById("questionTargetWord");
+        const hudSpeakBtn = document.getElementById("hudSpeakBtn");
+        const shapeOptionsGrid = document.getElementById("shapeOptionsGrid");
+
+        const feedbackContainer = document.getElementById("feedbackContainer");
+        const feedbackIcon = document.getElementById("feedbackIcon");
+        const feedbackText = document.getElementById("feedbackText");
+        const nextQuestionBtn = document.getElementById("nextQuestionBtn");
+        const footerAccuracy = document.getElementById("footerAccuracy");
+
+        const levelCompleteModal = document.getElementById("levelCompleteModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDesc = document.getElementById("modalDesc");
+        const modalScore = document.getElementById("modalScore");
+        const modalHomeBtn = document.getElementById("modalHomeBtn");
+        const modalNextLevelBtn = document.getElementById("modalNextLevelBtn");
+
+        const resetModal = document.getElementById("resetModal");
+        const resetAllDataBtn = document.getElementById("resetAllDataBtn");
+        const cancelResetBtn = document.getElementById("cancelResetBtn");
+        const confirmResetBtn = document.getElementById("confirmResetBtn");
+        const globalAudioBtn = document.getElementById("globalAudioBtn");
+
+        // Save Progress Helper
+        function persistData() {
+            localStorage.setItem("mindner_shape_level", currentLevel);
+            localStorage.setItem("mindner_shape_unlocked", unlockedLevel);
+            localStorage.setItem("mindner_shape_score", currentScore);
+            localStorage.setItem("mindner_shape_attempts", totalAttempts);
+            localStorage.setItem("mindner_shape_correct", correctAttempts);
+            updateAccuracyUI();
+        }
+
+        function updateAccuracyUI() {
+            if (totalAttempts > 0) {
+                const pct = Math.round((correctAttempts / totalAttempts) * 100);
+                footerAccuracy.textContent = `${pct}%`;
+            } else {
+                footerAccuracy.textContent = "100%";
+            }
+        }
+
+        // Speech Synthesizer
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "en-US";
+            utterance.rate = 0.82; // Calm, deliberate pace for elderly assistance
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Render Home Level Grid
+        function renderHomeLevels() {
+            homeLevelGrid.innerHTML = "";
+            for (let i = 1; i <= TOTAL_LEVELS; i++) {
+                const btn = document.createElement("button");
+                btn.type = "button";
+
+                const isUnlocked = i <= unlockedLevel;
+                const isCurrent = i === currentLevel;
+
+                if (isUnlocked) {
+                    btn.className = `level-dot-btn h-12 rounded-xl flex flex-col items-center justify-center font-bold text-xs border ${isCurrent
+                            ? "bg-brand-500 text-white border-brand-600 shadow-md shadow-brand-500/20"
+                            : "bg-white text-stone-700 border-stone-200 hover:border-brand-300 hover:bg-brand-50"
+                        }`;
+                    btn.innerHTML = `<span>${i}</span>`;
+                    btn.addEventListener("click", () => {
+                        currentLevel = i;
+                        startLevelSession();
+                    });
+                } else {
+                    btn.className = "h-12 rounded-xl flex flex-col items-center justify-center text-xs border border-stone-200 bg-stone-100/70 text-stone-400 cursor-not-allowed";
+                    btn.innerHTML = `<span class="material-symbols-outlined text-sm">lock</span>`;
+                    btn.disabled = true;
+                }
+
+                homeLevelGrid.appendChild(btn);
+            }
+
+            savedLevelBadge.textContent = `Level ${currentLevel}`;
+            savedScoreBadge.textContent = `${currentScore} pts`;
+            hudScoreText.textContent = currentScore;
+            updateAccuracyUI();
+        }
+
+        // Switch Views
+        function showHome() {
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            gameView.classList.add("hidden");
+            homeView.classList.remove("hidden");
+            renderHomeLevels();
+        }
+
+        function startLevelSession() {
+            questionsCompletedInLevel = 0;
+            homeView.classList.add("hidden");
+            gameView.classList.remove("hidden");
+            updateHud();
+            loadNextQuestion();
+        }
+
+        function updateHud() {
+            hudLevelPill.textContent = `Level ${currentLevel} of ${TOTAL_LEVELS}`;
+            hudQuestionStep.textContent = questionsCompletedInLevel + 1;
+            hudScoreText.textContent = currentScore;
+
+            // Update the 5 step dots
+            const dots = questionStepDots.children;
+            for (let i = 0; i < 5; i++) {
+                if (i < questionsCompletedInLevel) {
+                    dots[i].className = "w-2.5 h-1.5 rounded-full bg-emerald-600";
+                } else if (i === questionsCompletedInLevel) {
+                    dots[i].className = "w-4 h-1.5 rounded-full bg-brand-500";
+                } else {
+                    dots[i].className = "w-2.5 h-1.5 rounded-full bg-stone-200";
+                }
+            }
+        }
+
+        // Question Generation
+        function loadNextQuestion() {
+            hasAnswered = false;
+            nextQuestionBtn.classList.add("hidden");
+
+            // Reset Feedback
+            feedbackIcon.className = "w-8 h-8 rounded-full bg-stone-100 text-stone-400 flex items-center justify-center";
+            feedbackIcon.innerHTML = `<span class="material-symbols-outlined text-lg">touch_app</span>`;
+            feedbackText.className = "text-base font-semibold text-stone-600";
+            feedbackText.textContent = "Select one of the 4 shapes below.";
+
+            // Select random target shape
+            const randomIndex = Math.floor(Math.random() * SHAPE_CATALOG.length);
+            currentQuestion = SHAPE_CATALOG[randomIndex];
+
+            questionTargetWord.textContent = currentQuestion.name;
+
+            // Automatically speak prompt calmly if voice enabled
+            speakText(`Find the ${currentQuestion.name}`);
+
+            // Prepare 4 choices: 1 correct + 3 unique distractors
+            const choices = [currentQuestion];
+            const pool = SHAPE_CATALOG.filter(s => s.type !== currentQuestion.type);
+
+            // Shuffle pool
+            pool.sort(() => Math.random() - 0.5);
+            choices.push(pool[0], pool[1], pool[2]);
+
+            // Shuffle the 4 choices
+            choices.sort(() => Math.random() - 0.5);
+
+            // Render 4 Shape Cards
+            shapeOptionsGrid.innerHTML = "";
+            choices.forEach(shape => {
+                const card = document.createElement("button");
+                card.type = "button";
+                card.className = "shape-card group bg-white rounded-3xl border-2 border-stone-200/90 p-6 sm:p-8 flex flex-col items-center justify-center relative shadow-sm cursor-pointer";
+                card.setAttribute("aria-label", `Shape option: ${shape.name}`);
+
+                card.innerHTML = `
+          <div class="mb-3 transition-transform group-hover:scale-105">
+            ${shape.render()}
+          </div>
+          <span class="text-xs font-bold text-stone-400 uppercase tracking-wider group-hover:text-brand-600 transition-colors">
+            Tap to select
+          </span>
+        `;
+
+                card.addEventListener("click", () => handleAnswerSelection(shape, card));
+                shapeOptionsGrid.appendChild(card);
+            });
+        }
+
+        function handleAnswerSelection(selectedShape, cardElement) {
+            if (hasAnswered) return;
+
+            totalAttempts++;
+
+            if (selectedShape.type === currentQuestion.type) {
+                // CORRECT ANSWER
+                hasAnswered = true;
+                correctAttempts++;
+                currentScore += 10;
+                questionsCompletedInLevel++;
+
+                persistData();
+                updateHud();
+
+                // Style card
+                cardElement.classList.add("correct");
+
+                // Disable all cards
+                const allCards = shapeOptionsGrid.querySelectorAll(".shape-card");
+                allCards.forEach(c => {
+                    if (c !== cardElement) {
+                        c.disabled = true;
+                        c.style.opacity = "0.5";
+                    }
+                });
+
+                // Feedback
+                feedbackIcon.className = "w-8 h-8 rounded-full bg-emerald-100 text-brand-700 flex items-center justify-center";
+                feedbackIcon.innerHTML = `<span class="material-symbols-outlined text-lg">check</span>`;
+                feedbackText.className = "text-base font-bold text-brand-700";
+                feedbackText.textContent = `Excellent! That is the ${currentQuestion.name}.`;
+
+                speakText(`Splendid! That is the ${currentQuestion.name}.`);
+
+                // Check if level is completed (5 questions)
+                if (questionsCompletedInLevel >= QUESTIONS_PER_LEVEL) {
+                    setTimeout(showLevelCompleteModal, 900);
+                } else {
+                    nextQuestionBtn.classList.remove("hidden");
+                }
+
+            } else {
+                // WRONG ANSWER — Gentle encouraging retry
+                cardElement.classList.add("wrong");
+                setTimeout(() => cardElement.classList.remove("wrong"), 600);
+
+                feedbackIcon.className = "w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center";
+                feedbackIcon.innerHTML = `<span class="material-symbols-outlined text-lg">replay</span>`;
+                feedbackText.className = "text-base font-semibold text-stone-700";
+                feedbackText.textContent = `Good effort! Take another look and find the ${currentQuestion.name}.`;
+
+                speakText(`Good try! Find the ${currentQuestion.name}.`);
+                persistData();
+            }
+        }
+
+        function showLevelCompleteModal() {
+            MINDNER_GAME_PROGRESS.markCompleted(MINDNER_GAME_PROGRESS.currentLevel());
+            if (currentLevel < TOTAL_LEVELS) {
+                unlockedLevel = Math.max(unlockedLevel, currentLevel + 1);
+                persistData();
+                modalTitle.textContent = `Level ${currentLevel} Completed! 🎉`;
+                modalDesc.textContent = `Wonderful work! You accurately recognized all 5 target shapes. Level ${currentLevel + 1} is now unlocked.`;
+                modalScore.textContent = `+${QUESTIONS_PER_LEVEL * 10} pts`;
+                modalNextLevelBtn.classList.remove("hidden");
+            } else {
+                modalTitle.textContent = "All 10 Levels Mastered! 🏆";
+                modalDesc.textContent = "Exceptional visual sharpness! You have completed all 10 shape recognition cognitive milestones.";
+                modalScore.textContent = `${currentScore} Total pts`;
+                modalNextLevelBtn.classList.add("hidden");
+            }
+            levelCompleteModal.classList.remove("hidden");
+
+            // Redirect to home with success message after delay
+            setTimeout(function() {
+                var level = MINDNER_GAME_PROGRESS.currentLevel();
+                MINDNER_GAME_PROGRESS.goHome(level);
+            }, 2000);
+        }
+
+        // Modal Events
+        modalNextLevelBtn.addEventListener("click", () => {
+            levelCompleteModal.classList.add("hidden");
+            currentLevel++;
+            persistData();
+            startLevelSession();
+        });
+
+        modalHomeBtn.addEventListener("click", () => {
+            levelCompleteModal.classList.add("hidden");
+            showHome();
+        });
+
+        // Button Listeners
+        homeStartBtn.addEventListener("click", () => {
+            startLevelSession();
+        });
+
+        gameExitBtn.addEventListener("click", () => {
+            showHome();
+        });
+
+        hudSpeakBtn.addEventListener("click", () => {
+            if (currentQuestion) {
+                speakText(currentQuestion.name);
+            }
+        });
+
+        globalAudioBtn.addEventListener("click", () => {
+            speakText("Welcome to Shape Recognition. Tap the audio button anytime to hear the target shape name clearly.");
+        });
+
+        nextQuestionBtn.addEventListener("click", () => {
+            updateHud();
+            loadNextQuestion();
+        });
+
+        // Reset Flow
+        resetAllDataBtn.addEventListener("click", () => {
+            resetModal.classList.remove("hidden");
+        });
+
+        cancelResetBtn.addEventListener("click", () => {
+            resetModal.classList.add("hidden");
+        });
+
+        confirmResetBtn.addEventListener("click", () => {
+            currentLevel = 1;
+            unlockedLevel = 1;
+            currentScore = 0;
+            totalAttempts = 0;
+            correctAttempts = 0;
+            persistData();
+            resetModal.classList.add("hidden");
+            showHome();
+        });
+
+        // Text Size Accessibility Toggle
+        let isLargeText = false;
+        document.getElementById("textSizeBtn").addEventListener("click", () => {
+            isLargeText = !isLargeText;
+            if (isLargeText) {
+                document.documentElement.classList.add("text-lg");
+            } else {
+                document.documentElement.classList.remove("text-lg");
+            }
+        });
+
+        // Initialize View
+        renderHomeLevels();
+    </script>
+</body>
+
+</html>
