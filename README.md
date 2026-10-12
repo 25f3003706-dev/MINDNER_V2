@@ -1,4 +1,4 @@
-# Asha-Mind AI Caregiver & Dementia Assistance Backend
+# MINDNER AI Caregiver & Dementia Assistance Backend
 
 Mindner is a production-ready, backend platform designed for dementia care coordination, cognitive therapy games, multi-domain cognitive trajectory analysis, adaptive difficulty calibration, and caregiver alert automation.
 
